@@ -1,0 +1,19 @@
+2019/07/02 02:17:12 server.go:29: connect to http://localhost:4242/ for GraphQL playground
+2019/07/02 02:20:18 server.go:29: connect to http://localhost:4242/ for GraphQL playground
+2019/07/02 02:20:31 server.go:38: [::1]:60892 GET /
+2019/07/02 02:20:33 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:34 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:35 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:37 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:39 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:41 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:43 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:45 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:47 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:49 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:51 server.go:38: [::1]:60892 GET /
+2019/07/02 02:20:52 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:52 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:54 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:20:56 server.go:38: [::1]:60892 POST /query
+2019/07/02 02:21:06 server.go:38: [::1]:32984 OPTIONS /query
