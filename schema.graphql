@@ -1,0 +1,101 @@
+
+# https://gqlgen.com/getting-started/
+
+type Patient {
+	personalinfo: ID!
+	fileinfo: HospFile!
+	done: Boolean!
+	user: User!
+	id: ID!
+	parentid: String
+	nextofkin: Nextofkin!
+	insurance: [Insurance]!
+	medicalinfo: Medicalinfo
+}
+
+enum newPatient {
+	Patient
+}
+
+type Subscription {
+	queuechanged(id: ID!): Patient!
+}
+
+type HospFile {
+	id: ID!
+	date: Int!
+	lastvisit: Int!
+	no: String!
+	idno: String
+	visitcount: Int
+}
+
+type Insurance {
+	id: String!
+	insuranceno: String
+}
+
+type Nextofkin {
+	name: String
+	relationship: String
+	phone: String
+	workplace: String
+}
+
+type Medicalinfo {
+	bloodtype: String
+	conditions: [Condition]
+	allergies: [Allergy]
+	vitals: Vitals
+	metadata: Metadata
+}
+
+type Condition {
+	conditiontype: String
+	detail: String
+	metadata: Metadata
+}
+
+type Allergy {
+	allergytype: String
+	detail: String
+	metadata: Metadata
+}
+
+type Vitals {
+	height: Int
+	weight: Int
+	pressure: Int
+	sugar: Int
+	heartrate: Int
+	respiration: Int
+	hb: String
+}
+
+type Metadata {
+	date: Int
+	lastedit: Int
+}
+
+type User {
+	id: ID!
+	name: String!
+}
+
+type Query {
+	Patient(id: ID!): [Patient!]!
+}
+
+input NewTodo {
+	text: String!
+	userId: String!
+}
+
+type Mutation {
+	createPatient(input: newPatient!): Patient!
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+}

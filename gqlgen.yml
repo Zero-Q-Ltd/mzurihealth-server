@@ -1,0 +1,19 @@
+# .gqlgen.yml example
+#
+# Refer to https://gqlgen.com/config/
+# for detailed .gqlgen.yml documentation.
+
+
+schema:
+- schema.graphql
+exec:
+  filename: gqlgen/generated.go
+model:
+  filename: gqlgen/models_gen.go
+models:
+  Patient: 
+    model: github.com/kisinga/mzurihealth-server/models.Patient
+resolver:
+  filename: gqlgen/resolver.go
+  type: Resolver
+autobind: []
