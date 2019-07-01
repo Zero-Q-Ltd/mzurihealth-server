@@ -84,7 +84,9 @@ type User {
 
 type Query {
 	Patient(id: ID!): [Patient!]!
+	User(id: ID!): [User!]!
 }
+
 
 input NewTodo {
 	text: String!

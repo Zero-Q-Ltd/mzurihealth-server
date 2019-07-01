@@ -110,6 +110,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Patient func(childComplexity int, id string) int
+		User    func(childComplexity int, id string) int
 	}
 
 	Subscription struct {
@@ -147,6 +148,7 @@ type PatientResolver interface {
 }
 type QueryResolver interface {
 	Patient(ctx context.Context, id string) ([]*models.Patient, error)
+	User(ctx context.Context, id string) ([]*User, error)
 }
 type SubscriptionResolver interface {
 	Queuechanged(ctx context.Context, id string) (<-chan *models.Patient, error)
@@ -429,6 +431,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Patient(childComplexity, args["id"].(string)), true
 
+	case "Query.User":
+		if e.complexity.Query.User == nil {
+			break
+		}
+
+		args, err := ec.field_Query_User_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.User(childComplexity, args["id"].(string)), true
+
 	case "Subscription.queuechanged":
 		if e.complexity.Subscription.Queuechanged == nil {
 			break
@@ -681,7 +695,9 @@ type User {
 
 type Query {
 	Patient(id: ID!): [Patient!]!
+	User(id: ID!): [User!]!
 }
+
 
 input NewTodo {
 	text: String!
@@ -718,6 +734,20 @@ func (ec *executionContext) field_Mutation_createPatient_args(ctx context.Contex
 }
 
 func (ec *executionContext) field_Query_Patient_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_User_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -2073,6 +2103,50 @@ func (ec *executionContext) _Query_Patient(ctx context.Context, field graphql.Co
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalNPatient2ᚕᚖgithubᚗcomᚋkisingaᚋmzurihealthᚑserverᚋmodelsᚐPatient(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_User(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_User_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().User(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*User)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋkisingaᚋmzurihealthᚑserverᚋgqlgenᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4082,6 +4156,20 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				return res
 			})
+		case "User":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_User(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
 		case "__type":
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
@@ -4604,6 +4692,43 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 
 func (ec *executionContext) marshalNUser2githubᚗcomᚋkisingaᚋmzurihealthᚑserverᚋgqlgenᚐUser(ctx context.Context, sel ast.SelectionSet, v User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋkisingaᚋmzurihealthᚑserverᚋgqlgenᚐUser(ctx context.Context, sel ast.SelectionSet, v []*User) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		rctx := &graphql.ResolverContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithResolverContext(ctx, rctx)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚑserverᚋgqlgenᚐUser(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
 }
 
 func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚑserverᚋgqlgenᚐUser(ctx context.Context, sel ast.SelectionSet, v *User) graphql.Marshaler {

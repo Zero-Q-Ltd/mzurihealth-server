@@ -58,6 +58,9 @@ type queryResolver struct{ *Resolver }
 func (r *queryResolver) Patient(ctx context.Context, id string) ([]*models.Patient, error) {
 	panic("not implemented")
 }
+func (r *queryResolver) User(ctx context.Context, id string) ([]*User, error) {
+	panic("not implemented")
+}
 
 type subscriptionResolver struct{ *Resolver }
 

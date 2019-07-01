@@ -1,0 +1,37 @@
+2019/07/02 02:27:57 server.go:36: [::1]:36422 POST /query
+2019/07/02 02:27:59 server.go:36: [::1]:36422 POST /query
+2019/07/02 02:28:01 server.go:36: [::1]:36422 POST /query
+2019/07/02 02:28:03 server.go:36: [::1]:36422 POST /query
+2019/07/02 02:28:03 server.go:36: [::1]:36422 POST /query
+2019/07/02 02:28:05 server.go:36: [::1]:36422 POST /query
+2019/07/02 02:28:07 server.go:36: [::1]:36422 POST /query
+2019/07/02 02:28:09 server.go:36: [::1]:36422 POST /query
+2019/07/02 02:28:11 server.go:27: connect to http://localhost:4242/ for GraphQL playground
+2019/07/02 02:28:13 server.go:36: [::1]:36558 GET /
+2019/07/02 02:28:14 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:14 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:16 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:18 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:20 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:22 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:23 server.go:36: [::1]:36558 GET /
+2019/07/02 02:28:24 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:24 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:26 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:28 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:30 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:32 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:35 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:35 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:36 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:38 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:40 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:43 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:45 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:47 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:50 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:50 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:28:52 server.go:36: [::1]:36558 POST /query
+2019/07/02 02:30:55 server.go:36: [::1]:38004 OPTIONS /query
+2019/07/02 02:36:50 server.go:27: connect to http://localhost:4242/ for GraphQL playground
+2019/07/02 02:45:21 server.go:27: connect to http://localhost:4242/ for GraphQL playground
