@@ -25,7 +25,10 @@ func main() {
 	http.Handle("/query", handler.GraphQL(gqlgen.NewExecutableSchema(gqlgen.Config{Resolvers: &gqlgen.Resolver{}})))
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, logRequest(http.DefaultServeMux)))
+	err := http.ListenAndServe(":"+port, logRequest(http.DefaultServeMux))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func logRequest(handler http.Handler) http.Handler {
