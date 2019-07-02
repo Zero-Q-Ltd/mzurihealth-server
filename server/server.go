@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/99designs/gqlgen/handler"
-	"github.com/kisinga/mzurihealth-server/gqlgen"
+	"github.com/kisinga/mzurihealth"
 )
 
 const defaultPort = "4242"
@@ -22,7 +22,7 @@ func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
 	http.Handle("/", handler.Playground("GraphQL playground", "/query"))
-	http.Handle("/query", handler.GraphQL(gqlgen.NewExecutableSchema(gqlgen.Config{Resolvers: &gqlgen.Resolver{}})))
+	http.Handle("/query", handler.GraphQL(mzurihealth.NewExecutableSchema(mzurihealth.Config{Resolvers: &mzurihealth.Resolver{}})))
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	err := http.ListenAndServe(":"+port, logRequest(http.DefaultServeMux))

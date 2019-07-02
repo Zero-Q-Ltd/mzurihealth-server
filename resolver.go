@@ -1,9 +1,9 @@
-package gqlgen
+package mzuriheallth
 
 import (
 	"context"
 
-	"github.com/kisinga/mzurihealth-server/models"
+	"github.com/kisinga/mzurihealth/models"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
