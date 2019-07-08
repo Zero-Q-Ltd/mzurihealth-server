@@ -7,7 +7,7 @@ import (
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/go-chi/chi"
-	"github.com/kisinga/mzurihealth"
+	genserver "github.com/kisinga/mzurihealth/qql/gen/"
 	"github.com/rs/cors"
 )
 
@@ -34,7 +34,7 @@ func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
 	router.Handle("/", handler.Playground("GraphQL playground", "/query"))
-	router.Handle("/query", handler.GraphQL(mzurihealth.NewExecutableSchema(mzurihealth.Config{Resolvers: &mzurihealth.Resolver{}})))
+	router.Handle("/query", handler.GraphQL(genserver.NewExecutableSchema(genserver.Config{Resolvers: &genserver.Resolver{}})))
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	err := http.ListenAndServe(":"+port, logRequest(http.DefaultServeMux))

@@ -5,7 +5,8 @@ go 1.12
 require (
 	github.com/99designs/gqlgen v0.9.1
 	github.com/agnivade/levenshtein v1.0.2 // indirect
-	github.com/go-chi/chi v4.0.2+incompatible // indirect
+	github.com/gin-gonic/gin v1.4.0 // indirect
+	github.com/go-chi/chi v4.0.2+incompatible
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.3.0 // indirect

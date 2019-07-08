@@ -1,7 +1,7 @@
 
 # https://gqlgen.com/getting-started/
 
-import Patient from "patient.graphql"
+# Import Patient from "patient.graphql"
 
 enum geoType {
 	Polygon
