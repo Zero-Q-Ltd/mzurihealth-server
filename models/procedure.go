@@ -43,13 +43,30 @@ package models
 // 	| "Women\"s Health" ;
 
 type Condition struct {
-	Conditiontype string
-	Detail        string
-	Metadata      Metadata
+	conditiontype string
+	detail        string
+	metadata      Metadata
 }
 
 type Allegy struct {
 	allergytype string
 	detail      string
 	metadata    Metadata
+}
+
+type RawProcedure struct {
+	name      string
+	_id       string
+	pricing   pricing
+	category  ProcedureCategory
+	numericid int32
+}
+type ProcedureCategory struct {
+	_id           string
+	code          string
+	subcategoryid string
+}
+type pricing struct {
+	min int32
+	max int32
 }

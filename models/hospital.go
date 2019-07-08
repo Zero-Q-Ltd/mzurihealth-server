@@ -1,12 +1,31 @@
 package models
 
-import "time"
+type Hospital struct {
+	location       struct{}
+	name           string
+	userid         string
+	_id            string
+	description    string
+	status         bool
+	contacPerson   contactperson
+	contactDetails contactDetails
+	logourl        string
+	patientCount   int
+	invoiceCount   int
+	metadata       Metadata
+	paymentMethods []CustomPaymentMethod
+}
 
-type HospFile struct {
-	id         string
-	date       time.Time
-	lastvisit  time.Time
-	no         string
-	idno       int
-	visitcount int
+type contactperson struct {
+	name     string
+	phone    string
+	email    string
+	position string
+	address  string
+}
+
+type contactDetails struct {
+	phone   string
+	email   string
+	address string
 }
