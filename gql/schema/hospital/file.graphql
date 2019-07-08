@@ -1,0 +1,9 @@
+
+type HospFile {
+	id: ID!
+	date: Int!
+	lastvisit: Int!
+	no: String!
+	idno: String
+	visitcount: Int
+}

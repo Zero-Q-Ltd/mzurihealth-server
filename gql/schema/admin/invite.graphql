@@ -1,0 +1,13 @@
+# Import * from "../universal.graphql"
+
+type AdminInvite {
+	_id: ID!
+	name: String!
+	email: String!
+	phone:      String!
+	categoyid:  String!
+	level:      Int!
+	inviterid:  String!
+	hospitalid: String!
+	metadata:   Metadata!
+}

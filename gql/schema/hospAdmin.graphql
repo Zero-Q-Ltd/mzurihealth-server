@@ -1,4 +1,0 @@
-type HospAdmin {
-	_id: ID!
-	name: String!
-}

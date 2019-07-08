@@ -1,0 +1,6 @@
+
+type Hospital {
+	id: ID!
+	location: location!
+	name: String!
+}

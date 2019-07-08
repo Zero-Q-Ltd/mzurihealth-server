@@ -1,0 +1,17 @@
+
+type RawProcedure {
+	name: String!
+}
+
+
+type Condition {
+	conditiontype: String
+	detail: String
+	metadata: Metadata
+}
+
+type Allergy {
+	allergytype: String
+	detail: String
+	metadata: Metadata
+}

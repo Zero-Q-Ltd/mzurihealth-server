@@ -36,6 +36,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	AdminInvite() AdminInviteResolver
 	HospAdmin() HospAdminResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
@@ -46,6 +47,18 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	AdminInvite struct {
+		Categoyid  func(childComplexity int) int
+		Email      func(childComplexity int) int
+		Hospitalid func(childComplexity int) int
+		Inviterid  func(childComplexity int) int
+		Level      func(childComplexity int) int
+		Metadata   func(childComplexity int) int
+		Name       func(childComplexity int) int
+		Phone      func(childComplexity int) int
+		_id        func(childComplexity int) int
+	}
+
 	Allergy struct {
 		Allergytype func(childComplexity int) int
 		Detail      func(childComplexity int) int
@@ -59,8 +72,12 @@ type ComplexityRoot struct {
 	}
 
 	HospAdmin struct {
-		Name func(childComplexity int) int
-		_id  func(childComplexity int) int
+		Config      func(childComplexity int) int
+		Data        func(childComplexity int) int
+		Metadata    func(childComplexity int) int
+		Profiledata func(childComplexity int) int
+		Status      func(childComplexity int) int
+		_id         func(childComplexity int) int
 	}
 
 	HospFile struct {
@@ -80,7 +97,7 @@ type ComplexityRoot struct {
 
 	Insurance struct {
 		ID          func(childComplexity int) int
-		Insuranceno func(childComplexity int) int
+		InsuranceNo func(childComplexity int) int
 	}
 
 	Medicalinfo struct {
@@ -138,7 +155,7 @@ type ComplexityRoot struct {
 
 	Vitals struct {
 		Hb          func(childComplexity int) int
-		Heartrate   func(childComplexity int) int
+		HeartRate   func(childComplexity int) int
 		Height      func(childComplexity int) int
 		Pressure    func(childComplexity int) int
 		Respiration func(childComplexity int) int
@@ -146,12 +163,37 @@ type ComplexityRoot struct {
 		Weight      func(childComplexity int) int
 	}
 
+	Config struct {
+		Availability func(childComplexity int) int
+		CategoryID   func(childComplexity int) int
+		HospitalID   func(childComplexity int) int
+		Level        func(childComplexity int) int
+	}
+
+	Data struct {
+		DisplayName func(childComplexity int) int
+		Email       func(childComplexity int) int
+		PhotoURL    func(childComplexity int) int
+		UID         func(childComplexity int) int
+	}
+
 	Location struct {
 		Coordinates func(childComplexity int) int
 		Type        func(childComplexity int) int
 	}
+
+	Profiledata struct {
+		Address func(childComplexity int) int
+		Age     func(childComplexity int) int
+		Bio     func(childComplexity int) int
+		Phone   func(childComplexity int) int
+		Status  func(childComplexity int) int
+	}
 }
 
+type AdminInviteResolver interface {
+	_id(ctx context.Context, obj *models.AdminInvite) (string, error)
+}
 type HospAdminResolver interface {
 	_id(ctx context.Context, obj *models.HospAdmin) (string, error)
 }
@@ -184,6 +226,69 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "AdminInvite.categoyid":
+		if e.complexity.AdminInvite.Categoyid == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.Categoyid(childComplexity), true
+
+	case "AdminInvite.email":
+		if e.complexity.AdminInvite.Email == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.Email(childComplexity), true
+
+	case "AdminInvite.hospitalid":
+		if e.complexity.AdminInvite.Hospitalid == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.Hospitalid(childComplexity), true
+
+	case "AdminInvite.inviterid":
+		if e.complexity.AdminInvite.Inviterid == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.Inviterid(childComplexity), true
+
+	case "AdminInvite.level":
+		if e.complexity.AdminInvite.Level == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.Level(childComplexity), true
+
+	case "AdminInvite.metadata":
+		if e.complexity.AdminInvite.Metadata == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.Metadata(childComplexity), true
+
+	case "AdminInvite.name":
+		if e.complexity.AdminInvite.Name == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.Name(childComplexity), true
+
+	case "AdminInvite.phone":
+		if e.complexity.AdminInvite.Phone == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.Phone(childComplexity), true
+
+	case "AdminInvite._id":
+		if e.complexity.AdminInvite._id == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite._id(childComplexity), true
 
 	case "Allergy.allergytype":
 		if e.complexity.Allergy.Allergytype == nil {
@@ -227,12 +332,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Condition.Metadata(childComplexity), true
 
-	case "HospAdmin.name":
-		if e.complexity.HospAdmin.Name == nil {
+	case "HospAdmin.config":
+		if e.complexity.HospAdmin.Config == nil {
 			break
 		}
 
-		return e.complexity.HospAdmin.Name(childComplexity), true
+		return e.complexity.HospAdmin.Config(childComplexity), true
+
+	case "HospAdmin.data":
+		if e.complexity.HospAdmin.Data == nil {
+			break
+		}
+
+		return e.complexity.HospAdmin.Data(childComplexity), true
+
+	case "HospAdmin.metadata":
+		if e.complexity.HospAdmin.Metadata == nil {
+			break
+		}
+
+		return e.complexity.HospAdmin.Metadata(childComplexity), true
+
+	case "HospAdmin.profiledata":
+		if e.complexity.HospAdmin.Profiledata == nil {
+			break
+		}
+
+		return e.complexity.HospAdmin.Profiledata(childComplexity), true
+
+	case "HospAdmin.status":
+		if e.complexity.HospAdmin.Status == nil {
+			break
+		}
+
+		return e.complexity.HospAdmin.Status(childComplexity), true
 
 	case "HospAdmin._id":
 		if e.complexity.HospAdmin._id == nil {
@@ -311,12 +444,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Insurance.ID(childComplexity), true
 
-	case "Insurance.insuranceno":
-		if e.complexity.Insurance.Insuranceno == nil {
+	case "Insurance.insuranceNo":
+		if e.complexity.Insurance.InsuranceNo == nil {
 			break
 		}
 
-		return e.complexity.Insurance.Insuranceno(childComplexity), true
+		return e.complexity.Insurance.InsuranceNo(childComplexity), true
 
 	case "Medicalinfo.allergies":
 		if e.complexity.Medicalinfo.Allergies == nil {
@@ -568,12 +701,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Vitals.Hb(childComplexity), true
 
-	case "Vitals.heartrate":
-		if e.complexity.Vitals.Heartrate == nil {
+	case "Vitals.heartRate":
+		if e.complexity.Vitals.HeartRate == nil {
 			break
 		}
 
-		return e.complexity.Vitals.Heartrate(childComplexity), true
+		return e.complexity.Vitals.HeartRate(childComplexity), true
 
 	case "Vitals.height":
 		if e.complexity.Vitals.Height == nil {
@@ -610,6 +743,62 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Vitals.Weight(childComplexity), true
 
+	case "config.availability":
+		if e.complexity.Config.Availability == nil {
+			break
+		}
+
+		return e.complexity.Config.Availability(childComplexity), true
+
+	case "config.categoryId":
+		if e.complexity.Config.CategoryID == nil {
+			break
+		}
+
+		return e.complexity.Config.CategoryID(childComplexity), true
+
+	case "config.hospitalId":
+		if e.complexity.Config.HospitalID == nil {
+			break
+		}
+
+		return e.complexity.Config.HospitalID(childComplexity), true
+
+	case "config.level":
+		if e.complexity.Config.Level == nil {
+			break
+		}
+
+		return e.complexity.Config.Level(childComplexity), true
+
+	case "data.displayName":
+		if e.complexity.Data.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.Data.DisplayName(childComplexity), true
+
+	case "data.email":
+		if e.complexity.Data.Email == nil {
+			break
+		}
+
+		return e.complexity.Data.Email(childComplexity), true
+
+	case "data.photoURL":
+		if e.complexity.Data.PhotoURL == nil {
+			break
+		}
+
+		return e.complexity.Data.PhotoURL(childComplexity), true
+
+	case "data.uid":
+		if e.complexity.Data.UID == nil {
+			break
+		}
+
+		return e.complexity.Data.UID(childComplexity), true
+
 	case "location.coordinates":
 		if e.complexity.Location.Coordinates == nil {
 			break
@@ -623,6 +812,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Location.Type(childComplexity), true
+
+	case "profiledata.address":
+		if e.complexity.Profiledata.Address == nil {
+			break
+		}
+
+		return e.complexity.Profiledata.Address(childComplexity), true
+
+	case "profiledata.age":
+		if e.complexity.Profiledata.Age == nil {
+			break
+		}
+
+		return e.complexity.Profiledata.Age(childComplexity), true
+
+	case "profiledata.bio":
+		if e.complexity.Profiledata.Bio == nil {
+			break
+		}
+
+		return e.complexity.Profiledata.Bio(childComplexity), true
+
+	case "profiledata.phone":
+		if e.complexity.Profiledata.Phone == nil {
+			break
+		}
+
+		return e.complexity.Profiledata.Phone(childComplexity), true
+
+	case "profiledata.status":
+		if e.complexity.Profiledata.Status == nil {
+			break
+		}
+
+		return e.complexity.Profiledata.Status(childComplexity), true
 
 	}
 	return 0, false
@@ -715,56 +939,56 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var parsedSchema = gqlparser.MustLoadSchema(
-	&ast.Source{Name: "gql/schema/hospAdmin.graphql", Input: `type HospAdmin {
+	&ast.Source{Name: "gql/schema/admin/admin.graphql", Input: `# Import * from "../**/*.graphql"
+
+type HospAdmin {
+	_id: ID!
+	status: Boolean!
+	data: data!
+	config: config!
+	profiledata: profiledata!
+	metadata: Metadata!
+}
+
+type data {
+	uid: String!
+	email: String!
+	photoURL: String!
+	displayName: String!
+}
+
+type config {
+	hospitalId: String!
+	categoryId: String!
+	level: Int!
+	availability: Int! # Whether on break , away or available
+}
+
+type profiledata {
+	bio: String!
+	age: String!
+	address: String!
+	phone: String!
+	status: Boolean!
+}
+`},
+	&ast.Source{Name: "gql/schema/admin/category.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/admin/invite.graphql", Input: `# Import * from "../universal.graphql"
+
+type AdminInvite {
 	_id: ID!
 	name: String!
+	email: String!
+	phone:      String!
+	categoyid:  String!
+	level:      Int!
+	inviterid:  String!
+	hospitalid: String!
+	metadata:   Metadata!
 }
 `},
-	&ast.Source{Name: "gql/schema/hospFile.graphql", Input: ``},
-	&ast.Source{Name: "gql/schema/hospital.graphql", Input: ``},
-	&ast.Source{Name: "gql/schema/patient.graphql", Input: `
-
-type Patient {
-	personalinfo: ID!
-	fileinfo: HospFile!
-	done: Boolean!
-	HospAdmin: HospAdmin!
-	id: ID!
-	parentid: String
-	nextofkin: Nextofkin!
-	insurance: [Insurance]!
-	medicalinfo: Medicalinfo
-}
-
-enum newPatient {
-	Patient
-}
-`},
-	&ast.Source{Name: "gql/schema/payment.graphql", Input: ``},
-	&ast.Source{Name: "gql/schema/paymentChannel.graphql", Input: ``},
-	&ast.Source{Name: "gql/schema/procedure.graphql", Input: ``},
-	&ast.Source{Name: "gql/schema/schema.graphql", Input: `
-# https://gqlgen.com/getting-started/
-
-# Import Patient from "patient.graphql"
-
-enum geoType {
-	Polygon
-	Point
-}
-type location{
-	type: geoType!
-	coordinates: [Int]!
-}
-
-type Subscription {
-	queueChanged(id: ID!): Patient!
-	userChanged(id : ID!) : HospAdmin!
-	hospChanged(id : ID) : Hospital!
-	patientChanged(id : ID) : Patient!
-	procedureChanged(id : ID): RawProcedure!
-}
-
+	&ast.Source{Name: "gql/schema/calendar/event.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/hospital/file.graphql", Input: `
 type HospFile {
 	id: ID!
 	date: Int!
@@ -772,61 +996,32 @@ type HospFile {
 	no: String!
 	idno: String
 	visitcount: Int
-}
+}`},
+	&ast.Source{Name: "gql/schema/hospital/hospital.graphql", Input: `
 type Hospital {
 	id: ID!
 	location: location!
 	name: String!
 }
-
-type RawProcedure {
-	name: String!
+`},
+	&ast.Source{Name: "gql/schema/insurance/insurance.graphql", Input: `type Insurance {
+    id: String!
+    insuranceNo: String!
 }
-type Insurance {
-	id: String!
-	insuranceno: String
-}
+`},
+	&ast.Source{Name: "gql/schema/main.graphql", Input: `
+# https://gqlgen.com/getting-started/
+# import everything to everything so that all models can interact with each other with little effort
+# Import * from "/**/*.graphql"
 
-type Nextofkin {
-	name: String
-	relationship: String
-	phone: String
-	workplace: String
-}
 
-type Medicalinfo {
-	bloodtype: String
-	conditions: [Condition]
-	allergies: [Allergy]
-	vitals: Vitals
-	metadata: Metadata
-}
 
-type Condition {
-	conditiontype: String
-	detail: String
-	metadata: Metadata
-}
-
-type Allergy {
-	allergytype: String
-	detail: String
-	metadata: Metadata
-}
-
-type Vitals {
-	height: Int
-	weight: Int
-	pressure: Int
-	sugar: Int
-	heartrate: Int
-	respiration: Int
-	hb: String
-}
-
-type Metadata {
-	date: Int
-	lastedit: Int
+type Subscription {
+	queueChanged(id: ID!): Patient!
+	userChanged(id : ID!) : HospAdmin!
+	hospChanged(id : ID) : Hospital!
+	patientChanged(id : ID) : Patient!
+	procedureChanged(id : ID): RawProcedure!
 }
 
 
@@ -845,8 +1040,92 @@ schema {
 	mutation: Mutation
 }
 `},
-	&ast.Source{Name: "gql/schema/universal.graphql", Input: ``},
-	&ast.Source{Name: "gql/schema/visit.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/patient/note.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/patient/patient.graphql", Input: `# Import * from "../visit/vitals.graphql"
+# Import * from "../insurance/insurance.graphql"
+
+
+type Patient {
+	personalinfo: ID!
+	fileinfo: HospFile!
+	done: Boolean!
+	HospAdmin: HospAdmin!
+	id: ID!
+	parentid: String
+	nextofkin: Nextofkin!
+	insurance: [Insurance]!
+	medicalinfo: Medicalinfo
+}
+
+enum newPatient {
+	Patient
+}
+
+
+type Nextofkin {
+	name: String
+	relationship: String
+	phone: String
+	workplace: String
+}
+
+type Medicalinfo {
+	bloodtype: String
+	conditions: [Condition]
+	allergies: [Allergy]
+	vitals: Vitals
+	metadata: Metadata
+}
+`},
+	&ast.Source{Name: "gql/schema/payment/channel.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/payment/payment.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/procedure/allergy.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/procedure/category.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/procedure/condition.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/procedure/mergedProcedure.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/procedure/performed.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/procedure/procedure.graphql", Input: `
+type RawProcedure {
+	name: String!
+}
+
+
+type Condition {
+	conditiontype: String
+	detail: String
+	metadata: Metadata
+}
+
+type Allergy {
+	allergytype: String
+	detail: String
+	metadata: Metadata
+}`},
+	&ast.Source{Name: "gql/schema/universal.graphql", Input: `
+
+type Metadata {
+	date: Int
+	lastedit: Int
+}
+enum geoType {
+	Polygon
+	Point
+}
+type location{
+	type: geoType!
+	coordinates: [Int]!
+}`},
+	&ast.Source{Name: "gql/schema/visit/visit.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/visit/vitals.graphql", Input: `type Vitals {
+	height: Int!
+	weight: Int!
+	pressure: Int!
+	sugar: Int!
+	heartRate: Int!
+	respiration: Int!
+	hb: String!
+}
+`},
 )
 
 // endregion ************************** generated!.gotpl **************************
@@ -1014,6 +1293,339 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _AdminInvite__id(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.AdminInvite()._id(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AdminInvite_name(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AdminInvite_email(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Email, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AdminInvite_phone(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Phone, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AdminInvite_categoyid(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Categoyid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AdminInvite_level(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Level, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AdminInvite_inviterid(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Inviterid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AdminInvite_hospitalid(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Hospitalid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AdminInvite_metadata(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "AdminInvite",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Metadata, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Metadata)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNMetadata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐMetadata(ctx, field.Selections, res)
+}
 
 func (ec *executionContext) _Allergy_allergytype(ctx context.Context, field graphql.CollectedField, obj *models.Allergy) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
@@ -1256,7 +1868,7 @@ func (ec *executionContext) _HospAdmin__id(ctx context.Context, field graphql.Co
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _HospAdmin_name(ctx context.Context, field graphql.CollectedField, obj *models.HospAdmin) (ret graphql.Marshaler) {
+func (ec *executionContext) _HospAdmin_status(ctx context.Context, field graphql.CollectedField, obj *models.HospAdmin) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1275,7 +1887,7 @@ func (ec *executionContext) _HospAdmin_name(ctx context.Context, field graphql.C
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
+		return obj.Status, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1287,10 +1899,158 @@ func (ec *executionContext) _HospAdmin_name(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(bool)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _HospAdmin_data(ctx context.Context, field graphql.CollectedField, obj *models.HospAdmin) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "HospAdmin",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Data, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Data)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNdata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐData(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _HospAdmin_config(ctx context.Context, field graphql.CollectedField, obj *models.HospAdmin) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "HospAdmin",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Config, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Config)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNconfig2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐConfig(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _HospAdmin_profiledata(ctx context.Context, field graphql.CollectedField, obj *models.HospAdmin) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "HospAdmin",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Profiledata, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Profiledata)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNprofiledata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐProfiledata(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _HospAdmin_metadata(ctx context.Context, field graphql.CollectedField, obj *models.HospAdmin) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "HospAdmin",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Metadata, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Metadata)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNMetadata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐMetadata(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _HospFile_id(ctx context.Context, field graphql.CollectedField, obj *models.HospFile) (ret graphql.Marshaler) {
@@ -1657,7 +2417,7 @@ func (ec *executionContext) _Insurance_id(ctx context.Context, field graphql.Col
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Insurance_insuranceno(ctx context.Context, field graphql.CollectedField, obj *models.Insurance) (ret graphql.Marshaler) {
+func (ec *executionContext) _Insurance_insuranceNo(ctx context.Context, field graphql.CollectedField, obj *models.Insurance) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -1676,19 +2436,22 @@ func (ec *executionContext) _Insurance_insuranceno(ctx context.Context, field gr
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Insuranceno, nil
+		return obj.InsuranceNo, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Medicalinfo_bloodtype(ctx context.Context, field graphql.CollectedField, obj *models.Medicalinfo) (ret graphql.Marshaler) {
@@ -2832,12 +3595,15 @@ func (ec *executionContext) _Vitals_height(ctx context.Context, field graphql.Co
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Vitals_weight(ctx context.Context, field graphql.CollectedField, obj *models.Vitals) (ret graphql.Marshaler) {
@@ -2866,12 +3632,15 @@ func (ec *executionContext) _Vitals_weight(ctx context.Context, field graphql.Co
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Vitals_pressure(ctx context.Context, field graphql.CollectedField, obj *models.Vitals) (ret graphql.Marshaler) {
@@ -2900,12 +3669,15 @@ func (ec *executionContext) _Vitals_pressure(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Vitals_sugar(ctx context.Context, field graphql.CollectedField, obj *models.Vitals) (ret graphql.Marshaler) {
@@ -2934,15 +3706,18 @@ func (ec *executionContext) _Vitals_sugar(ctx context.Context, field graphql.Col
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Vitals_heartrate(ctx context.Context, field graphql.CollectedField, obj *models.Vitals) (ret graphql.Marshaler) {
+func (ec *executionContext) _Vitals_heartRate(ctx context.Context, field graphql.CollectedField, obj *models.Vitals) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -2961,19 +3736,22 @@ func (ec *executionContext) _Vitals_heartrate(ctx context.Context, field graphql
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Heartrate, nil
+		return obj.HeartRate, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Vitals_respiration(ctx context.Context, field graphql.CollectedField, obj *models.Vitals) (ret graphql.Marshaler) {
@@ -3002,12 +3780,15 @@ func (ec *executionContext) _Vitals_respiration(ctx context.Context, field graph
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Vitals_hb(ctx context.Context, field graphql.CollectedField, obj *models.Vitals) (ret graphql.Marshaler) {
@@ -3036,12 +3817,15 @@ func (ec *executionContext) _Vitals_hb(ctx context.Context, field graphql.Collec
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -4191,6 +4975,302 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 	return ec.marshalO__Type2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐType(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _config_hospitalId(ctx context.Context, field graphql.CollectedField, obj *models.Config) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "config",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HospitalID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _config_categoryId(ctx context.Context, field graphql.CollectedField, obj *models.Config) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "config",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CategoryID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _config_level(ctx context.Context, field graphql.CollectedField, obj *models.Config) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "config",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Level, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _config_availability(ctx context.Context, field graphql.CollectedField, obj *models.Config) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "config",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Availability, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _data_uid(ctx context.Context, field graphql.CollectedField, obj *models.Data) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "data",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _data_email(ctx context.Context, field graphql.CollectedField, obj *models.Data) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "data",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Email, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _data_photoURL(ctx context.Context, field graphql.CollectedField, obj *models.Data) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "data",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PhotoURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _data_displayName(ctx context.Context, field graphql.CollectedField, obj *models.Data) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "data",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DisplayName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _location_type(ctx context.Context, field graphql.CollectedField, obj *models.Location) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
@@ -4265,6 +5345,191 @@ func (ec *executionContext) _location_coordinates(ctx context.Context, field gra
 	return ec.marshalNInt2ᚕᚖint(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _profiledata_bio(ctx context.Context, field graphql.CollectedField, obj *models.Profiledata) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "profiledata",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Bio, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _profiledata_age(ctx context.Context, field graphql.CollectedField, obj *models.Profiledata) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "profiledata",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Age, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _profiledata_address(ctx context.Context, field graphql.CollectedField, obj *models.Profiledata) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "profiledata",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Address, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _profiledata_phone(ctx context.Context, field graphql.CollectedField, obj *models.Profiledata) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "profiledata",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Phone, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _profiledata_status(ctx context.Context, field graphql.CollectedField, obj *models.Profiledata) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "profiledata",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -4276,6 +5541,82 @@ func (ec *executionContext) _location_coordinates(ctx context.Context, field gra
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var adminInviteImplementors = []string{"AdminInvite"}
+
+func (ec *executionContext) _AdminInvite(ctx context.Context, sel ast.SelectionSet, obj *models.AdminInvite) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, adminInviteImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AdminInvite")
+		case "_id":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._AdminInvite__id(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
+		case "name":
+			out.Values[i] = ec._AdminInvite_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "email":
+			out.Values[i] = ec._AdminInvite_email(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "phone":
+			out.Values[i] = ec._AdminInvite_phone(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "categoyid":
+			out.Values[i] = ec._AdminInvite_categoyid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "level":
+			out.Values[i] = ec._AdminInvite_level(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "inviterid":
+			out.Values[i] = ec._AdminInvite_inviterid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "hospitalid":
+			out.Values[i] = ec._AdminInvite_hospitalid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "metadata":
+			out.Values[i] = ec._AdminInvite_metadata(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
 
 var allergyImplementors = []string{"Allergy"}
 
@@ -4358,8 +5699,28 @@ func (ec *executionContext) _HospAdmin(ctx context.Context, sel ast.SelectionSet
 				}
 				return res
 			})
-		case "name":
-			out.Values[i] = ec._HospAdmin_name(ctx, field, obj)
+		case "status":
+			out.Values[i] = ec._HospAdmin_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "data":
+			out.Values[i] = ec._HospAdmin_data(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "config":
+			out.Values[i] = ec._HospAdmin_config(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "profiledata":
+			out.Values[i] = ec._HospAdmin_profiledata(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "metadata":
+			out.Values[i] = ec._HospAdmin_metadata(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
@@ -4473,8 +5834,11 @@ func (ec *executionContext) _Insurance(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "insuranceno":
-			out.Values[i] = ec._Insurance_insuranceno(ctx, field, obj)
+		case "insuranceNo":
+			out.Values[i] = ec._Insurance_insuranceNo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4792,18 +6156,39 @@ func (ec *executionContext) _Vitals(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = graphql.MarshalString("Vitals")
 		case "height":
 			out.Values[i] = ec._Vitals_height(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "weight":
 			out.Values[i] = ec._Vitals_weight(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "pressure":
 			out.Values[i] = ec._Vitals_pressure(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "sugar":
 			out.Values[i] = ec._Vitals_sugar(ctx, field, obj)
-		case "heartrate":
-			out.Values[i] = ec._Vitals_heartrate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "heartRate":
+			out.Values[i] = ec._Vitals_heartRate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "respiration":
 			out.Values[i] = ec._Vitals_respiration(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "hb":
 			out.Values[i] = ec._Vitals_hb(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5056,6 +6441,90 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 	return out
 }
 
+var configImplementors = []string{"config"}
+
+func (ec *executionContext) _config(ctx context.Context, sel ast.SelectionSet, obj *models.Config) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, configImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("config")
+		case "hospitalId":
+			out.Values[i] = ec._config_hospitalId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "categoryId":
+			out.Values[i] = ec._config_categoryId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "level":
+			out.Values[i] = ec._config_level(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "availability":
+			out.Values[i] = ec._config_availability(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var dataImplementors = []string{"data"}
+
+func (ec *executionContext) _data(ctx context.Context, sel ast.SelectionSet, obj *models.Data) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, dataImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("data")
+		case "uid":
+			out.Values[i] = ec._data_uid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "email":
+			out.Values[i] = ec._data_email(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "photoURL":
+			out.Values[i] = ec._data_photoURL(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "displayName":
+			out.Values[i] = ec._data_displayName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var locationImplementors = []string{"location"}
 
 func (ec *executionContext) _location(ctx context.Context, sel ast.SelectionSet, obj *models.Location) graphql.Marshaler {
@@ -5074,6 +6543,53 @@ func (ec *executionContext) _location(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "coordinates":
 			out.Values[i] = ec._location_coordinates(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var profiledataImplementors = []string{"profiledata"}
+
+func (ec *executionContext) _profiledata(ctx context.Context, sel ast.SelectionSet, obj *models.Profiledata) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, profiledataImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("profiledata")
+		case "bio":
+			out.Values[i] = ec._profiledata_bio(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "age":
+			out.Values[i] = ec._profiledata_age(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "address":
+			out.Values[i] = ec._profiledata_address(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "phone":
+			out.Values[i] = ec._profiledata_phone(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "status":
+			out.Values[i] = ec._profiledata_status(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -5277,6 +6793,20 @@ func (ec *executionContext) marshalNInt2ᚕᚖint(ctx context.Context, sel ast.S
 	}
 
 	return ret
+}
+
+func (ec *executionContext) marshalNMetadata2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐMetadata(ctx context.Context, sel ast.SelectionSet, v models.Metadata) graphql.Marshaler {
+	return ec._Metadata(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMetadata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐMetadata(ctx context.Context, sel ast.SelectionSet, v *models.Metadata) graphql.Marshaler {
+	if v == nil {
+		if !ec.HasError(graphql.GetResolverContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Metadata(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNNextofkin2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐNextofkin(ctx context.Context, sel ast.SelectionSet, v models.Nextofkin) graphql.Marshaler {
@@ -5598,6 +7128,34 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
+func (ec *executionContext) marshalNconfig2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐConfig(ctx context.Context, sel ast.SelectionSet, v models.Config) graphql.Marshaler {
+	return ec._config(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNconfig2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐConfig(ctx context.Context, sel ast.SelectionSet, v *models.Config) graphql.Marshaler {
+	if v == nil {
+		if !ec.HasError(graphql.GetResolverContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._config(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNdata2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐData(ctx context.Context, sel ast.SelectionSet, v models.Data) graphql.Marshaler {
+	return ec._data(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNdata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐData(ctx context.Context, sel ast.SelectionSet, v *models.Data) graphql.Marshaler {
+	if v == nil {
+		if !ec.HasError(graphql.GetResolverContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._data(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNgeoType2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐGeoType(ctx context.Context, v interface{}) (models.GeoType, error) {
 	var res models.GeoType
 	return res, res.UnmarshalGQL(v)
@@ -5628,6 +7186,20 @@ func (ec *executionContext) unmarshalNnewPatient2githubᚗcomᚋkisingaᚋmzurih
 
 func (ec *executionContext) marshalNnewPatient2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐNewPatient(ctx context.Context, sel ast.SelectionSet, v models.NewPatient) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) marshalNprofiledata2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐProfiledata(ctx context.Context, sel ast.SelectionSet, v models.Profiledata) graphql.Marshaler {
+	return ec._profiledata(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNprofiledata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐProfiledata(ctx context.Context, sel ast.SelectionSet, v *models.Profiledata) graphql.Marshaler {
+	if v == nil {
+		if !ec.HasError(graphql.GetResolverContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._profiledata(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOAllergy2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐAllergy(ctx context.Context, sel ast.SelectionSet, v models.Allergy) graphql.Marshaler {

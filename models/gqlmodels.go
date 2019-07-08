@@ -8,6 +8,18 @@ import (
 	"strconv"
 )
 
+type AdminInvite struct {
+	_id        string    `json:"_id"`
+	Name       string    `json:"name"`
+	Email      string    `json:"email"`
+	Phone      string    `json:"phone"`
+	Categoyid  string    `json:"categoyid"`
+	Level      int       `json:"level"`
+	Inviterid  string    `json:"inviterid"`
+	Hospitalid string    `json:"hospitalid"`
+	Metadata   *Metadata `json:"metadata"`
+}
+
 type Allergy struct {
 	Allergytype *string   `json:"allergytype"`
 	Detail      *string   `json:"detail"`
@@ -21,8 +33,12 @@ type Condition struct {
 }
 
 type HospAdmin struct {
-	_id  string `json:"_id"`
-	Name string `json:"name"`
+	_id         string       `json:"_id"`
+	Status      bool         `json:"status"`
+	Data        *Data        `json:"data"`
+	Config      *Config      `json:"config"`
+	Profiledata *Profiledata `json:"profiledata"`
+	Metadata    *Metadata    `json:"metadata"`
 }
 
 type HospFile struct {
@@ -41,8 +57,8 @@ type Hospital struct {
 }
 
 type Insurance struct {
-	ID          string  `json:"id"`
-	Insuranceno *string `json:"insuranceno"`
+	ID          string `json:"id"`
+	InsuranceNo string `json:"insuranceNo"`
 }
 
 type Medicalinfo struct {
@@ -82,18 +98,40 @@ type RawProcedure struct {
 }
 
 type Vitals struct {
-	Height      *int    `json:"height"`
-	Weight      *int    `json:"weight"`
-	Pressure    *int    `json:"pressure"`
-	Sugar       *int    `json:"sugar"`
-	Heartrate   *int    `json:"heartrate"`
-	Respiration *int    `json:"respiration"`
-	Hb          *string `json:"hb"`
+	Height      int    `json:"height"`
+	Weight      int    `json:"weight"`
+	Pressure    int    `json:"pressure"`
+	Sugar       int    `json:"sugar"`
+	HeartRate   int    `json:"heartRate"`
+	Respiration int    `json:"respiration"`
+	Hb          string `json:"hb"`
+}
+
+type Config struct {
+	HospitalID   string `json:"hospitalId"`
+	CategoryID   string `json:"categoryId"`
+	Level        int    `json:"level"`
+	Availability int    `json:"availability"`
+}
+
+type Data struct {
+	UID         string `json:"uid"`
+	Email       string `json:"email"`
+	PhotoURL    string `json:"photoURL"`
+	DisplayName string `json:"displayName"`
 }
 
 type Location struct {
 	Type        GeoType `json:"type"`
 	Coordinates []*int  `json:"coordinates"`
+}
+
+type Profiledata struct {
+	Bio     string `json:"bio"`
+	Age     string `json:"age"`
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+	Status  bool   `json:"status"`
 }
 
 type GeoType string
