@@ -6,12 +6,24 @@ import (
 	"os"
 
 	"github.com/99designs/gqlgen/handler"
+	"github.com/go-chi/chi"
 	"github.com/kisinga/mzurihealth"
+	"github.com/rs/cors"
 )
 
 const defaultPort = "4242"
 
 func main() {
+	router := chi.NewRouter()
+
+	// Add CORS middleware around every request
+	// See https://github.com/rs/cors for full option listing
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8080"},
+		AllowCredentials: true,
+		Debug:            true,
+	}).Handler)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -21,8 +33,8 @@ func main() {
 
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
-	http.Handle("/", handler.Playground("GraphQL playground", "/query"))
-	http.Handle("/query", handler.GraphQL(mzurihealth.NewExecutableSchema(mzurihealth.Config{Resolvers: &mzurihealth.Resolver{}})))
+	router.Handle("/", handler.Playground("GraphQL playground", "/query"))
+	router.Handle("/query", handler.GraphQL(mzurihealth.NewExecutableSchema(mzurihealth.Config{Resolvers: &mzurihealth.Resolver{}})))
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	err := http.ListenAndServe(":"+port, logRequest(http.DefaultServeMux))

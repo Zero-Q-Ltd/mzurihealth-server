@@ -10,7 +10,7 @@ schema:
 exec:
   filename: gql/gen/generated.go
 model:
-  filename: gql/gen/models.go
+  filename: models/gqlmodels.go
 
 resolver:
   filename: gql/gen/resolver.go

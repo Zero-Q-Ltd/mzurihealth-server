@@ -5,12 +5,14 @@ go 1.12
 require (
 	github.com/99designs/gqlgen v0.9.1
 	github.com/agnivade/levenshtein v1.0.2 // indirect
+	github.com/go-chi/chi v4.0.2+incompatible // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/gorilla/websocket v1.4.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
 	github.com/mongodb/mongo-go-driver v0.3.0
+	github.com/rs/cors v1.6.0
 	github.com/tidwall/pretty v1.0.0 // indirect
 	github.com/vektah/gqlparser v1.1.2
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect

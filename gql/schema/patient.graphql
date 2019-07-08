@@ -1,0 +1,17 @@
+
+
+type Patient {
+	personalinfo: ID!
+	fileinfo: HospFile!
+	done: Boolean!
+	HospAdmin: HospAdmin!
+	id: ID!
+	parentid: String
+	nextofkin: Nextofkin!
+	insurance: [Insurance]!
+	medicalinfo: Medicalinfo
+}
+
+enum newPatient {
+	Patient
+}

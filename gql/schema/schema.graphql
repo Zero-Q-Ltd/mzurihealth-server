@@ -1,21 +1,7 @@
 
 # https://gqlgen.com/getting-started/
 
-type Patient {
-	personalinfo: ID!
-	fileinfo: HospFile!
-	done: Boolean!
-	HospAdmin: HospAdmin!
-	id: ID!
-	parentid: String
-	nextofkin: Nextofkin!
-	insurance: [Insurance]!
-	medicalinfo: Medicalinfo
-}
-
-enum newPatient {
-	Patient
-}
+import Patient from "patient.graphql"
 
 enum geoType {
 	Polygon
@@ -98,10 +84,6 @@ type Metadata {
 	lastedit: Int
 }
 
-type HospAdmin {
-	_id: ID!
-	name: String!
-}
 
 type Query {
 	Patient(id: ID!): [Patient!]!
