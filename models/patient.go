@@ -3,28 +3,28 @@ package models
 import "time"
 
 type Patient struct {
-	Personalinfo personalinfo `json:"personalinfo"`
-	Fileinfo     HospFile     `json:"fileinfo"`
-	Id           string       `json:"id"`
+	personalinfo personalinfo `json:"personalinfo"`
+	fileinfo     HospFile     `json:"fileinfo"`
+	id           string       `json:"id"`
 	/**
 	 * Optional parent id int for minors
 	 */
-	Parentid string `json:"parentid"`
+	parentid string `json:"parentid"`
 
-	Nextofkin nextofkin `json:"nextofkin"`
+	nextofkin nextofkin `json:"nextofkin"`
 	/**
 	 * A patient can have several insurances at the same time
 	 */
-	Insurance   []Insurance `json:"isnurance"`
-	Medicalinfo medicalinfo `json:"medicalinfo"`
+	insurance   []Insurance `json:"isnurance"`
+	medicalinfo medicalinfo `json:"medicalinfo"`
 	/**
 	 * used in queries so that you can optionally disable some patients
 	 */
-	Status       bool           `json:"status"`
-	Exrainfo     string         `json:"extarinfo"`
-	Customfuelds []Customfields `json:"customfields"`
-	Primaryhosp  string         `json:"primaryhosp"`
-	Metadata     Metadata       `json:"metadata"`
+	status       bool           `json:"status"`
+	exrainfo     string         `json:"extarinfo"`
+	customfuelds []Customfields `json:"customfields"`
+	primaryhosp  string         `json:"primaryhosp"`
+	metadata     Metadata       `json:"metadata"`
 }
 
 type Insurance struct {
@@ -32,38 +32,38 @@ type Insurance struct {
 	insuranceno string `json:"gender"`
 }
 type nextofkin struct {
-	Name         string `json:"gender"`
-	Relationship string `json:"gender"`
-	Phone        int    `json:"gender"`
-	Workplace    string `json:"gender"`
+	name         string `json:"gender"`
+	relationship string `json:"gender"`
+	phone        int    `json:"gender"`
+	workplace    string `json:"gender"`
 }
 
 type medicalinfo struct {
-	Bloodtype  string      `json:"bloodtype"`
-	Conditions []Condition `json:"condition"`
-	Allergies  []Allegy    `json:"allergies"`
-	Vitals     vitals      `json:"vitals"`
-	Metadata   *Metadata   `json:"metadata"`
+	bloodtype  string      `json:"bloodtype"`
+	conditions []Condition `json:"condition"`
+	allergies  []Allegy    `json:"allergies"`
+	vitals     vitals      `json:"vitals"`
+	metadata   *Metadata   `json:"metadata"`
 }
 
 type personalinfo struct {
-	Address    string    `json:"address,omitempty"`
-	PhotoURL   string    `json:"photourl"`
-	Name       string    `json:"name"`
-	Gender     int       `json:"gender"`
-	Occupation string    `json:"occupation"`
-	Workplace  string    `json:"workplace"`
-	Phone      int       `json:"phone"`
-	Email      string    `json:"email"`
-	Idno       string    `json:"idno"`
-	Dob        time.Time `json:"dob"`
+	address    string    `json:"address,omitempty"`
+	photoURL   string    `json:"photourl"`
+	name       string    `json:"name"`
+	gender     int       `json:"gender"`
+	occupation string    `json:"occupation"`
+	workplace  string    `json:"workplace"`
+	phone      int       `json:"phone"`
+	email      string    `json:"email"`
+	idno       string    `json:"idno"`
+	dob        time.Time `json:"dob"`
 }
 type vitals struct {
-	Height      int    `json:"height"`
-	Weight      int    `json:"weight"`
-	Pressure    int    `json:"pressure"`
-	Sugar       int    `json:"sugar"`
-	Heartrate   int    `json:"heartrate"`
-	Respiration int    `json:"respiration"`
-	Hb          string `json:"hb"`
+	height      int    `json:"height"`
+	weight      int    `json:"weight"`
+	pressure    int    `json:"pressure"`
+	sugar       int    `json:"sugar"`
+	heartrate   int    `json:"heartrate"`
+	respiration int    `json:"respiration"`
+	hb          string `json:"hb"`
 }

@@ -5,7 +5,7 @@ type Patient {
 	personalinfo: ID!
 	fileinfo: HospFile!
 	done: Boolean!
-	user: User!
+	Admin: Admin!
 	id: ID!
 	parentid: String
 	nextofkin: Nextofkin!
@@ -17,8 +17,21 @@ enum newPatient {
 	Patient
 }
 
+enum geoType {
+	Polygon
+	Point
+}
+type location{
+	type: geoType!
+	coordinates: [Int]!
+}
+
 type Subscription {
-	queuechanged(id: ID!): Patient!
+	queueChanged(id: ID!): Patient!
+	userChanged(id : ID!) : Admin!
+	hospChanged(id : ID) : Hosp!
+	patientChanged(id : ID) : Patient!
+	procedureChanged(id : ID): RawProcedure!
 }
 
 type HospFile {
@@ -29,7 +42,15 @@ type HospFile {
 	idno: String
 	visitcount: Int
 }
+type Hosp {
+	id: ID!
+	location: location!
+	name: String!
+}
 
+type RawProcedure {
+	name: String!
+}
 type Insurance {
 	id: String!
 	insuranceno: String
@@ -77,21 +98,16 @@ type Metadata {
 	lastedit: Int
 }
 
-type User {
-	id: ID!
+type Admin {
+	_id: ID!
 	name: String!
 }
 
 type Query {
 	Patient(id: ID!): [Patient!]!
-	User(id: ID!): [User!]!
+	Admin(id: ID!): [Admin!]!
 }
 
-
-input NewTodo {
-	text: String!
-	userId: String!
-}
 
 type Mutation {
 	createPatient(input: newPatient!): Patient!
