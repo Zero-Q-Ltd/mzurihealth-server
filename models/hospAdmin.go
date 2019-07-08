@@ -12,7 +12,7 @@ type AdminInvite struct {
 	id         string
 }
 
-type HospitalAdmin struct {
+type HospAdmin struct {
 	id          string
 	status      bool
 	data        data

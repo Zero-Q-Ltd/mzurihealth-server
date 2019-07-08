@@ -48,7 +48,7 @@ type Condition struct {
 	metadata      Metadata
 }
 
-type Allegy struct {
+type Allergy struct {
 	allergytype string
 	detail      string
 	metadata    Metadata

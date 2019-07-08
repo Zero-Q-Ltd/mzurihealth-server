@@ -5,7 +5,7 @@ type Patient {
 	personalinfo: ID!
 	fileinfo: HospFile!
 	done: Boolean!
-	Admin: Admin!
+	HospAdmin: HospAdmin!
 	id: ID!
 	parentid: String
 	nextofkin: Nextofkin!
@@ -28,8 +28,8 @@ type location{
 
 type Subscription {
 	queueChanged(id: ID!): Patient!
-	userChanged(id : ID!) : Admin!
-	hospChanged(id : ID) : Hosp!
+	userChanged(id : ID!) : HospAdmin!
+	hospChanged(id : ID) : Hospital!
 	patientChanged(id : ID) : Patient!
 	procedureChanged(id : ID): RawProcedure!
 }
@@ -42,7 +42,7 @@ type HospFile {
 	idno: String
 	visitcount: Int
 }
-type Hosp {
+type Hospital {
 	id: ID!
 	location: location!
 	name: String!
@@ -98,14 +98,14 @@ type Metadata {
 	lastedit: Int
 }
 
-type Admin {
+type HospAdmin {
 	_id: ID!
 	name: String!
 }
 
 type Query {
 	Patient(id: ID!): [Patient!]!
-	Admin(id: ID!): [Admin!]!
+	HospAdmin(id: ID!): [HospAdmin!]!
 }
 
 

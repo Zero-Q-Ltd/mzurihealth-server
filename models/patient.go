@@ -31,14 +31,14 @@ type Insurance struct {
 	id          string `json:"gender"`
 	insuranceno string `json:"gender"`
 }
-type nextofkin struct {
+type Nextofkin struct {
 	name         string `json:"gender"`
 	relationship string `json:"gender"`
 	phone        int    `json:"gender"`
 	workplace    string `json:"gender"`
 }
 
-type medicalinfo struct {
+type Medicalinfo struct {
 	bloodtype  string      `json:"bloodtype"`
 	conditions []Condition `json:"condition"`
 	allergies  []Allegy    `json:"allergies"`
@@ -58,7 +58,7 @@ type personalinfo struct {
 	idno       string    `json:"idno"`
 	dob        time.Time `json:"dob"`
 }
-type vitals struct {
+type Vitals struct {
 	height      int    `json:"height"`
 	weight      int    `json:"weight"`
 	pressure    int    `json:"pressure"`

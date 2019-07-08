@@ -23,6 +23,20 @@ models:
     model: github.com/kisinga/mzurihealth/models.PaymentChannel
   RawProcedure:
     model: github.com/kisinga/mzurihealth/models.RawProcedure
+  Insurance:
+    model: github.com/kisinga/mzurihealth/models.Insurance
+  Allergy:
+    model: github.com/kisinga/mzurihealth/models.Allergy
+  Condition:
+    model: github.com/kisinga/mzurihealth/models.Condition
+  Metadata:
+    model: github.com/kisinga/mzurihealth/models.Metadata
+  Nextofkin:
+    model: github.com/kisinga/mzurihealth/models.Nextofkin
+  Medicalinfo:
+    model: github.com/kisinga/mzurihealth/models.Medicalinfo
+  Vitals:
+    model: github.com/kisinga/mzurihealth/models.Vitals
  
 resolver:
   filename: resolver.go
