@@ -38,6 +38,7 @@ type Config struct {
 type ResolverRoot interface {
 	AdminInvite() AdminInviteResolver
 	HospAdmin() HospAdminResolver
+	Hospital() HospitalResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
 	Subscription() SubscriptionResolver
@@ -90,9 +91,19 @@ type ComplexityRoot struct {
 	}
 
 	Hospital struct {
-		ID       func(childComplexity int) int
-		Location func(childComplexity int) int
-		Name     func(childComplexity int) int
+		ContactDetails func(childComplexity int) int
+		Contactperson  func(childComplexity int) int
+		Description    func(childComplexity int) int
+		InvoiceCount   func(childComplexity int) int
+		Location       func(childComplexity int) int
+		Logourl        func(childComplexity int) int
+		Metadata       func(childComplexity int) int
+		Name           func(childComplexity int) int
+		PatientCount   func(childComplexity int) int
+		PaymentMethods func(childComplexity int) int
+		Status         func(childComplexity int) int
+		Userid         func(childComplexity int) int
+		_id            func(childComplexity int) int
 	}
 
 	Insurance struct {
@@ -136,6 +147,13 @@ type ComplexityRoot struct {
 		Personalinfo func(childComplexity int) int
 	}
 
+	PaymentMethod struct {
+		AccountNumber    func(childComplexity int) int
+		ExtraInfo        func(childComplexity int) int
+		PaymentChannelID func(childComplexity int) int
+		PaymentMethodID  func(childComplexity int) int
+	}
+
 	Query struct {
 		HospAdmin func(childComplexity int, id string) int
 		Patient   func(childComplexity int, id string) int
@@ -170,6 +188,20 @@ type ComplexityRoot struct {
 		Level        func(childComplexity int) int
 	}
 
+	ContactDetails struct {
+		Address func(childComplexity int) int
+		Email   func(childComplexity int) int
+		Phone   func(childComplexity int) int
+	}
+
+	Contactperson struct {
+		Address  func(childComplexity int) int
+		Email    func(childComplexity int) int
+		Name     func(childComplexity int) int
+		Phone    func(childComplexity int) int
+		Position func(childComplexity int) int
+	}
+
 	Data struct {
 		DisplayName func(childComplexity int) int
 		Email       func(childComplexity int) int
@@ -196,6 +228,9 @@ type AdminInviteResolver interface {
 }
 type HospAdminResolver interface {
 	_id(ctx context.Context, obj *models.HospAdmin) (string, error)
+}
+type HospitalResolver interface {
+	_id(ctx context.Context, obj *models.Hospital) (string, error)
 }
 type MutationResolver interface {
 	CreatePatient(ctx context.Context, input models.NewPatient) (*models.Patient, error)
@@ -416,12 +451,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.HospFile.Visitcount(childComplexity), true
 
-	case "Hospital.id":
-		if e.complexity.Hospital.ID == nil {
+	case "Hospital.contactDetails":
+		if e.complexity.Hospital.ContactDetails == nil {
 			break
 		}
 
-		return e.complexity.Hospital.ID(childComplexity), true
+		return e.complexity.Hospital.ContactDetails(childComplexity), true
+
+	case "Hospital.contactperson":
+		if e.complexity.Hospital.Contactperson == nil {
+			break
+		}
+
+		return e.complexity.Hospital.Contactperson(childComplexity), true
+
+	case "Hospital.description":
+		if e.complexity.Hospital.Description == nil {
+			break
+		}
+
+		return e.complexity.Hospital.Description(childComplexity), true
+
+	case "Hospital.invoiceCount":
+		if e.complexity.Hospital.InvoiceCount == nil {
+			break
+		}
+
+		return e.complexity.Hospital.InvoiceCount(childComplexity), true
 
 	case "Hospital.location":
 		if e.complexity.Hospital.Location == nil {
@@ -430,12 +486,61 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Hospital.Location(childComplexity), true
 
+	case "Hospital.logourl":
+		if e.complexity.Hospital.Logourl == nil {
+			break
+		}
+
+		return e.complexity.Hospital.Logourl(childComplexity), true
+
+	case "Hospital.metadata":
+		if e.complexity.Hospital.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Hospital.Metadata(childComplexity), true
+
 	case "Hospital.name":
 		if e.complexity.Hospital.Name == nil {
 			break
 		}
 
 		return e.complexity.Hospital.Name(childComplexity), true
+
+	case "Hospital.patientCount":
+		if e.complexity.Hospital.PatientCount == nil {
+			break
+		}
+
+		return e.complexity.Hospital.PatientCount(childComplexity), true
+
+	case "Hospital.paymentMethods":
+		if e.complexity.Hospital.PaymentMethods == nil {
+			break
+		}
+
+		return e.complexity.Hospital.PaymentMethods(childComplexity), true
+
+	case "Hospital.status":
+		if e.complexity.Hospital.Status == nil {
+			break
+		}
+
+		return e.complexity.Hospital.Status(childComplexity), true
+
+	case "Hospital.userid":
+		if e.complexity.Hospital.Userid == nil {
+			break
+		}
+
+		return e.complexity.Hospital.Userid(childComplexity), true
+
+	case "Hospital._id":
+		if e.complexity.Hospital._id == nil {
+			break
+		}
+
+		return e.complexity.Hospital._id(childComplexity), true
 
 	case "Insurance.id":
 		if e.complexity.Insurance.ID == nil {
@@ -602,6 +707,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Patient.Personalinfo(childComplexity), true
+
+	case "PaymentMethod.accountNumber":
+		if e.complexity.PaymentMethod.AccountNumber == nil {
+			break
+		}
+
+		return e.complexity.PaymentMethod.AccountNumber(childComplexity), true
+
+	case "PaymentMethod.extraInfo":
+		if e.complexity.PaymentMethod.ExtraInfo == nil {
+			break
+		}
+
+		return e.complexity.PaymentMethod.ExtraInfo(childComplexity), true
+
+	case "PaymentMethod.paymentChannelId":
+		if e.complexity.PaymentMethod.PaymentChannelID == nil {
+			break
+		}
+
+		return e.complexity.PaymentMethod.PaymentChannelID(childComplexity), true
+
+	case "PaymentMethod.paymentMethodId":
+		if e.complexity.PaymentMethod.PaymentMethodID == nil {
+			break
+		}
+
+		return e.complexity.PaymentMethod.PaymentMethodID(childComplexity), true
 
 	case "Query.HospAdmin":
 		if e.complexity.Query.HospAdmin == nil {
@@ -770,6 +903,62 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Config.Level(childComplexity), true
+
+	case "contactDetails.address":
+		if e.complexity.ContactDetails.Address == nil {
+			break
+		}
+
+		return e.complexity.ContactDetails.Address(childComplexity), true
+
+	case "contactDetails.email":
+		if e.complexity.ContactDetails.Email == nil {
+			break
+		}
+
+		return e.complexity.ContactDetails.Email(childComplexity), true
+
+	case "contactDetails.phone":
+		if e.complexity.ContactDetails.Phone == nil {
+			break
+		}
+
+		return e.complexity.ContactDetails.Phone(childComplexity), true
+
+	case "contactperson.address":
+		if e.complexity.Contactperson.Address == nil {
+			break
+		}
+
+		return e.complexity.Contactperson.Address(childComplexity), true
+
+	case "contactperson.email":
+		if e.complexity.Contactperson.Email == nil {
+			break
+		}
+
+		return e.complexity.Contactperson.Email(childComplexity), true
+
+	case "contactperson.name":
+		if e.complexity.Contactperson.Name == nil {
+			break
+		}
+
+		return e.complexity.Contactperson.Name(childComplexity), true
+
+	case "contactperson.phone":
+		if e.complexity.Contactperson.Phone == nil {
+			break
+		}
+
+		return e.complexity.Contactperson.Phone(childComplexity), true
+
+	case "contactperson.position":
+		if e.complexity.Contactperson.Position == nil {
+			break
+		}
+
+		return e.complexity.Contactperson.Position(childComplexity), true
 
 	case "data.displayName":
 		if e.complexity.Data.DisplayName == nil {
@@ -997,11 +1186,36 @@ type HospFile {
 	idno: String
 	visitcount: Int
 }`},
-	&ast.Source{Name: "gql/schema/hospital/hospital.graphql", Input: `
+	&ast.Source{Name: "gql/schema/hospital/hospital.graphql", Input: `# Import * from "../**/*.graphql"
+
 type Hospital {
-	id: ID!
-	location: location!
+	location: location
 	name: String!
+	userid: String!
+	_id: String!
+	description: String!
+	status: Boolean
+	contactperson: contactperson
+	contactDetails: contactDetails
+	logourl: String!
+	patientCount: Int!
+	invoiceCount: Int!
+	metadata: Metadata
+	paymentMethods: [PaymentMethod]
+}
+
+type contactperson {
+	name: String!
+	phone: String!
+	email: String!
+	position: String!
+	address: String!
+}
+
+type contactDetails {
+	phone: String!
+	email: String!
+	address: String!
 }
 `},
 	&ast.Source{Name: "gql/schema/insurance/insurance.graphql", Input: `type Insurance {
@@ -1078,6 +1292,13 @@ type Medicalinfo {
 }
 `},
 	&ast.Source{Name: "gql/schema/payment/channel.graphql", Input: ``},
+	&ast.Source{Name: "gql/schema/payment/method.graphql", Input: `type PaymentMethod {
+	accountNumber: String!
+	extraInfo: String!
+	paymentChannelId: String!
+	paymentMethodId: String!
+}
+`},
 	&ast.Source{Name: "gql/schema/payment/payment.graphql", Input: ``},
 	&ast.Source{Name: "gql/schema/procedure/allergy.graphql", Input: ``},
 	&ast.Source{Name: "gql/schema/procedure/category.graphql", Input: ``},
@@ -2269,43 +2490,6 @@ func (ec *executionContext) _HospFile_visitcount(ctx context.Context, field grap
 	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Hospital_id(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
-	ctx = ec.Tracer.StartFieldExecution(ctx, field)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-		ec.Tracer.EndFieldExecution(ctx)
-	}()
-	rctx := &graphql.ResolverContext{
-		Object:   "Hospital",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-	ctx = graphql.WithResolverContext(ctx, rctx)
-	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !ec.HasError(rctx) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	rctx.Result = res
-	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Hospital_location(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
@@ -2332,15 +2516,12 @@ func (ec *executionContext) _Hospital_location(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !ec.HasError(rctx) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*models.Location)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNlocation2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐLocation(ctx, field.Selections, res)
+	return ec.marshalOlocation2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐLocation(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Hospital_name(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
@@ -2378,6 +2559,398 @@ func (ec *executionContext) _Hospital_name(ctx context.Context, field graphql.Co
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_userid(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Userid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital__id(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Hospital()._id(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_description(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_status(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_contactperson(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Contactperson, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Contactperson)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOcontactperson2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐContactperson(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_contactDetails(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ContactDetails, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.ContactDetails)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOcontactDetails2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐContactDetails(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_logourl(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Logourl, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_patientCount(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PatientCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_invoiceCount(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InvoiceCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_metadata(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Metadata, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Metadata)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOMetadata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐMetadata(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_paymentMethods(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PaymentMethods, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*models.PaymentMethod)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOPaymentMethod2ᚕᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐPaymentMethod(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Insurance_id(ctx context.Context, field graphql.CollectedField, obj *models.Insurance) (ret graphql.Marshaler) {
@@ -3197,6 +3770,154 @@ func (ec *executionContext) _Patient_medicalinfo(ctx context.Context, field grap
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalOMedicalinfo2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐMedicalinfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentMethod_accountNumber(ctx context.Context, field graphql.CollectedField, obj *models.PaymentMethod) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "PaymentMethod",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AccountNumber, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentMethod_extraInfo(ctx context.Context, field graphql.CollectedField, obj *models.PaymentMethod) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "PaymentMethod",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ExtraInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentMethod_paymentChannelId(ctx context.Context, field graphql.CollectedField, obj *models.PaymentMethod) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "PaymentMethod",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PaymentChannelID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentMethod_paymentMethodId(ctx context.Context, field graphql.CollectedField, obj *models.PaymentMethod) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "PaymentMethod",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PaymentMethodID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_Patient(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5123,6 +5844,302 @@ func (ec *executionContext) _config_availability(ctx context.Context, field grap
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _contactDetails_phone(ctx context.Context, field graphql.CollectedField, obj *models.ContactDetails) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "contactDetails",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Phone, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _contactDetails_email(ctx context.Context, field graphql.CollectedField, obj *models.ContactDetails) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "contactDetails",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Email, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _contactDetails_address(ctx context.Context, field graphql.CollectedField, obj *models.ContactDetails) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "contactDetails",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Address, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _contactperson_name(ctx context.Context, field graphql.CollectedField, obj *models.Contactperson) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "contactperson",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _contactperson_phone(ctx context.Context, field graphql.CollectedField, obj *models.Contactperson) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "contactperson",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Phone, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _contactperson_email(ctx context.Context, field graphql.CollectedField, obj *models.Contactperson) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "contactperson",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Email, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _contactperson_position(ctx context.Context, field graphql.CollectedField, obj *models.Contactperson) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "contactperson",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Position, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _contactperson_address(ctx context.Context, field graphql.CollectedField, obj *models.Contactperson) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "contactperson",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Address, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _data_uid(ctx context.Context, field graphql.CollectedField, obj *models.Data) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
@@ -5792,21 +6809,62 @@ func (ec *executionContext) _Hospital(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Hospital")
-		case "id":
-			out.Values[i] = ec._Hospital_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "location":
 			out.Values[i] = ec._Hospital_location(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "name":
 			out.Values[i] = ec._Hospital_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
+		case "userid":
+			out.Values[i] = ec._Hospital_userid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "_id":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Hospital__id(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
+		case "description":
+			out.Values[i] = ec._Hospital_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "status":
+			out.Values[i] = ec._Hospital_status(ctx, field, obj)
+		case "contactperson":
+			out.Values[i] = ec._Hospital_contactperson(ctx, field, obj)
+		case "contactDetails":
+			out.Values[i] = ec._Hospital_contactDetails(ctx, field, obj)
+		case "logourl":
+			out.Values[i] = ec._Hospital_logourl(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "patientCount":
+			out.Values[i] = ec._Hospital_patientCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "invoiceCount":
+			out.Values[i] = ec._Hospital_invoiceCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "metadata":
+			out.Values[i] = ec._Hospital_metadata(ctx, field, obj)
+		case "paymentMethods":
+			out.Values[i] = ec._Hospital_paymentMethods(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6019,6 +7077,48 @@ func (ec *executionContext) _Patient(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "medicalinfo":
 			out.Values[i] = ec._Patient_medicalinfo(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var paymentMethodImplementors = []string{"PaymentMethod"}
+
+func (ec *executionContext) _PaymentMethod(ctx context.Context, sel ast.SelectionSet, obj *models.PaymentMethod) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, paymentMethodImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaymentMethod")
+		case "accountNumber":
+			out.Values[i] = ec._PaymentMethod_accountNumber(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "extraInfo":
+			out.Values[i] = ec._PaymentMethod_extraInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "paymentChannelId":
+			out.Values[i] = ec._PaymentMethod_paymentChannelId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "paymentMethodId":
+			out.Values[i] = ec._PaymentMethod_paymentMethodId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6469,6 +7569,90 @@ func (ec *executionContext) _config(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "availability":
 			out.Values[i] = ec._config_availability(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var contactDetailsImplementors = []string{"contactDetails"}
+
+func (ec *executionContext) _contactDetails(ctx context.Context, sel ast.SelectionSet, obj *models.ContactDetails) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, contactDetailsImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("contactDetails")
+		case "phone":
+			out.Values[i] = ec._contactDetails_phone(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "email":
+			out.Values[i] = ec._contactDetails_email(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "address":
+			out.Values[i] = ec._contactDetails_address(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var contactpersonImplementors = []string{"contactperson"}
+
+func (ec *executionContext) _contactperson(ctx context.Context, sel ast.SelectionSet, obj *models.Contactperson) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, contactpersonImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("contactperson")
+		case "name":
+			out.Values[i] = ec._contactperson_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "phone":
+			out.Values[i] = ec._contactperson_phone(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "email":
+			out.Values[i] = ec._contactperson_email(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "position":
+			out.Values[i] = ec._contactperson_position(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "address":
+			out.Values[i] = ec._contactperson_address(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -7165,20 +8349,6 @@ func (ec *executionContext) marshalNgeoType2githubᚗcomᚋkisingaᚋmzurihealth
 	return v
 }
 
-func (ec *executionContext) marshalNlocation2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐLocation(ctx context.Context, sel ast.SelectionSet, v models.Location) graphql.Marshaler {
-	return ec._location(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNlocation2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐLocation(ctx context.Context, sel ast.SelectionSet, v *models.Location) graphql.Marshaler {
-	if v == nil {
-		if !ec.HasError(graphql.GetResolverContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._location(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNnewPatient2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐNewPatient(ctx context.Context, v interface{}) (models.NewPatient, error) {
 	var res models.NewPatient
 	return res, res.UnmarshalGQL(v)
@@ -7406,6 +8576,57 @@ func (ec *executionContext) marshalOMetadata2ᚖgithubᚗcomᚋkisingaᚋmzurihe
 	return ec._Metadata(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOPaymentMethod2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐPaymentMethod(ctx context.Context, sel ast.SelectionSet, v models.PaymentMethod) graphql.Marshaler {
+	return ec._PaymentMethod(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOPaymentMethod2ᚕᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐPaymentMethod(ctx context.Context, sel ast.SelectionSet, v []*models.PaymentMethod) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		rctx := &graphql.ResolverContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithResolverContext(ctx, rctx)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOPaymentMethod2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐPaymentMethod(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalOPaymentMethod2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐPaymentMethod(ctx context.Context, sel ast.SelectionSet, v *models.PaymentMethod) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PaymentMethod(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {
 	return graphql.UnmarshalString(v)
 }
@@ -7620,6 +8841,39 @@ func (ec *executionContext) marshalO__Type2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 		return graphql.Null
 	}
 	return ec.___Type(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOcontactDetails2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐContactDetails(ctx context.Context, sel ast.SelectionSet, v models.ContactDetails) graphql.Marshaler {
+	return ec._contactDetails(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOcontactDetails2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐContactDetails(ctx context.Context, sel ast.SelectionSet, v *models.ContactDetails) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._contactDetails(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOcontactperson2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐContactperson(ctx context.Context, sel ast.SelectionSet, v models.Contactperson) graphql.Marshaler {
+	return ec._contactperson(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOcontactperson2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐContactperson(ctx context.Context, sel ast.SelectionSet, v *models.Contactperson) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._contactperson(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOlocation2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐLocation(ctx context.Context, sel ast.SelectionSet, v models.Location) graphql.Marshaler {
+	return ec._location(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOlocation2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐLocation(ctx context.Context, sel ast.SelectionSet, v *models.Location) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._location(ctx, sel, v)
 }
 
 // endregion ***************************** type.gotpl *****************************

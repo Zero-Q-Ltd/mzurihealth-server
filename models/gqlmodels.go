@@ -51,9 +51,19 @@ type HospFile struct {
 }
 
 type Hospital struct {
-	ID       string    `json:"id"`
-	Location *Location `json:"location"`
-	Name     string    `json:"name"`
+	Location       *Location        `json:"location"`
+	Name           string           `json:"name"`
+	Userid         string           `json:"userid"`
+	_id            string           `json:"_id"`
+	Description    string           `json:"description"`
+	Status         *bool            `json:"status"`
+	Contactperson  *Contactperson   `json:"contactperson"`
+	ContactDetails *ContactDetails  `json:"contactDetails"`
+	Logourl        string           `json:"logourl"`
+	PatientCount   int              `json:"patientCount"`
+	InvoiceCount   int              `json:"invoiceCount"`
+	Metadata       *Metadata        `json:"metadata"`
+	PaymentMethods []*PaymentMethod `json:"paymentMethods"`
 }
 
 type Insurance struct {
@@ -93,6 +103,13 @@ type Patient struct {
 	Medicalinfo  *Medicalinfo `json:"medicalinfo"`
 }
 
+type PaymentMethod struct {
+	AccountNumber    string `json:"accountNumber"`
+	ExtraInfo        string `json:"extraInfo"`
+	PaymentChannelID string `json:"paymentChannelId"`
+	PaymentMethodID  string `json:"paymentMethodId"`
+}
+
 type RawProcedure struct {
 	Name string `json:"name"`
 }
@@ -112,6 +129,20 @@ type Config struct {
 	CategoryID   string `json:"categoryId"`
 	Level        int    `json:"level"`
 	Availability int    `json:"availability"`
+}
+
+type ContactDetails struct {
+	Phone   string `json:"phone"`
+	Email   string `json:"email"`
+	Address string `json:"address"`
+}
+
+type Contactperson struct {
+	Name     string `json:"name"`
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
+	Position string `json:"position"`
+	Address  string `json:"address"`
 }
 
 type Data struct {

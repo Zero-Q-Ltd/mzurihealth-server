@@ -1,6 +1,31 @@
+# Import * from "../**/*.graphql"
 
 type Hospital {
-	id: ID!
-	location: location!
+	location: location
 	name: String!
+	userid: String!
+	_id: String!
+	description: String!
+	status: Boolean
+	contactperson: contactperson
+	contactDetails: contactDetails
+	logourl: String!
+	patientCount: Int!
+	invoiceCount: Int!
+	metadata: Metadata
+	paymentMethods: [PaymentMethod]
+}
+
+type contactperson {
+	name: String!
+	phone: String!
+	email: String!
+	position: String!
+	address: String!
+}
+
+type contactDetails {
+	phone: String!
+	email: String!
+	address: String!
 }
