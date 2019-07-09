@@ -1,0 +1,9 @@
+type Vitals {
+	height: Int!
+	weight: Int!
+	pressure: Int!
+	sugar: Int!
+	heartRate: Int!
+	respiration: Int!
+	hb: String!
+}

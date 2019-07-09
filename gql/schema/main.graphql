@@ -1,0 +1,30 @@
+
+# https://gqlgen.com/getting-started/
+# import everything to everything so that all models can interact with each other with little effort
+# Import * from "/**/*.graphql"
+
+
+
+type Subscription {
+	queueChanged(id: ID!): Patient!
+	userChanged(id : ID!) : HospAdmin!
+	hospChanged(id : ID) : Hospital!
+	patientChanged(id : ID) : Patient!
+	procedureChanged(id : ID): RawProcedure!
+}
+
+
+type Query {
+	Patient(id: ID!): [Patient!]!
+	HospAdmin(id: ID!): [HospAdmin!]!
+}
+
+
+type Mutation {
+	createPatient(input: newPatient!): Patient!
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+}

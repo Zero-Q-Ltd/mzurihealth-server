@@ -1,0 +1,14 @@
+
+
+type Metadata {
+	date: Int
+	lastedit: Int
+}
+enum geoType {
+	Polygon
+	Point
+}
+type location{
+	type: geoType!
+	coordinates: [Int]!
+}

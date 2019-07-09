@@ -1,0 +1,6 @@
+type PaymentMethod {
+	accountNumber: String!
+	extraInfo: String!
+	paymentChannelId: String!
+	paymentMethodId: String!
+}

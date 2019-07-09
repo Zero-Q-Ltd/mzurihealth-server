@@ -5,26 +5,14 @@
 
 
 schema:
-- schema.graphql
+- gql/schema/**/*.graphql
+
 exec:
-  filename: generated.go
+  filename: gql/gen/generated.go
 model:
-  filename: models_gen.go
-models:
-  HospAdmin:
-    model: github.com/kisinga/mzurihealth/models.HospAdmin
-  Hospital: 
-    model: github.com/kisinga/mzurihealth/models.Hospital
-  HospFile: 
-    model: github.com/kisinga/mzurihealth/models.HospFile
-  Patient: 
-    model: github.com/kisinga/mzurihealth/models.Patient
-  PaymentChannel:
-    model: github.com/kisinga/mzurihealth/models.PaymentChannel
-  RawProcedure:
-    model: github.com/kisinga/mzurihealth/models.RawProcedure
- 
+  filename: models/gqlmodels.go
+
 resolver:
-  filename: resolver.go
+  filename: gql/gen/resolver.go
   type: Resolver
 autobind: []

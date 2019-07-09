@@ -1,0 +1,32 @@
+# Import * from "../**/*.graphql"
+
+type HospAdmin {
+	_id: ID!
+	status: Boolean!
+	data: data!
+	config: config!
+	profiledata: profiledata!
+	metadata: Metadata!
+}
+
+type data {
+	uid: String!
+	email: String!
+	photoURL: String!
+	displayName: String!
+}
+
+type config {
+	hospitalId: String!
+	categoryId: String!
+	level: Int!
+	availability: Int! # Whether on break , away or available
+}
+
+type profiledata {
+	bio: String!
+	age: String!
+	address: String!
+	phone: String!
+	status: Boolean!
+}

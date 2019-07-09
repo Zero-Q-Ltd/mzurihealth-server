@@ -1,0 +1,35 @@
+# Import * from "../visit/vitals.graphql"
+# Import * from "../insurance/insurance.graphql"
+
+
+type Patient {
+	personalinfo: ID!
+	fileinfo: HospFile!
+	done: Boolean!
+	HospAdmin: HospAdmin!
+	id: ID!
+	parentid: String
+	nextofkin: Nextofkin!
+	insurance: [Insurance]!
+	medicalinfo: Medicalinfo
+}
+
+enum newPatient {
+	Patient
+}
+
+
+type Nextofkin {
+	name: String
+	relationship: String
+	phone: String
+	workplace: String
+}
+
+type Medicalinfo {
+	bloodtype: String
+	conditions: [Condition]
+	allergies: [Allergy]
+	vitals: Vitals
+	metadata: Metadata
+}
