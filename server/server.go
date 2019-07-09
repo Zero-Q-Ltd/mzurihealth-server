@@ -57,7 +57,6 @@ func openLogFile(logfile string) {
 		if err != nil {
 			log.Fatal("OpenLogfile: os.OpenFile:", err)
 		}
-
 		log.SetOutput(lf)
 	}
 }
