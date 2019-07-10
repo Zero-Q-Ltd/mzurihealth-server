@@ -61,10 +61,27 @@ func main() {
 	}))
 	router.Use(gin.Recovery())
 
-	gql := gin.WrapH(handler.GraphQL(gen.NewExecutableSchema(gen.Config{Resolvers: &gen.Resolver{}})))
-	router.GET("/", gin.WrapH(handler.Playground("GraphQL playground", "/api")))
-	router.GET("/api", gql)
-	router.POST("/api", gql)
+	router.POST("/api", graphqlHandler())
+	router.GET("/api", graphqlHandler())
+	router.GET("/", playgroundHandler())
 	router.Run(":" + port)
 
+}
+
+// Defining the Graphql handler
+func graphqlHandler() gin.HandlerFunc {
+	h := handler.GraphQL(gen.NewExecutableSchema(gen.Config{Resolvers: &gen.Resolver{}}))
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+// Defining the Playground handler
+func playgroundHandler() gin.HandlerFunc {
+	h := handler.Playground("GraphQL", "/api")
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
 }
