@@ -33,7 +33,7 @@ func main() {
 
 	//set up log file
 	dt := time.Now()
-	logPath := dt.Format("01-02-2006") + ".log"
+	logPath := dt.Format("01-2006") + ".log"
 	logfile, err := os.OpenFile(logPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalln("Failed to create request log file:", err)
