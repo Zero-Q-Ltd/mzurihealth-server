@@ -1,7 +1,0 @@
-2019/07/09 10:51:16 server.go:49: [::1]:52438 OPTIONS /query map[Accept:[*/*] Accept-Encoding:[gzip, deflate, br] Accept-Language:[en-US,en;q=0.9] Access-Control-Request-Headers:[content-type] Access-Control-Request-Method:[POST] Connection:[keep-alive] Origin:[http://localhost:4200] Referer:[http://localhost:4200/admin/dashboard] User-Agent:[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.102 Safari/537.36 Vivaldi/2.6.1566.44]]
-2019/07/09 10:51:17 server.go:49: [::1]:52438 POST /query map[Accept:[application/json, text/plain, */*] Accept-Encoding:[gzip, deflate, br] Accept-Language:[en-US,en;q=0.9] Connection:[keep-alive] Content-Length:[148] Content-Type:[application/json] Origin:[http://localhost:4200] Referer:[http://localhost:4200/admin/dashboard] User-Agent:[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.102 Safari/537.36 Vivaldi/2.6.1566.44]]
-2019/07/09 10:52:06 server.go:40: connect to http://localhost:4242/ for GraphQL playground
-2019/07/09 10:53:09 server.go:49: [::1]:53426 OPTIONS /query/
-2019/07/09 10:53:09 server.go:49: [::1]:53426 POST /query/
-2019/07/09 10:54:03 server.go:49: [::1]:53426 OPTIONS /query
-2019/07/09 10:54:04 server.go:49: [::1]:53426 POST /query

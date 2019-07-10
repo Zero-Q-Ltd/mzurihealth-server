@@ -9,5 +9,5 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
-development.log
+*.log
 serve
