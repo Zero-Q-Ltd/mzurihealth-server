@@ -1,0 +1,16 @@
+type PaymentChannel {
+	id: String
+	name: String
+	mergeability: mergeability
+	transactionDetailCollection: Boolean
+}
+
+type mergeability {
+	self: Boolean
+	external: Boolean
+}
+
+type Paymentmethods {
+	name: String
+	imageurl: String
+}

@@ -1,6 +1,4 @@
-# Import * from "../visit/vitals.graphql"
-# Import * from "../insurance/insurance.graphql"
-
+# Import * from "../**/*.graphql"
 
 type Patient {
 	personalinfo: ID!

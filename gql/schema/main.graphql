@@ -1,27 +1,30 @@
-
 # https://gqlgen.com/getting-started/
 # import everything to everything so that all models can interact with each other with little effort
 # Import * from "/**/*.graphql"
 
-
-
 type Subscription {
 	queueChanged(id: ID!): Patient!
-	userChanged(id : ID!) : HospAdmin!
-	hospChanged(id : ID) : Hospital!
-	patientChanged(id : ID) : Patient!
-	procedureChanged(id : ID): RawProcedure!
+	userChanged(id: ID!): HospAdmin!
+	hospChanged(id: ID): Hospital!
+	patientChanged(id: ID): Patient!
+	procedureChanged(id: ID): RawProcedure!
 }
-
 
 type Query {
-	Patient(id: ID!): [Patient!]!
-	HospAdmin(id: ID!): [HospAdmin!]!
+	Patient(id: ID!): [Patient!]
+	PatientNotes(patientid: ID!, from: Int, to: Int): [Patientnote]
+	HospAdmin(id: ID!): HospAdmin
+	AdminCategories: [AdminCategory]!
+	Hospital(id: ID!): Hospital
+	HospFile(id: ID): HospFile
+	AllInsurance: [Insurance]!
+	PaymentChannels(hospitalid: ID!): [PaymentChannel]!
+	AllPaymentMethods: [PaymentMethod]!
 }
-
 
 type Mutation {
 	createPatient(input: newPatient!): Patient!
+	createAdmin(input: newHospAdmin): HospAdmin!
 }
 
 schema {
