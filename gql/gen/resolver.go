@@ -6,6 +6,7 @@ import (
 
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/models"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
@@ -63,22 +64,14 @@ type mutationResolver struct{ *Resolver }
 func (r *mutationResolver) CreatePatient(ctx context.Context, input models.NewPatient) (*models.Patient, error) {
 	panic("not implemented")
 }
-func (r *mutationResolver) CreateAdmin2(ctx context.Context, input *models.NewHospAdmin) (*models.HospAdmin, error) {
-	panic("not implemented")
-}
 
 func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHospAdmin) (*models.HospAdmin, error) {
-
-	collection := db.GetCollection("test", "hospadmins")
-
-	insertResult, err := collection.InsertOne(context.TODO(), input)
-	if err != nil {
-		log.Fatal(err)
-	}
+	collectionName := "hospadmins"
+	insertResult, err := db.InserDocument("", collectionName, input)
 	log.Print(insertResult)
 
 	var admin *models.HospAdmin
-	err = collection.FindOne(context.TODO(), insertResult.InsertedID).Decode(*admin)
+	err = db.QueryDocument("", collectionName, bson.M{"_id": insertResult.InsertedID}).Decode(admin)
 	return admin, err
 }
 
