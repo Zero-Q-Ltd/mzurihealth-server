@@ -71,6 +71,16 @@ func QueryDocument(database string, collection string, query bson.M) *mongo.Sing
 	return GetCollection(database, collection).FindOne(context.TODO(), query)
 }
 
+//DeleteDocument removes a document from the database
+func DeleteDocument(database string, collection string, id bson.ObjectId) (*mongo.DeleteResult, error) {
+	return GetCollection(database, collection).DeleteOne(context.TODO(), id)
+}
+
+//DeleteDocuments removes many documents from the database
+func DeleteDocuments(database string, collection string, id []bson.ObjectId) (*mongo.DeleteResult, error) {
+	return GetCollection(database, collection).DeleteMany(context.TODO(), id)
+}
+
 // QueryAggregate reads a many documents from the database
 //A set of many complext queries can be built and batched in the same read operation
 //Be very careful though, as pooply indexed database can be a huge bottleneck
