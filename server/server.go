@@ -9,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/gql/gen"
 )
 
@@ -18,7 +19,7 @@ const defaultPort = "4242"
 
 func main() {
 	router := gin.Default()
-
+	gin.SetMode(gin.DebugMode)
 	// Add CORS middleware around every request
 	// See https://github.com/rs/cors for full option listing
 	c := cors.Default()
@@ -38,6 +39,9 @@ func main() {
 	if err != nil {
 		log.Fatalln("Failed to create request log file:", err)
 	}
+
+	//Create the database connection
+	db.ConnectDB("test")
 
 	// set request logging
 	gin.DefaultWriter = logfile

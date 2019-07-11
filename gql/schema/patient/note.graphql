@@ -1,0 +1,11 @@
+# Import * from "../**/*.graphql"
+
+type Patientnote {
+	title: String!
+	note: String!
+	admin: AttachedAdmin!
+	id: String!
+	patientId: String!
+	metadata: Metadata!
+	helpful: Int!
+}

@@ -8,6 +8,9 @@ type HospAdmin {
 	profiledata: profiledata!
 	metadata: Metadata!
 }
+input newHospAdmin {
+	email: String!
+}
 
 type data {
 	uid: String!

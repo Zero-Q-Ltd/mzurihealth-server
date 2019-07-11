@@ -8,6 +8,13 @@ import (
 	"strconv"
 )
 
+type AdminCategory struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	_id         string `json:"_id"`
+	Level       int    `json:"level"`
+}
+
 type AdminInvite struct {
 	_id        string    `json:"_id"`
 	Name       string    `json:"name"`
@@ -24,6 +31,11 @@ type Allergy struct {
 	Allergytype *string   `json:"allergytype"`
 	Detail      *string   `json:"detail"`
 	Metadata    *Metadata `json:"metadata"`
+}
+
+type AttachedAdmin struct {
+	ID   *string `json:"id"`
+	Name *string `json:"name"`
 }
 
 type Condition struct {
@@ -103,11 +115,33 @@ type Patient struct {
 	Medicalinfo  *Medicalinfo `json:"medicalinfo"`
 }
 
+type Patientnote struct {
+	Title     string         `json:"title"`
+	Note      string         `json:"note"`
+	Admin     *AttachedAdmin `json:"admin"`
+	ID        string         `json:"id"`
+	PatientID string         `json:"patientId"`
+	Metadata  *Metadata      `json:"metadata"`
+	Helpful   int            `json:"helpful"`
+}
+
+type PaymentChannel struct {
+	ID                          *string       `json:"id"`
+	Name                        *string       `json:"name"`
+	Mergeability                *Mergeability `json:"mergeability"`
+	TransactionDetailCollection *bool         `json:"transactionDetailCollection"`
+}
+
 type PaymentMethod struct {
 	AccountNumber    string `json:"accountNumber"`
 	ExtraInfo        string `json:"extraInfo"`
 	PaymentChannelID string `json:"paymentChannelId"`
 	PaymentMethodID  string `json:"paymentMethodId"`
+}
+
+type Paymentmethods struct {
+	Name     *string `json:"name"`
+	Imageurl *string `json:"imageurl"`
 }
 
 type RawProcedure struct {
@@ -155,6 +189,15 @@ type Data struct {
 type Location struct {
 	Type        GeoType `json:"type"`
 	Coordinates []*int  `json:"coordinates"`
+}
+
+type Mergeability struct {
+	Self     *bool `json:"self"`
+	External *bool `json:"external"`
+}
+
+type NewHospAdmin struct {
+	Email string `json:"email"`
 }
 
 type Profiledata struct {
