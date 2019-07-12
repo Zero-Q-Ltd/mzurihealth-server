@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"gopkg.in/mgo.v2/bson"
 )
 
 var client *mongo.Client
@@ -65,26 +65,32 @@ func InserDocument(database string, collection string, document interface{}) (*m
 }
 
 //QueryDocument sends a query to the db
-//By design, even fetching a specific document is a query, so whether the id is known or not does not change the structure of the function
-//It is ip to the calling function to decode the document
-func QueryDocument(database string, collection string, query bson.M) *mongo.SingleResult {
+//By design, even fetching a specific document is a query, so whether the id is known or not does not change the structure of the function.
+//It is Up to the calling function to decode the document
+func QueryDocument(database string, collection string, query bson.D) *mongo.SingleResult {
+	log.Print(query)
 	return GetCollection(database, collection).FindOne(context.TODO(), query)
 }
 
+// UpdateDocument modifies a doc given the id and data
+func UpdateDocument(database string, collection string, id bson.M, document interface{}) (*mongo.UpdateResult, error) {
+	return GetCollection(database, collection).UpdateOne(context.TODO(), id, document)
+}
+
 //DeleteDocument removes a document from the database
-func DeleteDocument(database string, collection string, id bson.ObjectId) (*mongo.DeleteResult, error) {
+func DeleteDocument(database string, collection string, id bson.M) (*mongo.DeleteResult, error) {
 	return GetCollection(database, collection).DeleteOne(context.TODO(), id)
 }
 
 //DeleteDocuments removes many documents from the database
-func DeleteDocuments(database string, collection string, id []bson.ObjectId) (*mongo.DeleteResult, error) {
+func DeleteDocuments(database string, collection string, id []bson.M) (*mongo.DeleteResult, error) {
 	return GetCollection(database, collection).DeleteMany(context.TODO(), id)
 }
 
 // QueryAggregate reads a many documents from the database
-//A set of many complext queries can be built and batched in the same read operation
-//Be very careful though, as pooply indexed database can be a huge bottleneck
-//It is ip to the calling function to decode the documents
+//A set of many complext queries can be built and batched in the same read operation.
+//Be very careful though, as pooply indexed database can be a huge bottleneck.
+//It is up to the calling function to decode the documents
 func QueryAggregate(database string, collection string, query []bson.M) (*mongo.Cursor, error) {
 	return client.Database(database).Collection(collection).Aggregate(context.TODO(), query)
 }

@@ -6,7 +6,8 @@ import (
 
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/models"
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
@@ -69,9 +70,12 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHos
 	collectionName := "hospadmins"
 	insertResult, err := db.InserDocument("", collectionName, input)
 	log.Print(insertResult)
-
+	// str := fmt.Sprintf("%v", insertResult.InsertedID)
 	var admin *models.HospAdmin
-	err = db.QueryDocument("", collectionName, bson.M{"_id": insertResult.InsertedID}).Decode(admin)
+	objID, _ := primitive.ObjectIDFromHex("5d27e20cfe68ab3cfc380d7f")
+	data, err := db.QueryDocument("", collectionName, bson.D{{"_id", objID}}).DecodeBytes()
+	// admin= data
+	log.Print(data)
 	return admin, err
 }
 
