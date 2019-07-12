@@ -6,6 +6,8 @@ import (
 
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/models"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
@@ -63,22 +65,17 @@ type mutationResolver struct{ *Resolver }
 func (r *mutationResolver) CreatePatient(ctx context.Context, input models.NewPatient) (*models.Patient, error) {
 	panic("not implemented")
 }
-func (r *mutationResolver) CreateAdmin2(ctx context.Context, input *models.NewHospAdmin) (*models.HospAdmin, error) {
-	panic("not implemented")
-}
 
 func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHospAdmin) (*models.HospAdmin, error) {
-
-	collection := db.GetCollection("test", "hospadmins")
-
-	insertResult, err := collection.InsertOne(context.TODO(), input)
-	if err != nil {
-		log.Fatal(err)
-	}
+	collectionName := "hospadmins"
+	insertResult, err := db.InserDocument("", collectionName, input)
 	log.Print(insertResult)
-
+	// str := fmt.Sprintf("%v", insertResult.InsertedID)
 	var admin *models.HospAdmin
-	err = collection.FindOne(context.TODO(), insertResult.InsertedID).Decode(*admin)
+	objID, _ := primitive.ObjectIDFromHex("5d27e20cfe68ab3cfc380d7f")
+	data, err := db.QueryDocument("", collectionName, bson.D{{"_id", objID}}).DecodeBytes()
+	// admin= data
+	log.Print(data)
 	return admin, err
 }
 
