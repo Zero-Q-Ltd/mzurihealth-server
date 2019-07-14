@@ -1,14 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"time"
+
+	"github.com/gin-contrib/logger"
+	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
+	logg "github.com/rs/zerolog/log"
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/gql/gen"
 )
@@ -17,7 +21,56 @@ import (
 
 const defaultPort = "4242"
 
+var logFile *os.File
+
+var (
+	rxURL = regexp.MustCompile(`^/regexp\d*`)
+)
+
 func main() {
+	//We init the logger first because it's usued universally
+	logger := initLogging()
+
+	//Create the database connection
+	db.ConnectDB("test")
+
+	//Dont fotget to close connection to db
+	defer db.CloseSession()
+
+	initGin(logger)
+	// don't forget to close it
+	defer logFile.Close()
+}
+
+func initLogging() *zerolog.Logger {
+	//TODO: Make the logs rotate daily
+	//Refer to https://github.com/gin-gonic/gin/issues/350#issuecomment-115241349
+	dt := time.Now()
+	logPath := dt.Format("01-02-2006") + ".log.json"
+	logfile, err := os.OpenFile(logPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalln("Failed to create request log file:", err)
+	}
+	logFile = logfile
+	// create the logger
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	if gin.IsDebugging() {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	}
+	// Output to stderr instead of stdout, could also be a file.
+	logg.Logger = logg.Output(
+		zerolog.ConsoleWriter{
+			Out:     logfile,
+			NoColor: true,
+		},
+	)
+
+	log.SetOutput(logFile)
+	return &logg.Logger
+}
+
+func initGin(logge *zerolog.Logger) {
+
 	router := gin.Default()
 	gin.SetMode(gin.DebugMode)
 	// Add CORS middleware around every request
@@ -32,44 +85,12 @@ func main() {
 
 	gin.DisableConsoleColor()
 
-	//set up log file
-	dt := time.Now()
-	logPath := dt.Format("01-2006") + ".log"
-	logfile, err := os.OpenFile(logPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalln("Failed to create request log file:", err)
-	}
-
-	//Create the database connection
-	db.ConnectDB("test")
-
-	// set request logging
-	gin.DefaultWriter = logfile
-
-	// LoggerWithFormatter middleware will write the logs to gin.DefaultWriter
-	// By default gin.DefaultWriter = os.Stdout
-	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-
-		// your custom format
-		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
-			param.ClientIP,
-			param.TimeStamp.Format(time.RFC1123),
-			param.Method,
-			param.Path,
-			param.Request.Proto,
-			param.StatusCode,
-			param.Latency,
-			param.Request.UserAgent(),
-			param.ErrorMessage,
-		)
-	}))
-	router.Use(gin.Recovery())
+	router.Use(logger.SetLogger(), gin.Recovery())
 
 	router.POST("/api", graphqlHandler())
 	router.GET("/api", graphqlHandler())
 	router.GET("/", playgroundHandler())
 	router.Run(":" + port)
-
 }
 
 // Defining the Graphql handler

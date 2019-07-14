@@ -68,14 +68,18 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, input models.NewPa
 
 func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHospAdmin) (*models.HospAdmin, error) {
 	collectionName := "hospadmins"
-	insertResult, err := db.InserDocument("", collectionName, input)
-	log.Print(insertResult)
+	// insertResult, err := db.InserDocument("", collectionName, input)
+	// log.Print(insertResult)
 	// str := fmt.Sprintf("%v", insertResult.InsertedID)
 	var admin *models.HospAdmin
-	objID, _ := primitive.ObjectIDFromHex("5d27e20cfe68ab3cfc380d7f")
-	data, err := db.QueryDocument("", collectionName, bson.D{{"_id", objID}}).DecodeBytes()
-	// admin= data
-	log.Print(data)
+	objID, _ := primitive.ObjectIDFromHex("5d27e20cfe68ab3cfc380d7d")
+	result := db.QueryDocument("", collectionName, bson.D{{"_id", objID}})
+	if result.Err() != nil {
+		log.Fatalln("Failed to create request log file:", result.Err())
+
+	}
+	err := result.Decode(admin)
+
 	return admin, err
 }
 

@@ -1,0 +1,42 @@
+{
+    "_id": {
+        "$oid": "5d27e20cfe68ab3cfc380d7f"
+    },
+    "email": "tester@gmail.com",
+    "status": true,
+    "data": {
+        "uid": "5d27e20cfe68ab3cfc380d7f",
+        "email": "tester@gmail.com",
+        "photoURL": "something",
+        "displayName": "Kamana Kisinga"
+    },
+    "config": {
+        "hospitalId": "test hospital",
+        "cateoryId": "test category",
+        "level": {
+            "$numberInt": "1"
+        },
+        "availability": {
+            "$numberInt": "0"
+        }
+    },
+    "profiledata": {
+        "bio": "test bio",
+        "age": "12",
+        "address": "309",
+        "phone": "702604380",
+        "status": false
+    },
+    "metadata": {
+        "date": {
+            "$date": {
+                "$numberLong": "1576789200000"
+            }
+        },
+        "lastedit": {
+            "$date": {
+                "$numberLong": "1576875600000"
+            }
+        }
+    }
+}
