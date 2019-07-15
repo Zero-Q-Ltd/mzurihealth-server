@@ -73,7 +73,7 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHos
 	// str := fmt.Sprintf("%v", insertResult.InsertedID)
 	var admin *models.HospAdmin
 	objID, _ := primitive.ObjectIDFromHex("5d27e20cfe68ab3cfc380d7d")
-	result := db.QueryDocument("", collectionName, bson.D{{"_id", objID}})
+	result := db.QueryDocument(ctx, "", collectionName, bson.D{{"_id", objID}})
 	if result.Err() != nil {
 		log.Fatalln("Failed to create request log file:", result.Err())
 

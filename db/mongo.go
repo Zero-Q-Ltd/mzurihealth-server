@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -14,29 +13,29 @@ var client *mongo.Client
 var defaultdb string
 
 // ConnectDB is the entry point when the server is started that ensures a successful connection to a mongodb instance
-func ConnectDB(defaultdbstring string) {
+func ConnectDB(ctx context.Context, defaultdbstring string) {
 	fmt.Println("Connecting to Db........")
 
 	defaultdb = defaultdbstring
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-	clientvar, err := mongo.Connect(context.TODO(), clientOptions)
+	clientvar, err := mongo.Connect(ctx, clientOptions)
 	client = clientvar
 
 	if err != nil {
-		log.Error()
+		// log.Error(err)
 	}
 
-	err = client.Ping(context.TODO(), nil)
+	err = client.Ping(ctx, nil)
 
 	if err != nil {
-		log.Fatal().Msg(err.Error())
+		// log.Fatal(err.Error())
 	}
 	fmt.Println("Connected to MongoDB!")
 	//dont forget to close the connection
 }
 
 // GetCollection returns a collection reference that can be used for reading or writing to db
-func GetCollection(database string, collection string) *mongo.Collection {
+func GetCollection(ctx context.Context, database string, collection string) *mongo.Collection {
 	if database == "" {
 		return client.Database(defaultdb).Collection(collection)
 	}
@@ -44,58 +43,58 @@ func GetCollection(database string, collection string) *mongo.Collection {
 }
 
 //InserDocument is the universal function that inserts ONE doc to a collection
-func InserDocument(database string, collection string, document interface{}) (*mongo.InsertOneResult, error) {
+func InserDocument(ctx context.Context, database string, collection string, document interface{}) (*mongo.InsertOneResult, error) {
 	var ref *mongo.Collection
 	if database == "" {
 		ref = client.Database(defaultdb).Collection(collection)
 	} else {
 		ref = client.Database(database).Collection(collection)
 	}
-	insertres, err := ref.InsertOne(context.TODO(), document)
+	insertres, err := ref.InsertOne(ctx, document)
 	if err != nil {
-		dbError("InserDocument", document, err)
+		dbError(ctx, "InserDocument", document, err)
 	}
 	return insertres, err
 }
 
 //InsertManyDocuments is the universal function that inserts MANY docs to the same collection
-func InsertManyDocuments(database string, collection string, documents []interface{}) (*mongo.InsertManyResult, error) {
+func InsertManyDocuments(ctx context.Context, database string, collection string, documents []interface{}) (*mongo.InsertManyResult, error) {
 	var ref *mongo.Collection
 	if database == "" {
 		ref = client.Database(defaultdb).Collection(collection)
 	} else {
 		ref = client.Database(database).Collection(collection)
 	}
-	insertres, err := ref.InsertMany(context.TODO(), documents)
+	insertres, err := ref.InsertMany(ctx, documents)
 	if err != nil {
-		dbError("InsertManyDocuments", documents, err)
+		dbError(ctx, "InsertManyDocuments", documents, err)
 	}
 	return insertres, err
 }
 
 // UpdateDocument modifies a doc given the id and data
-func UpdateDocument(database string, collection string, id bson.M, document interface{}) (*mongo.UpdateResult, error) {
-	res, err := GetCollection(database, collection).UpdateOne(context.TODO(), id, document)
+func UpdateDocument(ctx context.Context, database string, collection string, id bson.M, document interface{}) (*mongo.UpdateResult, error) {
+	res, err := GetCollection(ctx, database, collection).UpdateOne(ctx, id, document)
 	if err != nil {
-		dbError("UpdateDocument", document, err)
+		dbError(ctx, "UpdateDocument", document, err)
 	}
 	return res, err
 }
 
 //DeleteDocument removes a document from the database
-func DeleteDocument(database string, collection string, id bson.M) (*mongo.DeleteResult, error) {
-	res, err := GetCollection(database, collection).DeleteOne(context.TODO(), id)
+func DeleteDocument(ctx context.Context, database string, collection string, id bson.M) (*mongo.DeleteResult, error) {
+	res, err := GetCollection(ctx, database, collection).DeleteOne(ctx, id)
 	if err != nil {
-		dbError("DeleteDocument", id, err)
+		dbError(ctx, "DeleteDocument", id, err)
 	}
 	return res, err
 }
 
 //DeleteDocuments removes many documents from the database
-func DeleteDocuments(database string, collection string, id []bson.M) (*mongo.DeleteResult, error) {
-	res, err := GetCollection(database, collection).DeleteMany(context.TODO(), id)
+func DeleteDocuments(ctx context.Context, database string, collection string, id []bson.M) (*mongo.DeleteResult, error) {
+	res, err := GetCollection(ctx, database, collection).DeleteMany(ctx, id)
 	if err != nil {
-		dbError("DeleteDocuments", id, err)
+		dbError(ctx, "DeleteDocuments", id, err)
 	}
 	return res, err
 }
@@ -103,13 +102,12 @@ func DeleteDocuments(database string, collection string, id []bson.M) (*mongo.De
 //QueryDocument sends a query to the db
 //By design, even fetching a specific document is a query, so whether the id is known or not does not change the structure of the function.
 //It is Up to the calling function to decode the document
-func QueryDocument(database string, collection string, query bson.D) *mongo.SingleResult {
-	res := GetCollection(database, collection).FindOne(context.TODO(), query)
-	// log.Info().Msg("Query", +query.)
-
+func QueryDocument(ctx context.Context, database string, collection string, query bson.D) *mongo.SingleResult {
+	res := GetCollection(ctx, database, collection).FindOne(ctx, query)
+	fmt.Print(ctx)
 	if res.Err() != nil {
-		log.Warn().Msg(res.Err().Error())
-		dbError("QueryDocument", query, res.Err())
+		// log.Warn().Msg(res.Err().Error())
+		dbError(ctx, "QueryDocument", query, res.Err())
 	}
 	return res
 }
@@ -118,23 +116,24 @@ func QueryDocument(database string, collection string, query bson.D) *mongo.Sing
 //A set of many complext queries can be built and batched in the same read operation.
 //Be very careful though, as pooply indexed database can be a huge bottleneck.
 //It is up to the calling function to decode the documents
-func QueryAggregate(database string, collection string, query []bson.M) (*mongo.Cursor, error) {
-	res, err := client.Database(database).Collection(collection).Aggregate(context.TODO(), query)
+func QueryAggregate(ctx context.Context, database string, collection string, query []bson.M) (*mongo.Cursor, error) {
+	res, err := client.Database(database).Collection(collection).Aggregate(ctx, query)
 	if err != nil {
-		dbError("QueryAggregate", query, err)
+		dbError(ctx, "QueryAggregate", query, err)
 	}
 	return res, err
 }
 
 //This logs any error occured when performing any CRUD operaion to db
-func dbError(function string, params interface{}, err error) {
-	log.Warn().Msg("Error" + function + err.Error())
+func dbError(ctx context.Context, function string, params interface{}, err error) {
+	// log.Warn().Msg("Error" + function + err.Error())
+	// ctx.
 }
 
 //CloseSession is good cleanup code when the server exits
-func CloseSession() {
-	err := client.Disconnect(context.TODO())
+func CloseSession(ctx context.Context) {
+	err := client.Disconnect(ctx)
 	if err != nil {
-		log.Warn().Msg(err.Error())
+		// log.Warn().Msg(err.Error())
 	}
 }
