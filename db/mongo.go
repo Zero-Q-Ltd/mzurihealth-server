@@ -3,8 +3,12 @@ package db
 import (
 	"context"
 	"fmt"
+	"net/http"
 
+	ginlogrus "github.com/Bose/go-gin-logrus"
+	"github.com/kisinga/mzurihealth/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -13,7 +17,7 @@ var client *mongo.Client
 var defaultdb string
 
 // ConnectDB is the entry point when the server is started that ensures a successful connection to a mongodb instance
-func ConnectDB(ctx context.Context, defaultdbstring string) {
+func ConnectDB(ctx context.Context, defaultdbstring string) (err error) {
 	fmt.Println("Connecting to Db........")
 
 	defaultdb = defaultdbstring
@@ -28,9 +32,10 @@ func ConnectDB(ctx context.Context, defaultdbstring string) {
 	err = client.Ping(ctx, nil)
 
 	if err != nil {
-		// log.Fatal(err.Error())
+		fmt.Println("Error connecting to DB...\n", err)
 	}
 	fmt.Println("Connected to MongoDB!")
+	return err
 	//dont forget to close the connection
 }
 
@@ -40,6 +45,20 @@ func GetCollection(ctx context.Context, database string, collection string) *mon
 		return client.Database(defaultdb).Collection(collection)
 	}
 	return client.Database(database).Collection(collection)
+}
+
+//ValidateAndGetUserID reads the user from the database
+func ValidateAndGetUserID(ctx context.Context, cookie http.Cookie) (admin models.HospAdmin, err error) {
+	userID, _ := primitive.ObjectIDFromHex(cookie.Value)
+	res := QueryDocument(ctx, "", "hospadmins", bson.D{{"_id", userID}})
+	if res.Err() != nil {
+		return admin, res.Err()
+	}
+	err = res.Decode(admin)
+	if err != nil {
+		return admin, err
+	}
+	return admin, nil
 }
 
 //InserDocument is the universal function that inserts ONE doc to a collection
@@ -127,7 +146,8 @@ func QueryAggregate(ctx context.Context, database string, collection string, que
 //This logs any error occured when performing any CRUD operaion to db
 func dbError(ctx context.Context, function string, params interface{}, err error) {
 	// log.Warn().Msg("Error" + function + err.Error())
-	// ctx.
+	logger := ginlogrus.GetCtxLogger(ctx) // will get a logger with the aggregate Logger set if it's enabled - handy if you've already set fields for the request
+
 }
 
 //CloseSession is good cleanup code when the server exits
