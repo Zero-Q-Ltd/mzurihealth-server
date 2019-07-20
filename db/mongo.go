@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
-	ginlogrus "github.com/Bose/go-gin-logrus"
 	"github.com/kisinga/mzurihealth/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -37,6 +37,29 @@ func ConnectDB(ctx context.Context, defaultdbstring string) (err error) {
 	fmt.Println("Connected to MongoDB!")
 	return err
 	//dont forget to close the connection
+var userDoc User
+var change bson.Mcs, err := r.users.Watch([]bson.M{}, mgo.ChangeStreamOptions{MaxAwaitTimeMS: time.Hour, FullDocument: mgo.FullDocument("updateLookup")})
+
+	go func() {
+		start := time.Now()
+		for {
+			ok := cs.Next(&change)
+			if ok {
+				byts, _ := bson.Marshal(change["fullDocument"].(bson.M))
+				bson.Unmarshal(byts, &userDoc)
+
+				userDoc.ID = bson.ObjectId(userDoc.ID).Hex()
+				if userDoc.ID == id {
+					*userChan <- userDoc
+				}
+			}
+			if time.Since(start).Minutes() >= 60 {
+				break
+			}
+			continue
+		}
+	}()
+
 }
 
 // GetCollection returns a collection reference that can be used for reading or writing to db
@@ -47,8 +70,8 @@ func GetCollection(ctx context.Context, database string, collection string) *mon
 	return client.Database(database).Collection(collection)
 }
 
-//ValidateAndGetUserID reads the user from the database
-func ValidateAndGetUserID(ctx context.Context, cookie http.Cookie) (admin models.HospAdmin, err error) {
+//ValidateAndGetUser reads the user from the database
+func ValidateAndGetUser(ctx context.Context, cookie http.Cookie) (admin models.HospAdmin, err error) {
 	userID, _ := primitive.ObjectIDFromHex(cookie.Value)
 	res := QueryDocument(ctx, "", "hospadmins", bson.D{{"_id", userID}})
 	if res.Err() != nil {
@@ -123,7 +146,6 @@ func DeleteDocuments(ctx context.Context, database string, collection string, id
 //It is Up to the calling function to decode the document
 func QueryDocument(ctx context.Context, database string, collection string, query bson.D) *mongo.SingleResult {
 	res := GetCollection(ctx, database, collection).FindOne(ctx, query)
-	fmt.Print(ctx)
 	if res.Err() != nil {
 		// log.Warn().Msg(res.Err().Error())
 		dbError(ctx, "QueryDocument", query, res.Err())
@@ -146,7 +168,6 @@ func QueryAggregate(ctx context.Context, database string, collection string, que
 //This logs any error occured when performing any CRUD operaion to db
 func dbError(ctx context.Context, function string, params interface{}, err error) {
 	// log.Warn().Msg("Error" + function + err.Error())
-	logger := ginlogrus.GetCtxLogger(ctx) // will get a logger with the aggregate Logger set if it's enabled - handy if you've already set fields for the request
 
 }
 

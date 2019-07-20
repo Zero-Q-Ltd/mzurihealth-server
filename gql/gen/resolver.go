@@ -2,10 +2,11 @@ package gen
 
 import (
 	"context"
-	"log"
 
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/models"
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -67,6 +68,10 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, input models.NewPa
 }
 
 func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHospAdmin) (*models.HospAdmin, error) {
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "CreateAdmin")
+	defer span.Finish()
+
 	collectionName := "hospadmins"
 	// insertResult, err := db.InserDocument("", collectionName, input)
 	// log.Print(insertResult)
@@ -74,12 +79,16 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHos
 	var admin *models.HospAdmin
 	objID, _ := primitive.ObjectIDFromHex("5d27e20cfe68ab3cfc380d7d")
 	result := db.QueryDocument(ctx, "", collectionName, bson.D{{"_id", objID}})
-	if result.Err() != nil {
-		log.Fatalln("Failed to create request log file:", result.Err())
+
+	err := result.Decode(admin)
+	if err != nil {
+		span.LogFields(
+			log.String("event", "soft error"),
+			log.String("type", "Error Conerting"),
+			log.Error(err))
+		return admin, err
 
 	}
-	err := result.Decode(admin)
-
 	return admin, err
 }
 
