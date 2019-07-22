@@ -143,8 +143,7 @@ func QueryAggregate(ctx context.Context, database string, collection string, que
 
 //This logs any error occured when performing any CRUD operaion to db
 func dbError(ctx context.Context, function string, params interface{}, err error) {
-	// log.Warn().Msg("Error" + function + err.Error())
-
+	fmt.Print(("Error" + function + err.Error()))
 }
 
 //CloseSession is good cleanup code when the server exits

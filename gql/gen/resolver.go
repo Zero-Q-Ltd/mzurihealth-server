@@ -15,18 +15,6 @@ import (
 
 type Resolver struct{}
 
-func (r *Resolver) AdminCategory() AdminCategoryResolver {
-	return &adminCategoryResolver{r}
-}
-func (r *Resolver) AdminInvite() AdminInviteResolver {
-	return &adminInviteResolver{r}
-}
-func (r *Resolver) HospAdmin() HospAdminResolver {
-	return &hospAdminResolver{r}
-}
-func (r *Resolver) Hospital() HospitalResolver {
-	return &hospitalResolver{r}
-}
 func (r *Resolver) Mutation() MutationResolver {
 	return &mutationResolver{r}
 }
@@ -35,30 +23,6 @@ func (r *Resolver) Query() QueryResolver {
 }
 func (r *Resolver) Subscription() SubscriptionResolver {
 	return &subscriptionResolver{r}
-}
-
-type adminCategoryResolver struct{ *Resolver }
-
-func (r *adminCategoryResolver) _id(ctx context.Context, obj *models.AdminCategory) (string, error) {
-	panic("not implemented")
-}
-
-type adminInviteResolver struct{ *Resolver }
-
-func (r *adminInviteResolver) _id(ctx context.Context, obj *models.AdminInvite) (string, error) {
-	panic("not implemented")
-}
-
-type hospAdminResolver struct{ *Resolver }
-
-func (r *hospAdminResolver) _id(ctx context.Context, obj *models.HospAdmin) (string, error) {
-	panic("not implemented")
-}
-
-type hospitalResolver struct{ *Resolver }
-
-func (r *hospitalResolver) _id(ctx context.Context, obj *models.Hospital) (string, error) {
-	panic("not implemented")
 }
 
 type mutationResolver struct{ *Resolver }

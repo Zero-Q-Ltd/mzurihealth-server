@@ -25,7 +25,7 @@ import (
 
 const defaultPort = "4242"
 
-var hospital *models.Hospital
+var hospital models.Hospital
 
 func main() {
 
@@ -42,16 +42,21 @@ func main() {
 
 	//Read the config first
 	hosp, configerr := config.ReadFile()
-	hospId, _ := primitive.ObjectIDFromHex(hosp.ID)
-
-	result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hospId}})
-	_ = result.Decode(hospital)
-	// fmt.Print(hosp)
 
 	if configerr != nil {
 		fmt.Println("Error reading file")
 		clicommands(ctx)
 	}
+	hospID, _ := primitive.ObjectIDFromHex(hosp.ID)
+	fmt.Print(hospID)
+	result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hospID}})
+	var temp *models.Hospital
+	var decodeerr = result.Decode(&temp)
+	// hospital = *temp
+	if decodeerr != nil {
+		initError("Decode Hospital 2", decodeerr)
+	}
+	fmt.Print(temp)
 
 	r := gin.Default()
 	gin.SetMode(gin.DebugMode)
@@ -81,7 +86,7 @@ func main() {
 	r.POST("/api", graphqlHandler())
 	r.GET("/api", graphqlHandler())
 	r.GET("/", playgroundHandler())
-	r.Run(":" + port)
+	_ = r.Run(":" + port)
 }
 
 func clicommands(ctx context.Context, cmd ...string) {
@@ -104,11 +109,13 @@ func clicommands(ctx context.Context, cmd ...string) {
 		}
 		objID, _ := primitive.ObjectIDFromHex(str.Hex())
 		result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
-		decodeerr := result.Decode(hospital)
+		var temp *models.Hospital
+		var decodeerr = result.Decode(&temp)
+		hospital = *temp
 		if decodeerr != nil {
 			initError("Decode Hospital", decodeerr)
 		}
-		config.Create(*hospital)
+		config.Create(hospital)
 		return
 	} else {
 		initError("Cli commands", nil)

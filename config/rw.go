@@ -15,11 +15,6 @@ import (
 	"github.com/kisinga/mzurihealth/models"
 )
 
-type hospconfig struct {
-	name string
-	id   string
-}
-
 const pass = "zero-q/mzurihealth"
 
 //Create will encrypt the hospital struct and save it to a file
@@ -30,7 +25,7 @@ func Create(hosp models.Hospital) {
 
 	fmt.Printf("Encrypted: %x\n", ciphertext)
 
-	writeToFile("config.txt", ciphertext)
+	_ = writeToFile("config.txt", ciphertext)
 
 	plaintext := decrypt(ciphertext, pass)
 
@@ -45,12 +40,15 @@ func ReadFile() (config models.Hospital, err error) {
 		empty := models.Hospital{}
 		return empty, returnerr
 	}
-	err = json.Unmarshal(data, &config)
+	var tempconfig *models.Hospital
+	err = json.Unmarshal(data, &tempconfig)
 	if err != nil {
 		fmt.Print("Error Unmarshaing Config ", err)
 	}
-	fmt.Print(config)
+	config = *tempconfig
 
+	fmt.Print(*tempconfig)
+	fmt.Print(config)
 	return
 }
 
@@ -101,7 +99,7 @@ func writeToFile(filename string, data []byte) error {
 		return err
 	}
 	defer file.Close()
-	file.Write(data)
+	_, _ = file.Write(data)
 	return file.Sync()
 }
 
