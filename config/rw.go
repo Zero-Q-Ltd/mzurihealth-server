@@ -1,0 +1,116 @@
+package config
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/md5"
+	"crypto/rand"
+	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
+
+	"github.com/kisinga/mzurihealth/models"
+)
+
+type hospconfig struct {
+	name string
+	id   string
+}
+
+const pass = "zero-q/mzurihealth"
+
+//Create will encrypt the hospital struct and save it to a file
+func Create(hosp models.Hospital) {
+	b, _ := json.Marshal(hosp)
+
+	ciphertext := encrypt(b, pass)
+
+	fmt.Printf("Encrypted: %x\n", ciphertext)
+
+	writeToFile("config.txt", ciphertext)
+
+	plaintext := decrypt(ciphertext, pass)
+
+	fmt.Printf("Decrypted: %s\n", plaintext)
+
+}
+
+//ReadFile reads the config file and returns the decripted data or (and) errors
+func ReadFile() (config models.Hospital, err error) {
+	data, returnerr := decryptFile("config.txt", pass)
+	if returnerr != nil {
+		empty := models.Hospital{}
+		return empty, returnerr
+	}
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		fmt.Print("Error Unmarshaing Config ", err)
+	}
+	fmt.Print(config)
+
+	return
+}
+
+func createHash(key string) string {
+	hasher := md5.New()
+	hasher.Write([]byte(key))
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func encrypt(data []byte, passphrase string) []byte {
+	block, _ := aes.NewCipher([]byte(createHash(passphrase)))
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		panic(err.Error())
+	}
+	nonce := make([]byte, gcm.NonceSize())
+	if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
+		panic(err.Error())
+	}
+	ciphertext := gcm.Seal(nonce, nonce, data, nil)
+	return ciphertext
+}
+
+func decrypt(data []byte, passphrase string) []byte {
+	key := []byte(createHash(passphrase))
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err.Error())
+	}
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		panic(err.Error())
+	}
+	nonceSize := gcm.NonceSize()
+	nonce, ciphertext := data[:nonceSize], data[nonceSize:]
+	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
+	if err != nil {
+		panic(err.Error())
+	}
+	return plaintext
+}
+
+// writeToFile will print any string of text to a file safely by
+// checking for errors and syncing at the end.
+func writeToFile(filename string, data []byte) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	file.Write(data)
+	return file.Sync()
+}
+
+func decryptFile(filename string, passphrase string) (data []byte, err error) {
+	encrypteddata, readerr := ioutil.ReadFile(filename)
+	if readerr != nil {
+		fmt.Print("Error Reading Config ", err)
+		return []byte{}, readerr
+	}
+	data = decrypt(encrypteddata, passphrase)
+	return
+}

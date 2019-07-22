@@ -14,7 +14,14 @@ type Hospital {
 	invoiceCount: Int!
 	metadata: Metadata
 	paymentMethods: [PaymentMethod]
+	environment: environment
 }
+
+enum environment {
+	Prod
+	Dev
+}
+
 
 type contactperson {
 	name: String!
