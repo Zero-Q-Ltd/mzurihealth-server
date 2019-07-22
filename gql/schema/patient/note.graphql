@@ -4,7 +4,7 @@ type Patientnote {
 	title: String!
 	note: String!
 	admin: AttachedAdmin!
-	id: String!
+	Id: ID!
 	patientId: String!
 	metadata: Metadata!
 	helpful: Int!

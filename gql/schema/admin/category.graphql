@@ -1,6 +1,6 @@
 type AdminCategory {
     name: String!
     description: String!
-    _id: String!
+	Id: ID!
     level: Int!
 }

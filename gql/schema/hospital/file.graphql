@@ -1,6 +1,6 @@
 
 type HospFile {
-	id: ID!
+	Id: ID!
 	date: Int!
 	lastvisit: Int!
 	no: String!

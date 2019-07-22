@@ -11,12 +11,12 @@ import (
 type AdminCategory struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	_id         string `json:"_id"`
+	ID          string `json:"Id"`
 	Level       int    `json:"level"`
 }
 
 type AdminInvite struct {
-	_id        string    `json:"_id"`
+	ID         string    `json:"Id"`
 	Name       string    `json:"name"`
 	Email      string    `json:"email"`
 	Phone      string    `json:"phone"`
@@ -45,7 +45,7 @@ type Condition struct {
 }
 
 type HospAdmin struct {
-	_id         string       `json:"_id"`
+	ID          string       `json:"Id"`
 	Status      bool         `json:"status"`
 	Data        *Data        `json:"data"`
 	Config      *Config      `json:"config"`
@@ -54,7 +54,7 @@ type HospAdmin struct {
 }
 
 type HospFile struct {
-	ID         string  `json:"id"`
+	ID         string  `json:"Id"`
 	Date       int     `json:"date"`
 	Lastvisit  int     `json:"lastvisit"`
 	No         string  `json:"no"`
@@ -66,7 +66,7 @@ type Hospital struct {
 	Location       *Location        `json:"location"`
 	Name           string           `json:"name"`
 	Userid         string           `json:"userid"`
-	_id            string           `json:"_id"`
+	ID             string           `json:"Id"`
 	Description    string           `json:"description"`
 	Status         *bool            `json:"status"`
 	Contactperson  *Contactperson   `json:"contactperson"`
@@ -80,7 +80,7 @@ type Hospital struct {
 }
 
 type Insurance struct {
-	ID          string `json:"id"`
+	ID          string `json:"Id"`
 	InsuranceNo string `json:"insuranceNo"`
 }
 
@@ -109,7 +109,7 @@ type Patient struct {
 	Fileinfo     *HospFile    `json:"fileinfo"`
 	Done         bool         `json:"done"`
 	HospAdmin    *HospAdmin   `json:"HospAdmin"`
-	ID           string       `json:"id"`
+	ID           string       `json:"Id"`
 	Parentid     *string      `json:"parentid"`
 	Nextofkin    *Nextofkin   `json:"nextofkin"`
 	Insurance    []*Insurance `json:"insurance"`
@@ -120,14 +120,14 @@ type Patientnote struct {
 	Title     string         `json:"title"`
 	Note      string         `json:"note"`
 	Admin     *AttachedAdmin `json:"admin"`
-	ID        string         `json:"id"`
+	ID        string         `json:"Id"`
 	PatientID string         `json:"patientId"`
 	Metadata  *Metadata      `json:"metadata"`
 	Helpful   int            `json:"helpful"`
 }
 
 type PaymentChannel struct {
-	ID                          *string       `json:"id"`
+	ID                          string        `json:"Id"`
 	Name                        *string       `json:"name"`
 	Mergeability                *Mergeability `json:"mergeability"`
 	TransactionDetailCollection *bool         `json:"transactionDetailCollection"`

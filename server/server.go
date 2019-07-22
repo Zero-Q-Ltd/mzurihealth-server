@@ -42,7 +42,10 @@ func main() {
 
 	//Read the config first
 	hosp, configerr := config.ReadFile()
-	hospital = &hosp
+	hospId, _ := primitive.ObjectIDFromHex(hosp.ID)
+
+	result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hospId}})
+	_ = result.Decode(hospital)
 	// fmt.Print(hosp)
 
 	if configerr != nil {

@@ -1,5 +1,5 @@
 type PaymentChannel {
-	id: String
+	Id: ID!
 	name: String
 	mergeability: mergeability
 	transactionDetailCollection: Boolean

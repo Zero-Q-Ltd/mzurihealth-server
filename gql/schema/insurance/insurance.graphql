@@ -1,4 +1,4 @@
 type Insurance {
-    id: String!
+	Id: ID!
     insuranceNo: String!
 }

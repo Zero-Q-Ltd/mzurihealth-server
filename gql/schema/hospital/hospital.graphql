@@ -4,7 +4,7 @@ type Hospital {
 	location: location
 	name: String!
 	userid: String!
-	_id: String!
+	Id: ID!
 	description: String!
 	status: Boolean
 	contactperson: contactperson
