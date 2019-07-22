@@ -13,7 +13,6 @@ import (
 	"os"
 
 	"github.com/kisinga/mzurihealth/models"
-	"gopkg.in/mgo.v2/bson"
 )
 
 type hospconfig struct {
@@ -42,15 +41,15 @@ func Create(hosp models.Hospital) {
 //ReadFile reads the config file and returns the decripted data or (and) errors
 func ReadFile() (config models.Hospital, err error) {
 	data, returnerr := decryptFile("config.txt", pass)
-	fmt.Print(string(data))
 	if returnerr != nil {
 		empty := models.Hospital{}
 		return empty, returnerr
 	}
-	err = bson.Unmarshal(data, &config)
+	err = json.Unmarshal(data, &config)
 	if err != nil {
 		fmt.Print("Error Unmarshaing Config ", err)
 	}
+	fmt.Print(config)
 
 	return
 }

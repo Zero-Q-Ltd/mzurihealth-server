@@ -43,6 +43,7 @@ func main() {
 	//Read the config first
 	hosp, configerr := config.ReadFile()
 	hospital = &hosp
+	// fmt.Print(hosp)
 
 	if configerr != nil {
 		fmt.Println("Error reading file")
