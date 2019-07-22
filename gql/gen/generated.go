@@ -107,6 +107,7 @@ type ComplexityRoot struct {
 		ContactDetails func(childComplexity int) int
 		Contactperson  func(childComplexity int) int
 		Description    func(childComplexity int) int
+		Environment    func(childComplexity int) int
 		InvoiceCount   func(childComplexity int) int
 		Location       func(childComplexity int) int
 		Logourl        func(childComplexity int) int
@@ -572,6 +573,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Hospital.Description(childComplexity), true
+
+	case "Hospital.environment":
+		if e.complexity.Hospital.Environment == nil {
+			break
+		}
+
+		return e.complexity.Hospital.Environment(childComplexity), true
 
 	case "Hospital.invoiceCount":
 		if e.complexity.Hospital.InvoiceCount == nil {
@@ -1498,7 +1506,14 @@ type Hospital {
 	invoiceCount: Int!
 	metadata: Metadata
 	paymentMethods: [PaymentMethod]
+	environment: environment
 }
+
+enum environment {
+	Prod
+	Dev
+}
+
 
 type contactperson {
 	name: String!
@@ -3583,6 +3598,40 @@ func (ec *executionContext) _Hospital_paymentMethods(ctx context.Context, field 
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalOPaymentMethod2ᚕᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐPaymentMethod(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Hospital_environment(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Hospital",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Environment, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Environment)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOenvironment2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐEnvironment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Insurance_id(ctx context.Context, field graphql.CollectedField, obj *models.Insurance) (ret graphql.Marshaler) {
@@ -8439,6 +8488,8 @@ func (ec *executionContext) _Hospital(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Hospital_metadata(ctx, field, obj)
 		case "paymentMethods":
 			out.Values[i] = ec._Hospital_paymentMethods(ctx, field, obj)
+		case "environment":
+			out.Values[i] = ec._Hospital_environment(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -10861,6 +10912,30 @@ func (ec *executionContext) marshalOcontactperson2ᚖgithubᚗcomᚋkisingaᚋmz
 		return graphql.Null
 	}
 	return ec._contactperson(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOenvironment2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐEnvironment(ctx context.Context, v interface{}) (models.Environment, error) {
+	var res models.Environment
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalOenvironment2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐEnvironment(ctx context.Context, sel ast.SelectionSet, v models.Environment) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOenvironment2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐEnvironment(ctx context.Context, v interface{}) (*models.Environment, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOenvironment2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐEnvironment(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) marshalOenvironment2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐEnvironment(ctx context.Context, sel ast.SelectionSet, v *models.Environment) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) marshalOlocation2githubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐLocation(ctx context.Context, sel ast.SelectionSet, v models.Location) graphql.Marshaler {

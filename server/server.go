@@ -2,53 +2,60 @@ package main
 
 import (
 	"context"
-	"log"
+	"flag"
+	"fmt"
 	"os"
-	"time"
 
-	ginlogrus "github.com/Bose/go-gin-logrus"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-contrib/cors"
+
+	"github.com/kisinga/mzurihealth/config"
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/gql/gen"
-	"github.com/kisinga/mzurihealth/logger"
+	"github.com/kisinga/mzurihealth/models"
+	"github.com/kisinga/mzurihealth/tracer"
 )
 
 //	cors "github.com/rs/cors/wrapper/gin"
 
 const defaultPort = "4242"
 
-var logFile *os.File
+var hospital models.Hospital
 
 func main() {
-	r := gin.Default()
 
-	p := logger.InitLogging()
-	// tell gin to use the middleware
-	r.Use(p)
-
-	//Create the database connection
+	//Create the first context
 	ctx := context.Background()
 
-	db.ConnectDB(ctx, "test")
-
+	//Create a connection to db
+	dberr := db.ConnectDB(ctx, "test")
+	if dberr != nil {
+		initError("ConnectDB", dberr)
+	}
 	//Dont fotget to close connection to db
 	defer db.CloseSession(ctx)
 
-	dt := time.Now()
-	logPath := dt.Format("01-02-2006") + ".log.json"
-	logfile, err := os.OpenFile(logPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalln("Failed to create request log file:", err)
-	}
-	// use the JSON formatter
-	logrus.SetFormatter(&logrus.JSONFormatter{})
-	logrus.SetOutput(logfile)
+	//Read the config first
+	hosp, configerr := config.ReadFile()
+	hospital = hosp
 
+	if configerr != nil {
+		fmt.Println("Error reading file")
+		clicommands(ctx)
+	}
+
+	r := gin.Default()
 	gin.SetMode(gin.DebugMode)
+
+	//
+	p := tracer.InitTracing()
+	// tell gin to use the middleware
+	r.Use(p)
 
 	// Add CORS middleware around every request
 	// See https://github.com/rs/cors for full option listing
@@ -58,11 +65,12 @@ func main() {
 
 	r.Use(c)
 
-	port := os.Getenv("PORT")
+	//This can vary according to client, in case they have something else running
+	//on port 4242
+	port := os.Getenv("MZURIHEALTH PORT")
 	if port == "" {
 		port = defaultPort
 	}
-	gin.DisableConsoleColor()
 
 	r.Use(gin.Recovery()) // add Recovery middleware
 
@@ -72,11 +80,43 @@ func main() {
 	r.Run(":" + port)
 }
 
+func clicommands(ctx context.Context, cmd ...string) {
+	newindicator := flag.Bool("new", false, "specify name to create a new hospital")
+	name := flag.String("name", "", "specify name to create a new hospital")
+	flag.Parse()
+
+	if *newindicator {
+		hospital.Name = *name
+		res, err := db.InserDocument(ctx, "", "hospitals", hospital)
+		if err != nil {
+			initError("Create Hospital", err)
+		}
+
+		str, ok := res.InsertedID.(primitive.ObjectID)
+		if ok {
+			fmt.Printf("string value is: %q\n", str.Hex())
+		} else {
+			fmt.Printf("value is not a string\n")
+		}
+		objID, _ := primitive.ObjectIDFromHex(str.Hex())
+		result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
+		result.Decode(hospital)
+		return
+	}
+}
+
+func createhospital() {
+
+}
+func initError(function string, e error) {
+	fmt.Println(function + " Init Error:")
+	fmt.Print(e)
+	panic("Init Error")
+}
+
 // Defining the Graphql handler
 func graphqlHandler() gin.HandlerFunc {
-
 	h := handler.GraphQL(gen.NewExecutableSchema(gen.Config{Resolvers: &gen.Resolver{}}))
-
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
@@ -85,33 +125,7 @@ func graphqlHandler() gin.HandlerFunc {
 // Defining the Playground handler
 func playgroundHandler() gin.HandlerFunc {
 	h := handler.Playground("GraphQL", "/api")
-
 	return func(c *gin.Context) {
-		ginlogrus.SetCtxLoggerHeader(c, "playground", "this is how you set new header level data")
-
-		// logger := ginlogrus.GetCtxLogger(c) // will get a logger with the aggregate Logger set if it's enabled - handy if you've already set fields for the request
-		// logger.Info("this will be aggregated into one write with the access log and will show up when the request is completed")
-
-		// // add some new fields to the existing logger
-		// logger = ginlogrus.SetCtxLogger(c, logger.WithFields(logrus.Fields{"comment": "this is an aggregated log entry with initial comment field"}))
-		// logger.Debug("aggregated entry with new comment field")
-
-		// // replace existing logger fields with new ones (notice it's logrus.WithFields())
-		// logger = ginlogrus.SetCtxLogger(c, logrus.WithFields(logrus.Fields{"new-comment": "this is an aggregated log entry with reset 	 field"}))
-		// logger.Error("aggregated error entry with new-comment field")
-
-		// logrus.Info("this will NOT be aggregated and will be logged immediately")
-		// span := newSpanFromContext(c, "sleep-span")
-		// defer span.Finish() // this will get logged because tracing was setup with ginopentracing.WithEnableInfoLog(true)
-
-		// go func() {
-		// 	// need a NewBuffer for aggregate logging of this goroutine (since the req will be done long before this thing finishes)
-		// 	// it will inherit header info from the existing request
-		// 	buff := ginlogrus.NewBuffer(logger)
-		// 	time.Sleep(1 * time.Second)
-		// 	logger.Info("Hi from a goroutine completing after the request")
-		// 	fmt.Printf(buff.String())
-		// }()
 		h.ServeHTTP(c.Writer, c.Request)
 	}
 }

@@ -76,6 +76,7 @@ type Hospital struct {
 	InvoiceCount   int              `json:"invoiceCount"`
 	Metadata       *Metadata        `json:"metadata"`
 	PaymentMethods []*PaymentMethod `json:"paymentMethods"`
+	Environment    *Environment     `json:"environment"`
 }
 
 type Insurance struct {
@@ -206,6 +207,47 @@ type Profiledata struct {
 	Address string `json:"address"`
 	Phone   string `json:"phone"`
 	Status  bool   `json:"status"`
+}
+
+type Environment string
+
+const (
+	EnvironmentProd Environment = "Prod"
+	EnvironmentDev  Environment = "Dev"
+)
+
+var AllEnvironment = []Environment{
+	EnvironmentProd,
+	EnvironmentDev,
+}
+
+func (e Environment) IsValid() bool {
+	switch e {
+	case EnvironmentProd, EnvironmentDev:
+		return true
+	}
+	return false
+}
+
+func (e Environment) String() string {
+	return string(e)
+}
+
+func (e *Environment) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Environment(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid environment", str)
+	}
+	return nil
+}
+
+func (e Environment) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type GeoType string

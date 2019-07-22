@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/kisinga/mzurihealth/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -32,34 +31,11 @@ func ConnectDB(ctx context.Context, defaultdbstring string) (err error) {
 	err = client.Ping(ctx, nil)
 
 	if err != nil {
-		fmt.Println("Error connecting to DB...\n", err)
+		fmt.Println("Error connecting to Db........\n", err)
+		panic("Error connecting to Db........")
 	}
 	fmt.Println("Connected to MongoDB!")
 	return err
-	//dont forget to close the connection
-var userDoc User
-var change bson.Mcs, err := r.users.Watch([]bson.M{}, mgo.ChangeStreamOptions{MaxAwaitTimeMS: time.Hour, FullDocument: mgo.FullDocument("updateLookup")})
-
-	go func() {
-		start := time.Now()
-		for {
-			ok := cs.Next(&change)
-			if ok {
-				byts, _ := bson.Marshal(change["fullDocument"].(bson.M))
-				bson.Unmarshal(byts, &userDoc)
-
-				userDoc.ID = bson.ObjectId(userDoc.ID).Hex()
-				if userDoc.ID == id {
-					*userChan <- userDoc
-				}
-			}
-			if time.Since(start).Minutes() >= 60 {
-				break
-			}
-			continue
-		}
-	}()
-
 }
 
 // GetCollection returns a collection reference that can be used for reading or writing to db
