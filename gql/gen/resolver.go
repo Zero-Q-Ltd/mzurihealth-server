@@ -73,13 +73,14 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHos
 	defer span.Finish()
 
 	collectionName := "hospadmins"
-	// insertResult, err := db.InserDocument("", collectionName, input)
+	insertResult, err := db.InserDocument(ctx, "", collectionName, input)
 	// log.Print(insertResult)
 	// str := fmt.Sprintf("%v", insertResult.InsertedID)
 	var admin *models.HospAdmin
-	objID, _ := primitive.ObjectIDFromHex("5d27e20cfe68ab3cfc380d7f")
+	str, _ := insertResult.InsertedID.(primitive.ObjectID)
+	objID, _ := primitive.ObjectIDFromHex(str.Hex())
 	result := db.QueryDocument(ctx, "", collectionName, bson.D{{"_id", objID}})
-	err := result.Decode(admin)
+	err = result.Decode(admin)
 	if err != nil {
 		span.LogFields(
 			log.String("event", "soft error"),

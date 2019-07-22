@@ -25,7 +25,7 @@ import (
 
 const defaultPort = "4242"
 
-var hospital models.Hospital
+var hospital *models.Hospital
 
 func main() {
 
@@ -42,7 +42,7 @@ func main() {
 
 	//Read the config first
 	hosp, configerr := config.ReadFile()
-	hospital = hosp
+	hospital = &hosp
 
 	if configerr != nil {
 		fmt.Println("Error reading file")
@@ -81,6 +81,7 @@ func main() {
 }
 
 func clicommands(ctx context.Context, cmd ...string) {
+	fmt.Println("Checking cli options...")
 	newindicator := flag.Bool("new", false, "specify name to create a new hospital")
 	name := flag.String("name", "", "specify name to create a new hospital")
 	flag.Parse()
@@ -91,23 +92,25 @@ func clicommands(ctx context.Context, cmd ...string) {
 		if err != nil {
 			initError("Create Hospital", err)
 		}
-
 		str, ok := res.InsertedID.(primitive.ObjectID)
 		if ok {
-			fmt.Printf("string value is: %q\n", str.Hex())
+			fmt.Printf("ID is: %q\n", str.Hex())
 		} else {
 			fmt.Printf("value is not a string\n")
 		}
 		objID, _ := primitive.ObjectIDFromHex(str.Hex())
 		result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
-		result.Decode(hospital)
+		decodeerr := result.Decode(hospital)
+		if decodeerr != nil {
+			initError("Decode Hospital", decodeerr)
+		}
+		config.Create(*hospital)
 		return
+	} else {
+		initError("Cli commands", nil)
 	}
 }
 
-func createhospital() {
-
-}
 func initError(function string, e error) {
 	fmt.Println(function + " Init Error:")
 	fmt.Print(e)

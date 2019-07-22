@@ -1,12 +1,10 @@
 package config
 
 import (
-	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"
 	"crypto/rand"
-	"encoding/gob"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -15,6 +13,7 @@ import (
 	"os"
 
 	"github.com/kisinga/mzurihealth/models"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type hospconfig struct {
@@ -22,22 +21,13 @@ type hospconfig struct {
 	id   string
 }
 
-func ReadFile() (config models.Hospital, err error) {
-	file, _ := ioutil.ReadFile("config.txt")
-	err = json.Unmarshal([]byte(file), &config)
-	return
-}
-
 const pass = "zero-q/mzurihealth"
 
 //Create will encrypt the hospital struct and save it to a file
 func Create(hosp models.Hospital) {
-	var b bytes.Buffer
-	e := gob.NewEncoder(&b)
-	if err := e.Encode(hosp); err != nil {
-		panic(err)
-	}
-	ciphertext := encrypt([]byte(b.Bytes()), pass)
+	b, _ := json.Marshal(hosp)
+
+	ciphertext := encrypt(b, pass)
 
 	fmt.Printf("Encrypted: %x\n", ciphertext)
 
@@ -47,8 +37,24 @@ func Create(hosp models.Hospital) {
 
 	fmt.Printf("Decrypted: %s\n", plaintext)
 
-	fmt.Println(string(decryptFile("config.txt", "sdkmk")))
 }
+
+//ReadFile reads the config file and returns the decripted data or (and) errors
+func ReadFile() (config models.Hospital, err error) {
+	data, returnerr := decryptFile("config.txt", pass)
+	fmt.Print(string(data))
+	if returnerr != nil {
+		empty := models.Hospital{}
+		return empty, returnerr
+	}
+	err = bson.Unmarshal(data, &config)
+	if err != nil {
+		fmt.Print("Error Unmarshaing Config ", err)
+	}
+
+	return
+}
+
 func createHash(key string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(key))
@@ -100,7 +106,12 @@ func writeToFile(filename string, data []byte) error {
 	return file.Sync()
 }
 
-func decryptFile(filename string, passphrase string) []byte {
-	data, _ := ioutil.ReadFile(filename)
-	return decrypt(data, passphrase)
+func decryptFile(filename string, passphrase string) (data []byte, err error) {
+	encrypteddata, readerr := ioutil.ReadFile(filename)
+	if readerr != nil {
+		fmt.Print("Error Reading Config ", err)
+		return []byte{}, readerr
+	}
+	data = decrypt(encrypteddata, passphrase)
+	return
 }
