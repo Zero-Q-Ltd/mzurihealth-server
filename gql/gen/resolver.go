@@ -37,7 +37,11 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHos
 	defer span.Finish()
 
 	collectionName := "hospadmins"
-	insertResult, err := db.InserDocument(ctx, "", collectionName, input)
+	var newadmin bson.M
+	b, _ := bson.Marshal(input)
+	bson.Unmarshal([]byte(b), &newadmin)
+
+	insertResult, err := db.InserDocument(ctx, "", collectionName, "", newadmin)
 	// log.Print(insertResult)
 	// str := fmt.Sprintf("%v", insertResult.InsertedID)
 	var admin *models.HospAdmin

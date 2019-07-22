@@ -61,12 +61,19 @@ func ValidateAndGetUser(ctx context.Context, cookie http.Cookie) (admin models.H
 }
 
 //InserDocument is the universal function that inserts ONE doc to a collection
-func InserDocument(ctx context.Context, database string, collection string, document interface{}) (*mongo.InsertOneResult, error) {
+//Accepts an optional id field and automatically adds one to the
+func InserDocument(ctx context.Context, database string, collection string, id string, document bson.M) (*mongo.InsertOneResult, error) {
 	var ref *mongo.Collection
 	if database == "" {
 		ref = client.Database(defaultdb).Collection(collection)
 	} else {
 		ref = client.Database(database).Collection(collection)
+	}
+	/**
+	Make Mongo Automatically create an ID
+	**/
+	if id == "" {
+		delete(document, "_id")
 	}
 	insertres, err := ref.InsertOne(ctx, document)
 	if err != nil {

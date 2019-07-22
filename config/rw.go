@@ -11,6 +11,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strconv"
 
 	"github.com/kisinga/mzurihealth/models"
 )
@@ -40,15 +41,17 @@ func ReadFile() (config models.Hospital, err error) {
 		empty := models.Hospital{}
 		return empty, returnerr
 	}
-	var tempconfig *models.Hospital
-	err = json.Unmarshal(data, &tempconfig)
-	if err != nil {
-		fmt.Print("Error Unmarshaing Config ", err)
-	}
-	config = *tempconfig
+	data2, _ := fmt.Print(string(data))
+	err = json.Unmarshal([]byte(strconv.Itoa(data2)), &config)
 
-	fmt.Print(*tempconfig)
+	fmt.Println("config.............................................")
 	fmt.Print(config)
+	// fmt.Print(strconv.Itoa(data2))
+	if err != nil {
+		fmt.Println("Error Unmarshaing Config ", err)
+	}
+	// config = *tempconfig
+
 	return
 }
 

@@ -42,21 +42,27 @@ func main() {
 
 	//Read the config first
 	hosp, configerr := config.ReadFile()
-
+	hospital = hosp
+	//Only create a new hospital if a config file does not exist
 	if configerr != nil {
 		fmt.Println("Error reading file")
-		clicommands(ctx)
+		switch configerr {
+		case os.ErrInvalid:
+			//Do stuff
+			initError("", configerr)
+			return
+		case os.ErrPermission:
+			//Do stuff
+			initError("", configerr)
+			return
+		case os.ErrNotExist:
+			fmt.Println("File doesnt exist")
+			clicommands(ctx)
+			return
+		default:
+			initError("", configerr)
+		}
 	}
-	hospID, _ := primitive.ObjectIDFromHex(hosp.ID)
-	fmt.Print(hospID)
-	result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hospID}})
-	var temp *models.Hospital
-	var decodeerr = result.Decode(&temp)
-	// hospital = *temp
-	if decodeerr != nil {
-		initError("Decode Hospital 2", decodeerr)
-	}
-	fmt.Print(temp)
 
 	r := gin.Default()
 	gin.SetMode(gin.DebugMode)
@@ -96,8 +102,15 @@ func clicommands(ctx context.Context, cmd ...string) {
 	flag.Parse()
 
 	if *newindicator {
+		/**
+		*Make changnes before marshalling to take advantage of linter and avoid runtime errors
+		**/
 		hospital.Name = *name
-		res, err := db.InserDocument(ctx, "", "hospitals", hospital)
+		var newhosp bson.M
+		b, _ := bson.Marshal(hospital)
+		bson.Unmarshal([]byte(b), &newhosp)
+
+		res, err := db.InserDocument(ctx, "", "hospitals", "", newhosp)
 		if err != nil {
 			initError("Create Hospital", err)
 		}
@@ -109,16 +122,16 @@ func clicommands(ctx context.Context, cmd ...string) {
 		}
 		objID, _ := primitive.ObjectIDFromHex(str.Hex())
 		result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
-		var temp *models.Hospital
+		var temp models.Hospital
 		var decodeerr = result.Decode(&temp)
-		hospital = *temp
+		hospital = temp
 		if decodeerr != nil {
 			initError("Decode Hospital", decodeerr)
 		}
 		config.Create(hospital)
 		return
 	} else {
-		initError("Cli commands", nil)
+		initError("No Cli commands", nil)
 	}
 }
 
