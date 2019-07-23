@@ -3,6 +3,7 @@ package gen
 import (
 	"context"
 
+	"github.com/kisinga/mzurihealth/converter"
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/models"
 	"github.com/opentracing/opentracing-go"
@@ -34,13 +35,8 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHos
 
 	span, ctx := opentracing.StartSpanFromContext(ctx, "CreateAdmin")
 	defer span.Finish()
-
 	collectionName := "hospadmins"
-	var newadmin bson.M
-	b, _ := bson.Marshal(input)
-	bson.Unmarshal([]byte(b), &newadmin)
-
-	insertResult, err := db.InserDocument(ctx, "", collectionName, "", newadmin)
+	insertResult, err := db.InserDocument(ctx, "", collectionName, "", converter.StructToBson(input))
 	// log.Print(insertResult)
 	// str := fmt.Sprintf("%v", insertResult.InsertedID)
 	var admin *models.HospAdmin
