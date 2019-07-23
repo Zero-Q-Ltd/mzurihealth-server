@@ -6,36 +6,30 @@ import (
 	"crypto/md5"
 	"crypto/rand"
 	"encoding/hex"
-	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 
 	"github.com/kisinga/mzurihealth/models"
+	"go.mongodb.org/mongo-driver/bson"
 )
-
-type hospconfig struct {
-	name string
-	id   string
-}
 
 const pass = "zero-q/mzurihealth"
 
 //Create will encrypt the hospital struct and save it to a file
-func Create(hosp models.Hospital) {
-	b, _ := json.Marshal(hosp)
-
+func Create(hosp models.Hospital) (err error) {
+	b, _ := bson.Marshal(hosp)
 	ciphertext := encrypt(b, pass)
-
 	fmt.Printf("Encrypted: %x\n", ciphertext)
-
-	writeToFile("config.txt", ciphertext)
-
+	if _, _ = os.Stat("config.txt"); os.IsNotExist(err) {
+		err = errors.New("File Alreasy exists")
+	}
+	err = writeToFile("config.txt", ciphertext)
 	plaintext := decrypt(ciphertext, pass)
-
 	fmt.Printf("Decrypted: %s\n", plaintext)
-
+	return
 }
 
 //ReadFile reads the config file and returns the decripted data or (and) errors
@@ -45,12 +39,11 @@ func ReadFile() (config models.Hospital, err error) {
 		empty := models.Hospital{}
 		return empty, returnerr
 	}
-	err = json.Unmarshal(data, &config)
+	err = bson.Unmarshal(data, &config)
+	fmt.Println("config.............................................")
 	if err != nil {
-		fmt.Print("Error Unmarshaing Config ", err)
+		fmt.Println("Error Unmarshaing Config ", err)
 	}
-	fmt.Print(config)
-
 	return
 }
 
@@ -101,7 +94,7 @@ func writeToFile(filename string, data []byte) error {
 		return err
 	}
 	defer file.Close()
-	file.Write(data)
+	_, _ = file.Write(data)
 	return file.Sync()
 }
 

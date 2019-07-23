@@ -25,7 +25,7 @@ import (
 
 const defaultPort = "4242"
 
-var hospital *models.Hospital
+var hospital models.Hospital
 
 func main() {
 
@@ -42,14 +42,20 @@ func main() {
 
 	//Read the config first
 	hosp, configerr := config.ReadFile()
-	hospital = &hosp
-	// fmt.Print(hosp)
-
+	//Only create a new hospital if a config file does not exist
 	if configerr != nil {
 		fmt.Println("Error reading file")
 		clicommands(ctx)
-	}
 
+		// if configerr.Error() == "no such file or directory" {
+		// 	fmt.Println("File doesnt exist")
+		// 	clicommands(ctx)
+		// }
+	}
+	decodeerr := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hosp.ID}}).Decode(&hospital)
+	if decodeerr != nil {
+		initError("Decode Hospital After Reading from DB", decodeerr)
+	}
 	r := gin.Default()
 	gin.SetMode(gin.DebugMode)
 
@@ -78,7 +84,7 @@ func main() {
 	r.POST("/api", graphqlHandler())
 	r.GET("/api", graphqlHandler())
 	r.GET("/", playgroundHandler())
-	r.Run(":" + port)
+	_ = r.Run(":" + port)
 }
 
 func clicommands(ctx context.Context, cmd ...string) {
@@ -88,8 +94,15 @@ func clicommands(ctx context.Context, cmd ...string) {
 	flag.Parse()
 
 	if *newindicator {
+		/**
+		*Make changnes before marshalling to take advantage of linter and avoid runtime errors
+		**/
 		hospital.Name = *name
-		res, err := db.InserDocument(ctx, "", "hospitals", hospital)
+		var newhosp bson.M
+		b, _ := bson.Marshal(hospital)
+		bson.Unmarshal([]byte(b), &newhosp)
+
+		res, err := db.InserDocument(ctx, "", "hospitals", "", newhosp)
 		if err != nil {
 			initError("Create Hospital", err)
 		}
@@ -101,14 +114,19 @@ func clicommands(ctx context.Context, cmd ...string) {
 		}
 		objID, _ := primitive.ObjectIDFromHex(str.Hex())
 		result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
-		decodeerr := result.Decode(hospital)
+		var temp models.Hospital
+		var decodeerr = result.Decode(&temp)
 		if decodeerr != nil {
 			initError("Decode Hospital", decodeerr)
 		}
-		config.Create(*hospital)
+		hospital = temp
+		createerr := config.Create(hospital)
+		if createerr != nil {
+			initError("Error creating File", createerr)
+		}
 		return
 	} else {
-		initError("Cli commands", nil)
+		initError("No Cli commands", nil)
 	}
 }
 

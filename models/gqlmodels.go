@@ -6,25 +6,27 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AdminCategory struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	_id         string `json:"_id"`
-	Level       int    `json:"level"`
+	Name        string              `json:"name"`
+	Description string              `json:"description"`
+	ID          *primitive.ObjectID `json:"id" bson:"_id"`
+	Level       int                 `json:"level"`
 }
 
 type AdminInvite struct {
-	_id        string    `json:"_id"`
-	Name       string    `json:"name"`
-	Email      string    `json:"email"`
-	Phone      string    `json:"phone"`
-	Categoyid  string    `json:"categoyid"`
-	Level      int       `json:"level"`
-	Inviterid  string    `json:"inviterid"`
-	Hospitalid string    `json:"hospitalid"`
-	Metadata   *Metadata `json:"metadata"`
+	ID         *primitive.ObjectID `json:"id" bson:"_id"`
+	Name       string              `json:"name"`
+	Email      string              `json:"email"`
+	Phone      string              `json:"phone"`
+	Categoyid  string              `json:"categoyid"`
+	Level      int                 `json:"level"`
+	Inviterid  string              `json:"inviterid"`
+	Hospitalid string              `json:"hospitalid"`
+	Metadata   *Metadata           `json:"metadata"`
 }
 
 type Allergy struct {
@@ -45,43 +47,43 @@ type Condition struct {
 }
 
 type HospAdmin struct {
-	_id         string       `json:"_id"`
-	Status      bool         `json:"status"`
-	Data        *Data        `json:"data"`
-	Config      *Config      `json:"config"`
-	Profiledata *Profiledata `json:"profiledata"`
-	Metadata    *Metadata    `json:"metadata"`
+	ID          *primitive.ObjectID `json:"id" bson:"_id"`
+	Status      bool                `json:"status"`
+	Data        *Data               `json:"data"`
+	Config      *Config             `json:"config"`
+	Profiledata *Profiledata        `json:"profiledata"`
+	Metadata    *Metadata           `json:"metadata"`
 }
 
 type HospFile struct {
-	ID         string  `json:"id"`
-	Date       int     `json:"date"`
-	Lastvisit  int     `json:"lastvisit"`
-	No         string  `json:"no"`
-	Idno       *string `json:"idno"`
-	Visitcount *int    `json:"visitcount"`
+	ID         *primitive.ObjectID `json:"id" bson:"_id"`
+	Date       int                 `json:"date"`
+	Lastvisit  int                 `json:"lastvisit"`
+	No         string              `json:"no"`
+	Idno       *string             `json:"idno"`
+	Visitcount *int                `json:"visitcount"`
 }
 
 type Hospital struct {
-	Location       *Location        `json:"location"`
-	Name           string           `json:"name"`
-	Userid         string           `json:"userid"`
-	_id            string           `json:"_id"`
-	Description    string           `json:"description"`
-	Status         *bool            `json:"status"`
-	Contactperson  *Contactperson   `json:"contactperson"`
-	ContactDetails *ContactDetails  `json:"contactDetails"`
-	Logourl        string           `json:"logourl"`
-	PatientCount   int              `json:"patientCount"`
-	InvoiceCount   int              `json:"invoiceCount"`
-	Metadata       *Metadata        `json:"metadata"`
-	PaymentMethods []*PaymentMethod `json:"paymentMethods"`
-	Environment    *Environment     `json:"environment"`
+	Location       *Location           `json:"location"`
+	Name           string              `json:"name"`
+	Userid         string              `json:"userid"`
+	ID             *primitive.ObjectID `json:"id" bson:"_id"`
+	Description    string              `json:"description"`
+	Status         *bool               `json:"status"`
+	Contactperson  *Contactperson      `json:"contactperson"`
+	ContactDetails *ContactDetails     `json:"contactDetails"`
+	Logourl        string              `json:"logourl"`
+	PatientCount   int                 `json:"patientCount"`
+	InvoiceCount   int                 `json:"invoiceCount"`
+	Metadata       *Metadata           `json:"metadata"`
+	PaymentMethods []*PaymentMethod    `json:"paymentMethods"`
+	Environment    *Environment        `json:"environment"`
 }
 
 type Insurance struct {
-	ID          string `json:"id"`
-	InsuranceNo string `json:"insuranceNo"`
+	ID          *primitive.ObjectID `json:"id" bson:"_id"`
+	InsuranceNo string              `json:"insuranceNo"`
 }
 
 type Medicalinfo struct {
@@ -105,32 +107,32 @@ type Nextofkin struct {
 }
 
 type Patient struct {
-	Personalinfo string       `json:"personalinfo"`
-	Fileinfo     *HospFile    `json:"fileinfo"`
-	Done         bool         `json:"done"`
-	HospAdmin    *HospAdmin   `json:"HospAdmin"`
-	ID           string       `json:"id"`
-	Parentid     *string      `json:"parentid"`
-	Nextofkin    *Nextofkin   `json:"nextofkin"`
-	Insurance    []*Insurance `json:"insurance"`
-	Medicalinfo  *Medicalinfo `json:"medicalinfo"`
+	Personalinfo string              `json:"personalinfo"`
+	Fileinfo     *HospFile           `json:"fileinfo"`
+	Done         bool                `json:"done"`
+	HospAdmin    *HospAdmin          `json:"HospAdmin"`
+	ID           *primitive.ObjectID `json:"id" bson:"_id"`
+	Parentid     *string             `json:"parentid"`
+	Nextofkin    *Nextofkin          `json:"nextofkin"`
+	Insurance    []*Insurance        `json:"insurance"`
+	Medicalinfo  *Medicalinfo        `json:"medicalinfo"`
 }
 
 type Patientnote struct {
-	Title     string         `json:"title"`
-	Note      string         `json:"note"`
-	Admin     *AttachedAdmin `json:"admin"`
-	ID        string         `json:"id"`
-	PatientID string         `json:"patientId"`
-	Metadata  *Metadata      `json:"metadata"`
-	Helpful   int            `json:"helpful"`
+	Title     string              `json:"title"`
+	Note      string              `json:"note"`
+	Admin     *AttachedAdmin      `json:"admin"`
+	ID        *primitive.ObjectID `json:"id" bson:"_id"`
+	PatientID string              `json:"patientId"`
+	Metadata  *Metadata           `json:"metadata"`
+	Helpful   int                 `json:"helpful"`
 }
 
 type PaymentChannel struct {
-	ID                          *string       `json:"id"`
-	Name                        *string       `json:"name"`
-	Mergeability                *Mergeability `json:"mergeability"`
-	TransactionDetailCollection *bool         `json:"transactionDetailCollection"`
+	ID                          *primitive.ObjectID `json:"id" bson:"_id"`
+	Name                        *string             `json:"name"`
+	Mergeability                *Mergeability       `json:"mergeability"`
+	TransactionDetailCollection *bool               `json:"transactionDetailCollection"`
 }
 
 type PaymentMethod struct {

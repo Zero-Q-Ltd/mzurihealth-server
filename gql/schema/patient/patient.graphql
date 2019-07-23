@@ -5,7 +5,7 @@ type Patient {
 	fileinfo: HospFile!
 	done: Boolean!
 	HospAdmin: HospAdmin!
-	id: ID!
+	Id: ID!
 	parentid: String
 	nextofkin: Nextofkin!
 	insurance: [Insurance]!

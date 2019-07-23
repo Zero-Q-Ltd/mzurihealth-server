@@ -36,10 +36,6 @@ type Config struct {
 }
 
 type ResolverRoot interface {
-	AdminCategory() AdminCategoryResolver
-	AdminInvite() AdminInviteResolver
-	HospAdmin() HospAdminResolver
-	Hospital() HospitalResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
 	Subscription() SubscriptionResolver
@@ -51,21 +47,21 @@ type DirectiveRoot struct {
 type ComplexityRoot struct {
 	AdminCategory struct {
 		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
 		Level       func(childComplexity int) int
 		Name        func(childComplexity int) int
-		_id         func(childComplexity int) int
 	}
 
 	AdminInvite struct {
 		Categoyid  func(childComplexity int) int
 		Email      func(childComplexity int) int
 		Hospitalid func(childComplexity int) int
+		ID         func(childComplexity int) int
 		Inviterid  func(childComplexity int) int
 		Level      func(childComplexity int) int
 		Metadata   func(childComplexity int) int
 		Name       func(childComplexity int) int
 		Phone      func(childComplexity int) int
-		_id        func(childComplexity int) int
 	}
 
 	Allergy struct {
@@ -88,10 +84,10 @@ type ComplexityRoot struct {
 	HospAdmin struct {
 		Config      func(childComplexity int) int
 		Data        func(childComplexity int) int
+		ID          func(childComplexity int) int
 		Metadata    func(childComplexity int) int
 		Profiledata func(childComplexity int) int
 		Status      func(childComplexity int) int
-		_id         func(childComplexity int) int
 	}
 
 	HospFile struct {
@@ -108,6 +104,7 @@ type ComplexityRoot struct {
 		Contactperson  func(childComplexity int) int
 		Description    func(childComplexity int) int
 		Environment    func(childComplexity int) int
+		ID             func(childComplexity int) int
 		InvoiceCount   func(childComplexity int) int
 		Location       func(childComplexity int) int
 		Logourl        func(childComplexity int) int
@@ -117,7 +114,6 @@ type ComplexityRoot struct {
 		PaymentMethods func(childComplexity int) int
 		Status         func(childComplexity int) int
 		Userid         func(childComplexity int) int
-		_id            func(childComplexity int) int
 	}
 
 	Insurance struct {
@@ -272,18 +268,6 @@ type ComplexityRoot struct {
 	}
 }
 
-type AdminCategoryResolver interface {
-	_id(ctx context.Context, obj *models.AdminCategory) (string, error)
-}
-type AdminInviteResolver interface {
-	_id(ctx context.Context, obj *models.AdminInvite) (string, error)
-}
-type HospAdminResolver interface {
-	_id(ctx context.Context, obj *models.HospAdmin) (string, error)
-}
-type HospitalResolver interface {
-	_id(ctx context.Context, obj *models.Hospital) (string, error)
-}
 type MutationResolver interface {
 	CreatePatient(ctx context.Context, input models.NewPatient) (*models.Patient, error)
 	CreateAdmin(ctx context.Context, input *models.NewHospAdmin) (*models.HospAdmin, error)
@@ -329,6 +313,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AdminCategory.Description(childComplexity), true
 
+	case "AdminCategory.Id":
+		if e.complexity.AdminCategory.ID == nil {
+			break
+		}
+
+		return e.complexity.AdminCategory.ID(childComplexity), true
+
 	case "AdminCategory.level":
 		if e.complexity.AdminCategory.Level == nil {
 			break
@@ -342,13 +333,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AdminCategory.Name(childComplexity), true
-
-	case "AdminCategory._id":
-		if e.complexity.AdminCategory._id == nil {
-			break
-		}
-
-		return e.complexity.AdminCategory._id(childComplexity), true
 
 	case "AdminInvite.categoyid":
 		if e.complexity.AdminInvite.Categoyid == nil {
@@ -370,6 +354,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AdminInvite.Hospitalid(childComplexity), true
+
+	case "AdminInvite.Id":
+		if e.complexity.AdminInvite.ID == nil {
+			break
+		}
+
+		return e.complexity.AdminInvite.ID(childComplexity), true
 
 	case "AdminInvite.inviterid":
 		if e.complexity.AdminInvite.Inviterid == nil {
@@ -405,13 +396,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AdminInvite.Phone(childComplexity), true
-
-	case "AdminInvite._id":
-		if e.complexity.AdminInvite._id == nil {
-			break
-		}
-
-		return e.complexity.AdminInvite._id(childComplexity), true
 
 	case "Allergy.allergytype":
 		if e.complexity.Allergy.Allergytype == nil {
@@ -483,6 +467,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.HospAdmin.Data(childComplexity), true
 
+	case "HospAdmin.Id":
+		if e.complexity.HospAdmin.ID == nil {
+			break
+		}
+
+		return e.complexity.HospAdmin.ID(childComplexity), true
+
 	case "HospAdmin.metadata":
 		if e.complexity.HospAdmin.Metadata == nil {
 			break
@@ -504,13 +495,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.HospAdmin.Status(childComplexity), true
 
-	case "HospAdmin._id":
-		if e.complexity.HospAdmin._id == nil {
-			break
-		}
-
-		return e.complexity.HospAdmin._id(childComplexity), true
-
 	case "HospFile.date":
 		if e.complexity.HospFile.Date == nil {
 			break
@@ -518,7 +502,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.HospFile.Date(childComplexity), true
 
-	case "HospFile.id":
+	case "HospFile.Id":
 		if e.complexity.HospFile.ID == nil {
 			break
 		}
@@ -580,6 +564,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Hospital.Environment(childComplexity), true
+
+	case "Hospital.Id":
+		if e.complexity.Hospital.ID == nil {
+			break
+		}
+
+		return e.complexity.Hospital.ID(childComplexity), true
 
 	case "Hospital.invoiceCount":
 		if e.complexity.Hospital.InvoiceCount == nil {
@@ -644,14 +635,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Hospital.Userid(childComplexity), true
 
-	case "Hospital._id":
-		if e.complexity.Hospital._id == nil {
-			break
-		}
-
-		return e.complexity.Hospital._id(childComplexity), true
-
-	case "Insurance.id":
+	case "Insurance.Id":
 		if e.complexity.Insurance.ID == nil {
 			break
 		}
@@ -787,7 +771,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Patient.HospAdmin(childComplexity), true
 
-	case "Patient.id":
+	case "Patient.Id":
 		if e.complexity.Patient.ID == nil {
 			break
 		}
@@ -843,7 +827,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Patientnote.Helpful(childComplexity), true
 
-	case "Patientnote.id":
+	case "Patientnote.Id":
 		if e.complexity.Patientnote.ID == nil {
 			break
 		}
@@ -878,7 +862,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Patientnote.Title(childComplexity), true
 
-	case "PaymentChannel.id":
+	case "PaymentChannel.Id":
 		if e.complexity.PaymentChannel.ID == nil {
 			break
 		}
@@ -1426,7 +1410,7 @@ var parsedSchema = gqlparser.MustLoadSchema(
 	&ast.Source{Name: "gql/schema/admin/admin.graphql", Input: `# Import * from "../**/*.graphql"
 
 type HospAdmin {
-	_id: ID!
+	Id: ID!
 	status: Boolean!
 	data: data!
 	config: config!
@@ -1462,14 +1446,14 @@ type profiledata {
 	&ast.Source{Name: "gql/schema/admin/category.graphql", Input: `type AdminCategory {
     name: String!
     description: String!
-    _id: String!
+	Id: ID!
     level: Int!
 }
 `},
 	&ast.Source{Name: "gql/schema/admin/invite.graphql", Input: `# Import * from "../universal.graphql"
 
 type AdminInvite {
-	_id: ID!
+	Id: ID!
 	name: String!
 	email: String!
 	phone:      String!
@@ -1483,7 +1467,7 @@ type AdminInvite {
 	&ast.Source{Name: "gql/schema/calendar/event.graphql", Input: ``},
 	&ast.Source{Name: "gql/schema/hospital/file.graphql", Input: `
 type HospFile {
-	id: ID!
+	Id: ID!
 	date: Int!
 	lastvisit: Int!
 	no: String!
@@ -1496,7 +1480,7 @@ type Hospital {
 	location: location
 	name: String!
 	userid: String!
-	_id: String!
+	Id: ID!
 	description: String!
 	status: Boolean
 	contactperson: contactperson
@@ -1530,7 +1514,7 @@ type contactDetails {
 }
 `},
 	&ast.Source{Name: "gql/schema/insurance/insurance.graphql", Input: `type Insurance {
-    id: String!
+	Id: ID!
     insuranceNo: String!
 }
 `},
@@ -1574,7 +1558,7 @@ type Patientnote {
 	title: String!
 	note: String!
 	admin: AttachedAdmin!
-	id: String!
+	Id: ID!
 	patientId: String!
 	metadata: Metadata!
 	helpful: Int!
@@ -1587,7 +1571,7 @@ type Patient {
 	fileinfo: HospFile!
 	done: Boolean!
 	HospAdmin: HospAdmin!
-	id: ID!
+	Id: ID!
 	parentid: String
 	nextofkin: Nextofkin!
 	insurance: [Insurance]!
@@ -1615,7 +1599,7 @@ type Medicalinfo {
 }
 `},
 	&ast.Source{Name: "gql/schema/payment/channel.graphql", Input: `type PaymentChannel {
-	id: String
+	Id: ID!
 	name: String
 	mergeability: mergeability
 	transactionDetailCollection: Boolean
@@ -2020,7 +2004,7 @@ func (ec *executionContext) _AdminCategory_description(ctx context.Context, fiel
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _AdminCategory__id(ctx context.Context, field graphql.CollectedField, obj *models.AdminCategory) (ret graphql.Marshaler) {
+func (ec *executionContext) _AdminCategory_Id(ctx context.Context, field graphql.CollectedField, obj *models.AdminCategory) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -2033,13 +2017,13 @@ func (ec *executionContext) _AdminCategory__id(ctx context.Context, field graphq
 		Object:   "AdminCategory",
 		Field:    field,
 		Args:     nil,
-		IsMethod: true,
+		IsMethod: false,
 	}
 	ctx = graphql.WithResolverContext(ctx, rctx)
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.AdminCategory()._id(rctx, obj)
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2054,7 +2038,7 @@ func (ec *executionContext) _AdminCategory__id(ctx context.Context, field graphq
 	res := resTmp.(string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _AdminCategory_level(ctx context.Context, field graphql.CollectedField, obj *models.AdminCategory) (ret graphql.Marshaler) {
@@ -2094,7 +2078,7 @@ func (ec *executionContext) _AdminCategory_level(ctx context.Context, field grap
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _AdminInvite__id(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
+func (ec *executionContext) _AdminInvite_Id(ctx context.Context, field graphql.CollectedField, obj *models.AdminInvite) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -2107,13 +2091,13 @@ func (ec *executionContext) _AdminInvite__id(ctx context.Context, field graphql.
 		Object:   "AdminInvite",
 		Field:    field,
 		Args:     nil,
-		IsMethod: true,
+		IsMethod: false,
 	}
 	ctx = graphql.WithResolverContext(ctx, rctx)
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.AdminInvite()._id(rctx, obj)
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2699,7 +2683,7 @@ func (ec *executionContext) _Condition_metadata(ctx context.Context, field graph
 	return ec.marshalOMetadata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐMetadata(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _HospAdmin__id(ctx context.Context, field graphql.CollectedField, obj *models.HospAdmin) (ret graphql.Marshaler) {
+func (ec *executionContext) _HospAdmin_Id(ctx context.Context, field graphql.CollectedField, obj *models.HospAdmin) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -2712,13 +2696,13 @@ func (ec *executionContext) _HospAdmin__id(ctx context.Context, field graphql.Co
 		Object:   "HospAdmin",
 		Field:    field,
 		Args:     nil,
-		IsMethod: true,
+		IsMethod: false,
 	}
 	ctx = graphql.WithResolverContext(ctx, rctx)
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.HospAdmin()._id(rctx, obj)
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2921,7 +2905,7 @@ func (ec *executionContext) _HospAdmin_metadata(ctx context.Context, field graph
 	return ec.marshalNMetadata2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐMetadata(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _HospFile_id(ctx context.Context, field graphql.CollectedField, obj *models.HospFile) (ret graphql.Marshaler) {
+func (ec *executionContext) _HospFile_Id(ctx context.Context, field graphql.CollectedField, obj *models.HospFile) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -3245,7 +3229,7 @@ func (ec *executionContext) _Hospital_userid(ctx context.Context, field graphql.
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Hospital__id(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
+func (ec *executionContext) _Hospital_Id(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -3258,13 +3242,13 @@ func (ec *executionContext) _Hospital__id(ctx context.Context, field graphql.Col
 		Object:   "Hospital",
 		Field:    field,
 		Args:     nil,
-		IsMethod: true,
+		IsMethod: false,
 	}
 	ctx = graphql.WithResolverContext(ctx, rctx)
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Hospital()._id(rctx, obj)
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3279,7 +3263,7 @@ func (ec *executionContext) _Hospital__id(ctx context.Context, field graphql.Col
 	res := resTmp.(string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Hospital_description(ctx context.Context, field graphql.CollectedField, obj *models.Hospital) (ret graphql.Marshaler) {
@@ -3634,7 +3618,7 @@ func (ec *executionContext) _Hospital_environment(ctx context.Context, field gra
 	return ec.marshalOenvironment2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐEnvironment(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Insurance_id(ctx context.Context, field graphql.CollectedField, obj *models.Insurance) (ret graphql.Marshaler) {
+func (ec *executionContext) _Insurance_Id(ctx context.Context, field graphql.CollectedField, obj *models.Insurance) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -3668,7 +3652,7 @@ func (ec *executionContext) _Insurance_id(ctx context.Context, field graphql.Col
 	res := resTmp.(string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Insurance_insuranceNo(ctx context.Context, field graphql.CollectedField, obj *models.Insurance) (ret graphql.Marshaler) {
@@ -4318,7 +4302,7 @@ func (ec *executionContext) _Patient_HospAdmin(ctx context.Context, field graphq
 	return ec.marshalNHospAdmin2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐHospAdmin(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Patient_id(ctx context.Context, field graphql.CollectedField, obj *models.Patient) (ret graphql.Marshaler) {
+func (ec *executionContext) _Patient_Id(ctx context.Context, field graphql.CollectedField, obj *models.Patient) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -4608,7 +4592,7 @@ func (ec *executionContext) _Patientnote_admin(ctx context.Context, field graphq
 	return ec.marshalNAttachedAdmin2ᚖgithubᚗcomᚋkisingaᚋmzurihealthᚋmodelsᚐAttachedAdmin(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Patientnote_id(ctx context.Context, field graphql.CollectedField, obj *models.Patientnote) (ret graphql.Marshaler) {
+func (ec *executionContext) _Patientnote_Id(ctx context.Context, field graphql.CollectedField, obj *models.Patientnote) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -4642,7 +4626,7 @@ func (ec *executionContext) _Patientnote_id(ctx context.Context, field graphql.C
 	res := resTmp.(string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Patientnote_patientId(ctx context.Context, field graphql.CollectedField, obj *models.Patientnote) (ret graphql.Marshaler) {
@@ -4756,7 +4740,7 @@ func (ec *executionContext) _Patientnote_helpful(ctx context.Context, field grap
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _PaymentChannel_id(ctx context.Context, field graphql.CollectedField, obj *models.PaymentChannel) (ret graphql.Marshaler) {
+func (ec *executionContext) _PaymentChannel_Id(ctx context.Context, field graphql.CollectedField, obj *models.PaymentChannel) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -4782,12 +4766,15 @@ func (ec *executionContext) _PaymentChannel_id(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PaymentChannel_name(ctx context.Context, field graphql.CollectedField, obj *models.PaymentChannel) (ret graphql.Marshaler) {
@@ -8119,31 +8106,22 @@ func (ec *executionContext) _AdminCategory(ctx context.Context, sel ast.Selectio
 		case "name":
 			out.Values[i] = ec._AdminCategory_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "description":
 			out.Values[i] = ec._AdminCategory_description(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
-		case "_id":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._AdminCategory__id(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			})
+		case "Id":
+			out.Values[i] = ec._AdminCategory_Id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "level":
 			out.Values[i] = ec._AdminCategory_level(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -8167,59 +8145,50 @@ func (ec *executionContext) _AdminInvite(ctx context.Context, sel ast.SelectionS
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("AdminInvite")
-		case "_id":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._AdminInvite__id(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			})
+		case "Id":
+			out.Values[i] = ec._AdminInvite_Id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "name":
 			out.Values[i] = ec._AdminInvite_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "email":
 			out.Values[i] = ec._AdminInvite_email(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "phone":
 			out.Values[i] = ec._AdminInvite_phone(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "categoyid":
 			out.Values[i] = ec._AdminInvite_categoyid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "level":
 			out.Values[i] = ec._AdminInvite_level(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "inviterid":
 			out.Values[i] = ec._AdminInvite_inviterid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "hospitalid":
 			out.Values[i] = ec._AdminInvite_hospitalid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "metadata":
 			out.Values[i] = ec._AdminInvite_metadata(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -8325,44 +8294,35 @@ func (ec *executionContext) _HospAdmin(ctx context.Context, sel ast.SelectionSet
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("HospAdmin")
-		case "_id":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._HospAdmin__id(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			})
+		case "Id":
+			out.Values[i] = ec._HospAdmin_Id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "status":
 			out.Values[i] = ec._HospAdmin_status(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "data":
 			out.Values[i] = ec._HospAdmin_data(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "config":
 			out.Values[i] = ec._HospAdmin_config(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "profiledata":
 			out.Values[i] = ec._HospAdmin_profiledata(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "metadata":
 			out.Values[i] = ec._HospAdmin_metadata(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -8386,8 +8346,8 @@ func (ec *executionContext) _HospFile(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("HospFile")
-		case "id":
-			out.Values[i] = ec._HospFile_id(ctx, field, obj)
+		case "Id":
+			out.Values[i] = ec._HospFile_Id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -8437,31 +8397,22 @@ func (ec *executionContext) _Hospital(ctx context.Context, sel ast.SelectionSet,
 		case "name":
 			out.Values[i] = ec._Hospital_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "userid":
 			out.Values[i] = ec._Hospital_userid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
-		case "_id":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Hospital__id(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			})
+		case "Id":
+			out.Values[i] = ec._Hospital_Id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "description":
 			out.Values[i] = ec._Hospital_description(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "status":
 			out.Values[i] = ec._Hospital_status(ctx, field, obj)
@@ -8472,17 +8423,17 @@ func (ec *executionContext) _Hospital(ctx context.Context, sel ast.SelectionSet,
 		case "logourl":
 			out.Values[i] = ec._Hospital_logourl(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "patientCount":
 			out.Values[i] = ec._Hospital_patientCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "invoiceCount":
 			out.Values[i] = ec._Hospital_invoiceCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "metadata":
 			out.Values[i] = ec._Hospital_metadata(ctx, field, obj)
@@ -8512,8 +8463,8 @@ func (ec *executionContext) _Insurance(ctx context.Context, sel ast.SelectionSet
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Insurance")
-		case "id":
-			out.Values[i] = ec._Insurance_id(ctx, field, obj)
+		case "Id":
+			out.Values[i] = ec._Insurance_Id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -8688,8 +8639,8 @@ func (ec *executionContext) _Patient(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "id":
-			out.Values[i] = ec._Patient_id(ctx, field, obj)
+		case "Id":
+			out.Values[i] = ec._Patient_Id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -8744,8 +8695,8 @@ func (ec *executionContext) _Patientnote(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "id":
-			out.Values[i] = ec._Patientnote_id(ctx, field, obj)
+		case "Id":
+			out.Values[i] = ec._Patientnote_Id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -8786,8 +8737,11 @@ func (ec *executionContext) _PaymentChannel(ctx context.Context, sel ast.Selecti
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("PaymentChannel")
-		case "id":
-			out.Values[i] = ec._PaymentChannel_id(ctx, field, obj)
+		case "Id":
+			out.Values[i] = ec._PaymentChannel_Id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "name":
 			out.Values[i] = ec._PaymentChannel_name(ctx, field, obj)
 		case "mergeability":

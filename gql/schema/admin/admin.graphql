@@ -1,7 +1,7 @@
 # Import * from "../**/*.graphql"
 
 type HospAdmin {
-	_id: ID!
+	Id: ID!
 	status: Boolean!
 	data: data!
 	config: config!
