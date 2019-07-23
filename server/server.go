@@ -42,7 +42,6 @@ func main() {
 
 	//Read the config first
 	hosp, configerr := config.ReadFile()
-	hospital = hosp
 	//Only create a new hospital if a config file does not exist
 	if configerr != nil {
 		fmt.Println("Error reading file")
@@ -53,7 +52,10 @@ func main() {
 		// 	clicommands(ctx)
 		// }
 	}
-
+	decodeerr := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hosp.ID}}).Decode(&hospital)
+	if decodeerr != nil {
+		initError("Decode Hospital After Reading from DB", decodeerr)
+	}
 	r := gin.Default()
 	gin.SetMode(gin.DebugMode)
 
@@ -114,10 +116,10 @@ func clicommands(ctx context.Context, cmd ...string) {
 		result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
 		var temp models.Hospital
 		var decodeerr = result.Decode(&temp)
-		hospital = temp
 		if decodeerr != nil {
 			initError("Decode Hospital", decodeerr)
 		}
+		hospital = temp
 		createerr := config.Create(hospital)
 		if createerr != nil {
 			initError("Error creating File", createerr)
