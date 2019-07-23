@@ -13,7 +13,7 @@ import (
 	"os"
 
 	"github.com/kisinga/mzurihealth/models"
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 const pass = "zero-q/mzurihealth"
@@ -39,20 +39,11 @@ func ReadFile() (config models.Hospital, err error) {
 		empty := models.Hospital{}
 		return empty, returnerr
 	}
-
 	err = bson.Unmarshal(data, &config)
-	// err = json.Unmarshal(data, &config)
 	fmt.Println("config.............................................")
-
-	fmt.Print(config)
-
-	// fmt.Print(config)
-	// fmt.Print(strconv.Itoa(data2))
 	if err != nil {
 		fmt.Println("Error Unmarshaing Config ", err)
 	}
-	// config = *tempconfig
-
 	return
 }
 
