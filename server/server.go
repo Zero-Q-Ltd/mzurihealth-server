@@ -46,22 +46,12 @@ func main() {
 	//Only create a new hospital if a config file does not exist
 	if configerr != nil {
 		fmt.Println("Error reading file")
-		switch configerr {
-		case os.ErrInvalid:
-			//Do stuff
-			initError("", configerr)
-			return
-		case os.ErrPermission:
-			//Do stuff
-			initError("", configerr)
-			return
-		case os.ErrNotExist:
-			fmt.Println("File doesnt exist")
-			clicommands(ctx)
-			return
-		default:
-			initError("", configerr)
-		}
+		clicommands(ctx)
+
+		// if configerr.Error() == "no such file or directory" {
+		// 	fmt.Println("File doesnt exist")
+		// 	clicommands(ctx)
+		// }
 	}
 
 	r := gin.Default()
@@ -128,7 +118,10 @@ func clicommands(ctx context.Context, cmd ...string) {
 		if decodeerr != nil {
 			initError("Decode Hospital", decodeerr)
 		}
-		config.Create(hospital)
+		createerr := config.Create(hospital)
+		if createerr != nil {
+			initError("Error creating File", createerr)
+		}
 		return
 	} else {
 		initError("No Cli commands", nil)
