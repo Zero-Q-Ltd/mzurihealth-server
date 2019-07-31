@@ -96,17 +96,18 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"os"
-	"time"
 
 	"github.com/99designs/gqlgen/handler"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/gin"
 	"github.com/kisinga/mzurihealth/config"
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/gql/gen"
 	"github.com/kisinga/mzurihealth/models"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/kisinga/mzurihealth/tracer"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -161,13 +162,27 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
 var hospital models.Hospital
 
+const defaultPort = "4242"
+
 // version set by LDFLAGS
 var version string
 
-func start(ctx context.Context, root string, port int, redirectHttps bool, logFormat string) {
+func start(ctx context.Context, root string, port string, redirectHttps bool, logFormat string) {
 
-	e := echo.New()
-	e.HideBanner = true
+	gin.SetMode(gin.DebugMode)
+
+	r := gin.Default()
+	p := tracer.InitTracing()
+	// tell gin to use the middleware
+	r.Use(p)
+
+	// Add CORS middleware around every request
+	// See https://github.com/rs/cors for full option listing
+	c := cors.Default()
+
+	// r.Use(auth.Middleware())
+
+	r.Use(c)
 
 	//Read the config first
 	hosp, configerr := config.ReadFile()
@@ -181,52 +196,21 @@ func start(ctx context.Context, root string, port int, redirectHttps bool, logFo
 	if decodeerr != nil {
 		initError("Decode Hospital After Reading from DB", decodeerr)
 	}
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: logFormat,
-	}))
+	// e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+	// 	Format: logFormat,
+	// }))
 
-	if redirectHttps {
-		e.Pre(middleware.HTTPSRedirect())
-	}
-
-	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:   root,
-		Index:  "index.html",
-		HTML5:  true,
-		Browse: false,
-	}))
-	timeOut, _ := time.ParseDuration(timeoutInSeconds)
-	e.Server.IdleTimeout = timeOut
-	graphqlHandler := handler.GraphQL(gen.NewExecutableSchema(gen.Config{Resolvers: &gen.Resolver{}}))
-	playgroundHandler := handler.Playground("GraphQL", "/api")
-
-	// Middleware
-	// e.Use(Process)
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-
-	// Route => handler
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!\n")
-	})
-	e.POST("/api", func(c echo.Context) error {
-		req := c.Request()
-		res := c.Response()
-		graphqlHandler.ServeHTTP(res, req)
-		return nil
-	})
-
-	e.GET("/playground", func(c echo.Context) error {
-		req := c.Request()
-		res := c.Response()
-		playgroundHandler.ServeHTTP(res, req)
-		return nil
-	})
-
-	fmt.Printf(banner, "v"+version)
-	fmt.Printf("» http server started on port %d\n", port)
-
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", port)))
+	// if redirectHttps {
+	// 	e.Pre(middleware.HTTPSRedirect())
+	// }
+	//This can vary according to client, in case they have something else running
+	//on port 424
+	r.Use(gin.Recovery()) // add Recovery middleware
+	r.Use(static.Serve("/", static.LocalFile("./dist", false)))
+	r.POST("/api", graphqlHandler())
+	r.GET("/api", graphqlHandler())
+	r.GET("/playground", playgroundHandler())
+	_ = r.Run(":" + port)
 }
 
 func main() {
@@ -253,7 +237,7 @@ func main() {
 			Name:  "start",
 			Usage: "Start the SPA server",
 			Action: func(c *cli.Context) error {
-				start(ctx, c.String("dir"), c.Int("port"), c.Bool("https-redirect"), c.String("log-format")+"\n")
+				start(ctx, c.String("dir"), c.String("port"), c.Bool("https-redirect"), c.String("log-format")+"\n")
 				return nil
 			},
 			Flags: []cli.Flag{
@@ -265,7 +249,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:   "port, p",
-					Value:  "8080",
+					Value:  "4242",
 					Usage:  "Server port.",
 					EnvVar: "MZURIHEALTH_PORT",
 				},
@@ -304,6 +288,22 @@ func main() {
 
 	// start()
 	app.Run(os.Args)
+}
+
+// Defining the Graphql handler
+func graphqlHandler() gin.HandlerFunc {
+	h := handler.GraphQL(gen.NewExecutableSchema(gen.Config{Resolvers: &gen.Resolver{}}))
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+// Defining the Playground handler
+func playgroundHandler() gin.HandlerFunc {
+	h := handler.Playground("GraphQL", "/api")
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
 }
 func createhospital(hospitalname string) {
 	/**
