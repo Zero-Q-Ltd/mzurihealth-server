@@ -1,98 +1,5 @@
 package main
 
-// import (
-// 	"context"
-// 	"flag"
-// 	"fmt"
-// 	"os"
-// 	"path"
-// 	"path/filepath"
-
-// 	"go.mongodb.org/mongo-driver/bson"
-// 	"go.mongodb.org/mongo-driver/bson/primitive"
-
-// 	"github.com/99designs/gqlgen/handler"
-// 	"github.com/gin-contrib/cors"
-
-// 	"github.com/kisinga/mzurihealth/config"
-// 	"github.com/kisinga/mzurihealth/db"
-// 	"github.com/kisinga/mzurihealth/gql/gen"
-// 	"github.com/kisinga/mzurihealth/models"
-// )
-
-// //	cors "github.com/rs/cors/wrapper/gin"
-
-// const defaultPort = "4242"
-
-// func main() {
-
-// 	//Create the first context
-// 	ctx := context.Background()
-
-// 	//Create a connection to db
-// 	dberr := db.ConnectDB(ctx, "test")
-// 	if dberr != nil {
-// 		initError("ConnectDB", dberr)
-// 	}
-// 	//Dont fotget to close connection to db
-// 	defer db.CloseSession(ctx)
-
-// 	//Read the config first
-// 	hosp, configerr := config.ReadFile()
-// 	//Only create a new hospital if a config file does not exist
-// 	if configerr != nil {
-// 		fmt.Println("Error reading file")
-// 		clicommands(ctx)
-
-// 		// if configerr.Error() == "no such file or directory" {
-// 		// 	fmt.Println("File doesnt exist")
-// 		// 	clicommands(ctx)
-// 		// }
-// 	}
-// 	decodeerr := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hosp.ID}}).Decode(&hospital)
-// 	if decodeerr != nil {
-// 		initError("Decode Hospital After Reading from DB", decodeerr)
-// 	}
-// 	e := echo.New()
-
-// 	//
-// 	// p := tracer.InitTracing()
-// 	// tell gin to use the middleware
-// 	e.Use(p)
-
-// 	// Add CORS middleware around every request
-// 	// See https://github.com/rs/cors for full option listing
-// 	c := cors.Default()
-
-// 	// r.Use(auth.Middleware())
-
-// 	e.Use(c)
-
-// 	//This can vary according to client, in case they have something else running
-// 	//on port 4242
-// 	port := os.Getenv("MZURIHEALTH PORT")
-// 	if port == "" {
-// 		port = defaultPort
-// 	}
-
-// 	e.Use(gin.Recovery()) // add Recovery middleware
-
-// 	e.GET("/app", func(c *gin.Context) {
-// 		dir, file := path.Split(c.Request.RequestURI)
-// 		ext := filepath.Ext(file)
-// 		if file == "" || ext == "" {
-// 			c.File("./public/index.html")
-// 		} else {
-// 			// strings.Split(file, "?")
-// 			c.File("./public" + path.Join(dir, file))
-// 		}
-
-// 	})
-// 	e.POST("/api", graphqlHandler())
-// 	e.GET("/api", graphqlHandler())
-// 	e.GET("/", playgroundHandler())
-// 	_ = e.Run(":" + port)
-// }
 import (
 	"context"
 	"fmt"
@@ -162,10 +69,8 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
 var hospital models.Hospital
 
+const version = "1.0.0"
 const defaultPort = "4242"
-
-// version set by LDFLAGS
-var version string
 
 func start(ctx context.Context, root string, port string, redirectHttps bool, logFormat string) {
 
@@ -206,7 +111,7 @@ func start(ctx context.Context, root string, port string, redirectHttps bool, lo
 	//This can vary according to client, in case they have something else running
 	//on port 424
 	r.Use(gin.Recovery()) // add Recovery middleware
-	r.Use(static.Serve("/", static.LocalFile("./dist", false)))
+	r.Use(static.Serve("/", static.LocalFile("./public", false)))
 	r.POST("/api", graphqlHandler())
 	r.GET("/api", graphqlHandler())
 	r.GET("/playground", playgroundHandler())
@@ -214,7 +119,8 @@ func start(ctx context.Context, root string, port string, redirectHttps bool, lo
 }
 
 func main() {
-
+	fmt.Println(banner)
+	fmt.Println("V: " + version)
 	//Create the first context
 	ctx := context.Background()
 	//Create a connection to db
