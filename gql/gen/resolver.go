@@ -7,6 +7,7 @@ import (
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/models"
 	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -44,14 +45,14 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHos
 	objID, _ := primitive.ObjectIDFromHex(str.Hex())
 	result := db.QueryDocument(ctx, "", collectionName, bson.D{{"_id", objID}})
 	err = result.Decode(admin)
-	// if err != nil {
-	// 	span.LogFields(
-	// 		log.String("event", "soft error"),
-	// 		log.String("type", "Error Converting"),
-	// 		log.Error(err))
-	// 	return admin, err
+	if err != nil {
+		span.LogFields(
+			log.String("event", "soft error"),
+			log.String("type", "Error Converting"),
+			log.Error(err))
+		return admin, err
 
-	// }
+	}
 	return admin, err
 }
 
