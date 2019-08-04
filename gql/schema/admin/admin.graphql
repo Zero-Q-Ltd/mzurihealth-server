@@ -3,30 +3,36 @@
 type HospAdmin {
 	Id: ID!
 	status: Boolean!
-	data: data!
-	config: config!
-	profiledata: profiledata!
+	data: Data!
+	config: Config!
+	profileData: Profiledata!
 	metadata: Metadata!
-}
-input newHospAdmin {
-	email: String!
+	authdata: Authdata!
 }
 
-type data {
+enum NewAdmin {
+	Authdata
+}
+
+type Authdata {
+	name: String!
+	pass: String!
+}
+type Data {
 	uid: String!
 	email: String!
 	photoURL: String!
 	displayName: String!
 }
 
-type config {
+type Config {
 	hospitalId: String!
 	categoryId: String!
 	level: Int!
 	availability: Int! # Whether on break , away or available
 }
 
-type profiledata {
+type Profiledata {
 	bio: String!
 	age: String!
 	address: String!

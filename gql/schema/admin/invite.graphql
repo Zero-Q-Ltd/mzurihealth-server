@@ -5,9 +5,9 @@ type AdminInvite {
 	name: String!
 	email: String!
 	phone:      String!
-	categoyid:  String!
+	categoyId:  String!
 	level:      Int!
-	inviterid:  String!
-	hospitalid: String!
+	inviterId:  String!
+	hospitalId: String!
 	metadata:   Metadata!
 }

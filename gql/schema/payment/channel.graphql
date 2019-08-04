@@ -1,16 +1,16 @@
 type PaymentChannel {
 	Id: ID!
 	name: String
-	mergeability: mergeability
+	mergeability: Mergeability
 	transactionDetailCollection: Boolean
 }
 
-type mergeability {
+type Mergeability {
 	self: Boolean
 	external: Boolean
 }
 
-type Paymentmethods {
+type PaymentMethods {
 	name: String
 	imageurl: String
 }
