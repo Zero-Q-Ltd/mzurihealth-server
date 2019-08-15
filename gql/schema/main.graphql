@@ -12,7 +12,7 @@ type Subscription {
 
 type Query {
 	Patient(id: ID!): [Patient!]
-	PatientNotes(patientid: ID!, from: Int, to: Int): [Patientnote]
+	PatientNotes(patientid: ID!, from: Int, to: Int): [PatientNote]
 	HospAdmin(id: ID!): HospAdmin
 	AdminCategories: [AdminCategory]!
 	Hospital(id: ID!): Hospital
@@ -23,8 +23,8 @@ type Query {
 }
 
 type Mutation {
-	createPatient(input: newPatient!): Patient!
-	createAdmin(input: newHospAdmin): HospAdmin!
+	createPatient(input: NewPatient!): Patient!
+	createAdmin(input: NewAdmin): HospAdmin!
 }
 
 schema {

@@ -6,27 +6,25 @@ import (
 	"fmt"
 	"io"
 	"strconv"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AdminCategory struct {
-	Name        string              `json:"name"`
-	Description string              `json:"description"`
-	ID          *primitive.ObjectID `json:"id" bson:"_id"`
-	Level       int                 `json:"level"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	ID          string `json:"Id"`
+	Level       int    `json:"level"`
 }
 
 type AdminInvite struct {
-	ID         *primitive.ObjectID `json:"id" bson:"_id"`
-	Name       string              `json:"name"`
-	Email      string              `json:"email"`
-	Phone      string              `json:"phone"`
-	Categoyid  string              `json:"categoyid"`
-	Level      int                 `json:"level"`
-	Inviterid  string              `json:"inviterid"`
-	Hospitalid string              `json:"hospitalid"`
-	Metadata   *Metadata           `json:"metadata"`
+	ID         string    `json:"Id"`
+	Name       string    `json:"name"`
+	Email      string    `json:"email"`
+	Phone      string    `json:"phone"`
+	CategoyID  string    `json:"categoyId"`
+	Level      int       `json:"level"`
+	InviterID  string    `json:"inviterId"`
+	HospitalID string    `json:"hospitalId"`
+	Metadata   *Metadata `json:"metadata"`
 }
 
 type Allergy struct {
@@ -40,53 +38,87 @@ type AttachedAdmin struct {
 	Name *string `json:"name"`
 }
 
+type Authdata struct {
+	Name string `json:"name"`
+	Pass string `json:"pass"`
+}
+
 type Condition struct {
 	Conditiontype *string   `json:"conditiontype"`
 	Detail        *string   `json:"detail"`
 	Metadata      *Metadata `json:"metadata"`
 }
 
+type Config struct {
+	HospitalID   string `json:"hospitalId"`
+	CategoryID   string `json:"categoryId"`
+	Level        int    `json:"level"`
+	Availability int    `json:"availability"`
+}
+
+type ContactDetails struct {
+	Phone   string `json:"phone"`
+	Email   string `json:"email"`
+	Address string `json:"address"`
+}
+
+type ContactPerson struct {
+	Name     string `json:"name"`
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
+	Position string `json:"position"`
+	Address  string `json:"address"`
+}
+
+type Data struct {
+	UID         string `json:"uid"`
+	Email       string `json:"email"`
+	PhotoURL    string `json:"photoURL"`
+	DisplayName string `json:"displayName"`
+}
+
 type HospAdmin struct {
-	ID          *primitive.ObjectID `json:"id" bson:"_id"`
-	Status      bool                `json:"status"`
-	Data        *Data               `json:"data"`
-	Config      *Config             `json:"config"`
-	Profiledata *Profiledata        `json:"profiledata"`
-	Metadata    *Metadata           `json:"metadata"`
+	ID          string       `json:"Id"`
+	Status      bool         `json:"status"`
+	Data        *Data        `json:"data"`
+	Config      *Config      `json:"config"`
+	ProfileData *Profiledata `json:"profileData"`
+	Metadata    *Metadata    `json:"metadata"`
+	Authdata    *Authdata    `json:"authdata"`
 }
 
 type HospFile struct {
-	ID         *primitive.ObjectID `json:"id" bson:"_id"`
-	Date       int                 `json:"date"`
-	Lastvisit  int                 `json:"lastvisit"`
-	No         string              `json:"no"`
-	Idno       *string             `json:"idno"`
-	Visitcount *int                `json:"visitcount"`
+	ID         string  `json:"Id"`
+	Date       int     `json:"date"`
+	LastVisit  int     `json:"lastVisit"`
+	No         string  `json:"no"`
+	Idno       *string `json:"idno"`
+	VisitCount *int    `json:"visitCount"`
 }
 
 type Hospital struct {
-	Location       *Location           `json:"location"`
-	Name           string              `json:"name"`
-	Userid         string              `json:"userid"`
-	ID             *primitive.ObjectID `json:"id" bson:"_id"`
-	Description    string              `json:"description"`
-	Status         *bool               `json:"status"`
-	Contactperson  *Contactperson      `json:"contactperson"`
-	ContactDetails *ContactDetails     `json:"contactDetails"`
-	Logourl        string              `json:"logourl"`
-	PatientCount   int                 `json:"patientCount"`
-	InvoiceCount   int                 `json:"invoiceCount"`
-	Metadata       *Metadata           `json:"metadata"`
-	PaymentMethods []*PaymentMethod    `json:"paymentMethods"`
-	Environment    *Environment        `json:"environment"`
+	Location       *Location        `json:"location"`
+	Name           string           `json:"name"`
+	Userid         string           `json:"userid"`
+	ID             string           `json:"Id"`
+	Description    string           `json:"description"`
+	Status         *bool            `json:"status"`
+	Contactperson  *ContactPerson   `json:"contactperson"`
+	ContactDetails *ContactDetails  `json:"contactDetails"`
+	Logourl        string           `json:"logourl"`
+	PatientCount   int              `json:"patientCount"`
+	InvoiceCount   int              `json:"invoiceCount"`
+	Metadata       *Metadata        `json:"metadata"`
+	PaymentMethods []*PaymentMethod `json:"paymentMethods"`
+	Environment    *Environment     `json:"environment"`
 }
 
 type Insurance struct {
-	ID          *primitive.ObjectID `json:"id" bson:"_id"`
-	InsuranceNo string              `json:"insuranceNo"`
+	ID          string `json:"Id"`
+	InsuranceNo string `json:"insuranceNo"`
 }
 
-type Medicalinfo struct {
+type MedicalInfo struct {
 	Bloodtype  *string      `json:"bloodtype"`
 	Conditions []*Condition `json:"conditions"`
 	Allergies  []*Allergy   `json:"allergies"`
@@ -94,12 +126,17 @@ type Medicalinfo struct {
 	Metadata   *Metadata    `json:"metadata"`
 }
 
+type Mergeability struct {
+	Self     *bool `json:"self"`
+	External *bool `json:"external"`
+}
+
 type Metadata struct {
 	Date     *int `json:"date"`
 	Lastedit *int `json:"lastedit"`
 }
 
-type Nextofkin struct {
+type NextOfKin struct {
 	Name         *string `json:"name"`
 	Relationship *string `json:"relationship"`
 	Phone        *string `json:"phone"`
@@ -107,32 +144,32 @@ type Nextofkin struct {
 }
 
 type Patient struct {
-	Personalinfo string              `json:"personalinfo"`
-	Fileinfo     *HospFile           `json:"fileinfo"`
-	Done         bool                `json:"done"`
-	HospAdmin    *HospAdmin          `json:"HospAdmin"`
-	ID           *primitive.ObjectID `json:"id" bson:"_id"`
-	Parentid     *string             `json:"parentid"`
-	Nextofkin    *Nextofkin          `json:"nextofkin"`
-	Insurance    []*Insurance        `json:"insurance"`
-	Medicalinfo  *Medicalinfo        `json:"medicalinfo"`
+	PersonalInfo string       `json:"personalInfo"`
+	Fileinfo     *HospFile    `json:"fileinfo"`
+	Done         bool         `json:"done"`
+	HospAdmin    *HospAdmin   `json:"hospAdmin"`
+	ID           string       `json:"Id"`
+	ParentID     *string      `json:"parentId"`
+	NextOfKin    *NextOfKin   `json:"nextOfKin"`
+	Insurance    []*Insurance `json:"insurance"`
+	MedicalInfo  *MedicalInfo `json:"medicalInfo"`
 }
 
-type Patientnote struct {
-	Title     string              `json:"title"`
-	Note      string              `json:"note"`
-	Admin     *AttachedAdmin      `json:"admin"`
-	ID        *primitive.ObjectID `json:"id" bson:"_id"`
-	PatientID string              `json:"patientId"`
-	Metadata  *Metadata           `json:"metadata"`
-	Helpful   int                 `json:"helpful"`
+type PatientNote struct {
+	Title     string         `json:"title"`
+	Note      string         `json:"note"`
+	Admin     *AttachedAdmin `json:"admin"`
+	ID        string         `json:"Id"`
+	PatientID string         `json:"patientId"`
+	Metadata  *Metadata      `json:"metadata"`
+	Helpful   int            `json:"helpful"`
 }
 
 type PaymentChannel struct {
-	ID                          *primitive.ObjectID `json:"id" bson:"_id"`
-	Name                        *string             `json:"name"`
-	Mergeability                *Mergeability       `json:"mergeability"`
-	TransactionDetailCollection *bool               `json:"transactionDetailCollection"`
+	ID                          string        `json:"Id"`
+	Name                        *string       `json:"name"`
+	Mergeability                *Mergeability `json:"mergeability"`
+	TransactionDetailCollection *bool         `json:"transactionDetailCollection"`
 }
 
 type PaymentMethod struct {
@@ -142,9 +179,17 @@ type PaymentMethod struct {
 	PaymentMethodID  string `json:"paymentMethodId"`
 }
 
-type Paymentmethods struct {
+type PaymentMethods struct {
 	Name     *string `json:"name"`
 	Imageurl *string `json:"imageurl"`
+}
+
+type Profiledata struct {
+	Bio     string `json:"bio"`
+	Age     string `json:"age"`
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+	Status  bool   `json:"status"`
 }
 
 type RawProcedure struct {
@@ -161,54 +206,9 @@ type Vitals struct {
 	Hb          string `json:"hb"`
 }
 
-type Config struct {
-	HospitalID   string `json:"hospitalId"`
-	CategoryID   string `json:"categoryId"`
-	Level        int    `json:"level"`
-	Availability int    `json:"availability"`
-}
-
-type ContactDetails struct {
-	Phone   string `json:"phone"`
-	Email   string `json:"email"`
-	Address string `json:"address"`
-}
-
-type Contactperson struct {
-	Name     string `json:"name"`
-	Phone    string `json:"phone"`
-	Email    string `json:"email"`
-	Position string `json:"position"`
-	Address  string `json:"address"`
-}
-
-type Data struct {
-	UID         string `json:"uid"`
-	Email       string `json:"email"`
-	PhotoURL    string `json:"photoURL"`
-	DisplayName string `json:"displayName"`
-}
-
 type Location struct {
 	Type        GeoType `json:"type"`
 	Coordinates []*int  `json:"coordinates"`
-}
-
-type Mergeability struct {
-	Self     *bool `json:"self"`
-	External *bool `json:"external"`
-}
-
-type NewHospAdmin struct {
-	Email string `json:"email"`
-}
-
-type Profiledata struct {
-	Bio     string `json:"bio"`
-	Age     string `json:"age"`
-	Address string `json:"address"`
-	Phone   string `json:"phone"`
-	Status  bool   `json:"status"`
 }
 
 type Environment string
@@ -243,12 +243,90 @@ func (e *Environment) UnmarshalGQL(v interface{}) error {
 
 	*e = Environment(str)
 	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid environment", str)
+		return fmt.Errorf("%s is not a valid Environment", str)
 	}
 	return nil
 }
 
 func (e Environment) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type NewAdmin string
+
+const (
+	NewAdminAuthdata NewAdmin = "Authdata"
+)
+
+var AllNewAdmin = []NewAdmin{
+	NewAdminAuthdata,
+}
+
+func (e NewAdmin) IsValid() bool {
+	switch e {
+	case NewAdminAuthdata:
+		return true
+	}
+	return false
+}
+
+func (e NewAdmin) String() string {
+	return string(e)
+}
+
+func (e *NewAdmin) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NewAdmin(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NewAdmin", str)
+	}
+	return nil
+}
+
+func (e NewAdmin) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type NewPatient string
+
+const (
+	NewPatientPatient NewPatient = "Patient"
+)
+
+var AllNewPatient = []NewPatient{
+	NewPatientPatient,
+}
+
+func (e NewPatient) IsValid() bool {
+	switch e {
+	case NewPatientPatient:
+		return true
+	}
+	return false
+}
+
+func (e NewPatient) String() string {
+	return string(e)
+}
+
+func (e *NewPatient) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NewPatient(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NewPatient", str)
+	}
+	return nil
+}
+
+func (e NewPatient) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -290,44 +368,5 @@ func (e *GeoType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e GeoType) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type NewPatient string
-
-const (
-	NewPatientPatient NewPatient = "Patient"
-)
-
-var AllNewPatient = []NewPatient{
-	NewPatientPatient,
-}
-
-func (e NewPatient) IsValid() bool {
-	switch e {
-	case NewPatientPatient:
-		return true
-	}
-	return false
-}
-
-func (e NewPatient) String() string {
-	return string(e)
-}
-
-func (e *NewPatient) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = NewPatient(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid newPatient", str)
-	}
-	return nil
-}
-
-func (e NewPatient) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

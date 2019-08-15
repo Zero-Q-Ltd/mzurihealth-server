@@ -1,30 +1,30 @@
 # Import * from "../**/*.graphql"
 
 type Patient {
-	personalinfo: ID!
+	personalInfo: ID!
 	fileinfo: HospFile!
 	done: Boolean!
-	HospAdmin: HospAdmin!
+	hospAdmin: HospAdmin!
 	Id: ID!
-	parentid: String
-	nextofkin: Nextofkin!
+	parentId: String
+	nextOfKin: NextOfKin!
 	insurance: [Insurance]!
-	medicalinfo: Medicalinfo
+	medicalInfo: MedicalInfo
 }
 
-enum newPatient {
+enum NewPatient {
 	Patient
 }
 
 
-type Nextofkin {
+type NextOfKin {
 	name: String
 	relationship: String
 	phone: String
 	workplace: String
 }
 
-type Medicalinfo {
+type MedicalInfo {
 	bloodtype: String
 	conditions: [Condition]
 	allergies: [Allergy]

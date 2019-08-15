@@ -1,6 +1,6 @@
 # Import * from "../**/*.graphql"
 
-type Patientnote {
+type PatientNote {
 	title: String!
 	note: String!
 	admin: AttachedAdmin!

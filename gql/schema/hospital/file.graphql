@@ -2,8 +2,8 @@
 type HospFile {
 	Id: ID!
 	date: Int!
-	lastvisit: Int!
+	lastVisit: Int!
 	no: String!
 	idno: String
-	visitcount: Int
+	visitCount: Int
 }

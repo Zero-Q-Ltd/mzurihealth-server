@@ -3,13 +3,8 @@ package gen
 import (
 	"context"
 
-	"github.com/kisinga/mzurihealth/converter"
-	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/models"
-	"github.com/opentracing/opentracing-go"
-	"github.com/opentracing/opentracing-go/log"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/kisinga/mzurihealth/resolvers"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
@@ -32,28 +27,8 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, input models.NewPa
 	panic("not implemented")
 }
 
-func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewHospAdmin) (*models.HospAdmin, error) {
-
-	span, ctx := opentracing.StartSpanFromContext(ctx, "CreateAdmin")
-	defer span.Finish()
-	collectionName := "hospadmins"
-	insertResult, err := db.InserDocument(ctx, "", collectionName, "", converter.StructToBson(input))
-	// log.Print(insertResult)
-	// str := fmt.Sprintf("%v", insertResult.InsertedID)
-	var admin *models.HospAdmin
-	str, _ := insertResult.InsertedID.(primitive.ObjectID)
-	objID, _ := primitive.ObjectIDFromHex(str.Hex())
-	result := db.QueryDocument(ctx, "", collectionName, bson.D{{"_id", objID}})
-	err = result.Decode(admin)
-	if err != nil {
-		span.LogFields(
-			log.String("event", "soft error"),
-			log.String("type", "Error Converting"),
-			log.Error(err))
-		return admin, err
-
-	}
-	return admin, err
+func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewAdmin) (*models.HospAdmin, error) {
+	return resolvers.CreateAdmin(ctx, input)
 }
 
 type queryResolver struct{ *Resolver }
@@ -61,7 +36,7 @@ type queryResolver struct{ *Resolver }
 func (r *queryResolver) Patient(ctx context.Context, id string) ([]*models.Patient, error) {
 	panic("not implemented")
 }
-func (r *queryResolver) PatientNotes(ctx context.Context, patientid string, from *int, to *int) ([]*models.Patientnote, error) {
+func (r *queryResolver) PatientNotes(ctx context.Context, patientid string, from *int, to *int) ([]*models.PatientNote, error) {
 	panic("not implemented")
 }
 func (r *queryResolver) HospAdmin(ctx context.Context, id string) (*models.HospAdmin, error) {

@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="330c4fcc-26ca-4942-9406-d9ce9d85e15a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/config.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gql/gen/resolver.go" beforeDir="false" afterPath="$PROJECT_DIR$/gql/gen/resolver.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gql/schema/admin/admin.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/gql/schema/admin/admin.graphql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/go.sum">
           <provider selected="true" editor-type-id="text-editor" />
@@ -37,11 +40,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="888">
-              <caret line="88" lean-forward="true" selection-start-line="88" selection-end-line="88" />
+            <state relative-caret-position="543">
+              <caret line="168" column="10" selection-start-line="168" selection-start-column="10" selection-end-line="168" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resolvers/admin_test.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -60,6 +72,13 @@
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
   </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/resolvers/admin_test.go" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectConfigurationFiles">
     <option name="files">
       <list>
@@ -71,7 +90,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
+  <component name="ProjectFrameBounds" extendedState="5">
     <option name="y" value="30" />
     <option name="width" value="1920" />
     <option name="height" value="2130" />
@@ -82,12 +101,18 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="mzuriheallth" type="b2602c69:ProjectViewProjectNode" />
               <item name="mzuriheallth" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mzuriheallth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mzuriheallth" type="462c0819:PsiDirectoryNode" />
+              <item name="resolvers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mzuriheallth" type="b2602c69:ProjectViewProjectNode" />
@@ -103,7 +128,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -175,17 +199,12 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="30" width="1920" height="2130" extended-state="4" />
+    <frame x="0" y="30" width="1920" height="2130" extended-state="5" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2497332" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21611527" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32967582" />
@@ -193,10 +212,15 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" />
+      <window_info anchor="bottom" id="Database Changes" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,8 +277,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/server.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="888">
-          <caret line="88" lean-forward="true" selection-start-line="88" selection-end-line="88" />
+        <state relative-caret-position="543">
+          <caret line="168" column="10" selection-start-line="168" selection-start-column="10" selection-end-line="168" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resolvers/admin_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
     </entry>

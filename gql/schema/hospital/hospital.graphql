@@ -7,23 +7,23 @@ type Hospital {
 	Id: ID!
 	description: String!
 	status: Boolean
-	contactperson: contactperson
-	contactDetails: contactDetails
+	contactperson: ContactPerson
+	contactDetails: ContactDetails
 	logourl: String!
 	patientCount: Int!
 	invoiceCount: Int!
 	metadata: Metadata
 	paymentMethods: [PaymentMethod]
-	environment: environment
+	environment: Environment
 }
 
-enum environment {
+enum Environment {
 	Prod
 	Dev
 }
 
 
-type contactperson {
+type ContactPerson {
 	name: String!
 	phone: String!
 	email: String!
@@ -31,7 +31,7 @@ type contactperson {
 	address: String!
 }
 
-type contactDetails {
+type ContactDetails {
 	phone: String!
 	email: String!
 	address: String!
