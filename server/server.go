@@ -101,15 +101,7 @@ func start(ctx context.Context, root string, port string, redirectHttps bool, lo
 	if decodeerr != nil {
 		initError("Decode Hospital After Reading from DB", decodeerr)
 	}
-	// e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-	// 	Format: logFormat,
-	// }))
 
-	// if redirectHttps {
-	// 	e.Pre(middleware.HTTPSRedirect())
-	// }
-	//This can vary according to client, in case they have something else running
-	//on port 424
 	r.Use(gin.Recovery()) // add Recovery middleware
 	r.Use(static.Serve("/", static.LocalFile("./public", false)))
 	r.POST("/api", graphqlHandler())
@@ -179,6 +171,8 @@ func main() {
 			Name:  "new",
 			Usage: "Create a new hospital",
 			Action: func(c *cli.Context) error {
+				fmt.Println("name")
+				fmt.Println(c.String("name"))
 				createhospital(c.String("name"))
 				return nil
 			},
@@ -211,12 +205,14 @@ func playgroundHandler() gin.HandlerFunc {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
 }
+
 func createhospital(hospitalname string) {
+	//Try Read the config first
+	_, configerr := config.ReadFile()
 	/**
 	*Make changnes before marshalling to take advantage of linter and avoid runtime errors
 	**/
-	//Read the config first
-	_, configerr := config.ReadFile()
+
 	//Only create a new hospital if a config file does not exist
 	if configerr == nil {
 		fmt.Println("Config File already exists")

@@ -17,6 +17,7 @@ enum NewAdmin {
 type Authdata {
 	name: String!
 	pass: String!
+	new: Boolean!
 }
 type Data {
 	uid: String!
@@ -39,3 +40,4 @@ type Profiledata {
 	phone: String!
 	status: Boolean!
 }
+

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/kisinga/mzurihealth/models"
+	"github.com/kisinga/mzurihealth/resolvers"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
@@ -25,8 +26,9 @@ type mutationResolver struct{ *Resolver }
 func (r *mutationResolver) CreatePatient(ctx context.Context, input models.NewPatient) (*models.Patient, error) {
 	panic("not implemented")
 }
+
 func (r *mutationResolver) CreateAdmin(ctx context.Context, input *models.NewAdmin) (*models.HospAdmin, error) {
-	panic("not implemented")
+	return resolvers.CreateAdmin(ctx, input)
 }
 
 type queryResolver struct{ *Resolver }

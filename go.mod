@@ -6,7 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.9.1
 	github.com/Bose/go-gin-opentracing v1.0.4
 	github.com/agnivade/levenshtein v1.0.2 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-contrib/static v0.0.0-20190511124741-c1cdf9c9ec7b
 	github.com/gin-gonic/gin v1.4.0
@@ -26,4 +26,5 @@ require (
 	golang.org/x/net v0.0.0-20190607181551-461777fb6f67 // indirect
 	golang.org/x/sys v0.0.0-20190609082536-301114b31cce // indirect
 	golang.org/x/text v0.3.2 // indirect
+	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 )
