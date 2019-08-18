@@ -130,7 +130,6 @@ func DeleteDocuments(ctx context.Context, database string, collection string, id
 func QueryDocument(ctx context.Context, database string, collection string, query bson.D) *mongo.SingleResult {
 	res := GetCollection(ctx, database, collection).FindOne(ctx, query)
 	if res.Err() != nil {
-		// log.Warn().Msg(res.Err().Error())
 		dbError(ctx, "QueryDocument", query, res.Err())
 	}
 	return res

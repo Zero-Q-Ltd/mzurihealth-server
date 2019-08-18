@@ -16,6 +16,7 @@ serve
 *.launch
 .settings/
 *.sublime-workspace
+/.history
 
 # IDE - VSCode
 .vscode/*
@@ -23,3 +24,6 @@ serve
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+#Every hosp has a unique config file
+config.txt

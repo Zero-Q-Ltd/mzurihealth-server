@@ -18,31 +18,51 @@ import (
 
 const pass = "zero-q/mzurihealth"
 
-//Create will encrypt the hospital struct and save it to a file
-func Create(hosp models.Hospital) (err error) {
+// Chasis is the package instance, it contains config settings,
+type Chasis struct {
+	debug bool
+}
+
+//CreateHosp will encrypt the hospital struct and save it to a file
+func CreateHosp(chasis *Chasis, hosp models.Hospital) (err error) {
 	b, _ := bson.Marshal(hosp)
 	ciphertext := encrypt(b, pass)
-	fmt.Printf("Encrypted: %x\n", ciphertext)
+	if chasis.debug {
+		fmt.Printf("Encrypted: %x\n", ciphertext)
+	}
 	if _, _ = os.Stat("config.txt"); os.IsNotExist(err) {
 		err = errors.New("File Alreasy exists")
 	}
 	err = writeToFile("config.txt", ciphertext)
 	plaintext := decrypt(ciphertext, pass)
-	fmt.Printf("Decrypted: %s\n", plaintext)
+	if chasis.debug {
+		fmt.Printf("Decrypted: %s\n", plaintext)
+	}
+
 	return
 }
 
+//New is the Constructor that defines packange-wide Chasis config
+func New(debugstate bool) *Chasis {
+	debug := &Chasis{
+		debug: debugstate,
+	}
+	return debug
+}
+
 //ReadFile reads the config file and returns the decripted data or (and) errors
-func ReadFile() (config models.Hospital, err error) {
+func ReadFile(chasis *Chasis) (config models.Hospital, err error) {
 	data, returnerr := decryptFile("config.txt", pass)
 	if returnerr != nil {
 		empty := models.Hospital{}
 		return empty, returnerr
 	}
 	err = bson.Unmarshal(data, &config)
-	fmt.Println("config.............................................")
 	if err != nil {
 		fmt.Println("Error Unmarshaing Config ", err)
+	}
+	if chasis.debug {
+		fmt.Printf("Decrypted: %#v\n", config)
 	}
 	return
 }
@@ -101,7 +121,6 @@ func writeToFile(filename string, data []byte) error {
 func decryptFile(filename string, passphrase string) (data []byte, err error) {
 	encrypteddata, readerr := ioutil.ReadFile(filename)
 	if readerr != nil {
-		fmt.Print("Error Reading Config ", err)
 		return []byte{}, readerr
 	}
 	data = decrypt(encrypteddata, passphrase)

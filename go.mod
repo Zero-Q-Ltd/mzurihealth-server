@@ -6,7 +6,6 @@ require (
 	github.com/99designs/gqlgen v0.9.1
 	github.com/Bose/go-gin-opentracing v1.0.4
 	github.com/agnivade/levenshtein v1.0.2 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-contrib/static v0.0.0-20190511124741-c1cdf9c9ec7b
 	github.com/gin-gonic/gin v1.4.0
@@ -14,6 +13,9 @@ require (
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/mattn/go-isatty v0.0.8 // indirect
 	github.com/opentracing/opentracing-go v1.1.0
+	github.com/prometheus/client_model v0.0.0-20190129233127-fd36f4220a90 // indirect
+	github.com/prometheus/common v0.2.0 // indirect
+	github.com/prometheus/procfs v0.0.0-20190219184716-e4d4a2206da0 // indirect
 	github.com/tidwall/pretty v1.0.0 // indirect
 	github.com/uber/jaeger-client-go v2.16.0+incompatible // indirect
 	github.com/uber/jaeger-lib v2.0.0+incompatible // indirect
@@ -22,9 +24,8 @@ require (
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v0.0.0-20180714160509-73f8eece6fdc // indirect
 	go.mongodb.org/mongo-driver v1.0.4
-	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
+	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
 	golang.org/x/net v0.0.0-20190607181551-461777fb6f67 // indirect
 	golang.org/x/sys v0.0.0-20190609082536-301114b31cce // indirect
 	golang.org/x/text v0.3.2 // indirect
-	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 )
