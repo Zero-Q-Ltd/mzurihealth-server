@@ -1,19 +1,23 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"os"
+	"syscall"
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/kisinga/mzurihealth/config"
+	"github.com/kisinga/mzurihealth/converter"
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/gql/gen"
 	"github.com/kisinga/mzurihealth/models"
 	"github.com/kisinga/mzurihealth/tracer"
+	"golang.org/x/crypto/ssh/terminal"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -22,7 +26,8 @@ import (
 )
 
 const (
-	banner = `MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+	banner = `
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWK00XWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWKkocclxKWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWKkollc:::lxKWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
@@ -72,6 +77,8 @@ var hospital models.Hospital
 const version = "1.0.0"
 const defaultPort = "4242"
 
+var cfg *config.Chasis
+
 func start(ctx context.Context, root string, port string, redirectHttps bool, logFormat string) {
 
 	gin.SetMode(gin.DebugMode)
@@ -90,13 +97,12 @@ func start(ctx context.Context, root string, port string, redirectHttps bool, lo
 	r.Use(c)
 
 	//Read the config first
-	hosp, configerr := config.ReadFile()
+	hosp, configerr := config.ReadFile(cfg)
 	//Only create a new hospital if a config file does not exist
 	if configerr != nil {
 		fmt.Println("Error reading file")
-
 	}
-
+	fmt.Println(hosp)
 	decodeerr := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hosp.ID}}).Decode(&hospital)
 	if decodeerr != nil {
 		initError("Decode Hospital After Reading from DB", decodeerr)
@@ -115,6 +121,8 @@ func main() {
 	fmt.Println("V: " + version)
 	//Create the first context
 	ctx := context.Background()
+
+	cfg = config.New(true)
 	//Create a connection to db
 	dberr := db.ConnectDB(ctx, "test")
 	if dberr != nil {
@@ -133,7 +141,7 @@ func main() {
 	app.Commands = []cli.Command{
 		{
 			Name:  "start",
-			Usage: "Start the SPA server",
+			Usage: "Start the server",
 			Action: func(c *cli.Context) error {
 				start(ctx, c.String("dir"), c.String("port"), c.Bool("https-redirect"), c.String("log-format")+"\n")
 				return nil
@@ -207,11 +215,10 @@ func playgroundHandler() gin.HandlerFunc {
 }
 
 func createhospital(hospitalname string) {
+	//Try and read credentials provided via cli
+	getcredentials()
 	//Try Read the config first
-	_, configerr := config.ReadFile()
-	/**
-	*Make changnes before marshalling to take advantage of linter and avoid runtime errors
-	**/
+	_, configerr := config.ReadFile(cfg)
 
 	//Only create a new hospital if a config file does not exist
 	if configerr == nil {
@@ -220,14 +227,12 @@ func createhospital(hospitalname string) {
 	}
 	var ctx = context.Background()
 	hospital.Name = hospitalname
-	var newhosp bson.M
-	b, _ := bson.Marshal(hospital)
-	bson.Unmarshal([]byte(b), &newhosp)
 
-	res, err := db.InserDocument(ctx, "", "hospitals", "", newhosp)
+	res, err := db.InserDocument(ctx, "", "hospitals", "", converter.StructToBson(hospital))
 	if err != nil {
 		initError("Create Hospital", err)
 	}
+
 	str, ok := res.InsertedID.(primitive.ObjectID)
 	if ok {
 		fmt.Printf("ID is: %q\n", str.Hex())
@@ -236,17 +241,37 @@ func createhospital(hospitalname string) {
 	}
 	objID, _ := primitive.ObjectIDFromHex(str.Hex())
 	result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
-	var temp models.Hospital
-	var decodeerr = result.Decode(&temp)
+	var decodeerr = result.Decode(&hospital)
+
 	if decodeerr != nil {
 		initError("Decode Hospital", decodeerr)
 	}
-	hospital = temp
-	createerr := config.Create(hospital)
+	fmt.Printf("Hosii %+v", hospital)
+	createerr := config.CreateHosp(cfg, hospital)
 	if createerr != nil {
 		initError("Error creating File", createerr)
 	}
 	fmt.Printf("Success creating hospital: %q\n", hospitalname)
+}
+func getcredentials() (err error) {
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Print("Enter Username: ")
+	username, _ := reader.ReadString('\n')
+
+	fmt.Print("Enter Password: ")
+	bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+	if err == nil {
+		fmt.Println("\nPassword typed: " + string(bytePassword))
+	}
+	password := string(bytePassword)
+
+	if (username == "kisinga") && (password == "HashKitty") {
+		fmt.Println("credentials correct")
+	} else {
+		fmt.Printf("U: %v, P: %v\n", username, password)
+	}
+	return
 }
 
 func initError(function string, e error) {

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AdminCategory struct {
@@ -78,7 +80,7 @@ type Data struct {
 }
 
 type HospAdmin struct {
-	ID          string       `json:"Id"`
+	ID          string       `json:"Id" bson:"_id"`
 	Status      bool         `json:"status"`
 	Data        *Data        `json:"data"`
 	Config      *Config      `json:"config"`
@@ -97,20 +99,20 @@ type HospFile struct {
 }
 
 type Hospital struct {
-	Location       *Location        `json:"location"`
-	Name           string           `json:"name"`
-	Userid         string           `json:"userid"`
-	ID             string           `json:"Id"`
-	Description    string           `json:"description"`
-	Status         *bool            `json:"status"`
-	Contactperson  *ContactPerson   `json:"contactperson"`
-	ContactDetails *ContactDetails  `json:"contactDetails"`
-	Logourl        string           `json:"logourl"`
-	PatientCount   int              `json:"patientCount"`
-	InvoiceCount   int              `json:"invoiceCount"`
-	Metadata       *Metadata        `json:"metadata"`
-	PaymentMethods []*PaymentMethod `json:"paymentMethods"`
-	Environment    *Environment     `json:"environment"`
+	Location       *Location          `json:"location"`
+	Name           string             `json:"name"`
+	Userid         string             `json:"userid"`
+	ID             primitive.ObjectID `json:"Id" bson:"_id"`
+	Description    string             `json:"description"`
+	Status         *bool              `json:"status"`
+	Contactperson  *ContactPerson     `json:"contactperson"`
+	ContactDetails *ContactDetails    `json:"contactDetails"`
+	Logourl        string             `json:"logourl"`
+	PatientCount   int                `json:"patientCount"`
+	InvoiceCount   int                `json:"invoiceCount"`
+	Metadata       *Metadata          `json:"metadata"`
+	PaymentMethods []*PaymentMethod   `json:"paymentMethods"`
+	Environment    *Environment       `json:"environment"`
 }
 
 type Insurance struct {
