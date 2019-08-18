@@ -12,6 +12,7 @@ import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/kisinga/mzurihealth/config"
+	"github.com/kisinga/mzurihealth/converter"
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/gql/gen"
 	"github.com/kisinga/mzurihealth/models"
@@ -214,6 +215,45 @@ func playgroundHandler() gin.HandlerFunc {
 }
 
 func createhospital(hospitalname string) {
+	//Try and read credentials provided via cli
+	getcredentials()
+	//Try Read the config first
+	_, configerr := config.ReadFile(cfg)
+
+	//Only create a new hospital if a config file does not exist
+	if configerr == nil {
+		fmt.Println("Config File already exists")
+		initError("Create Hospital", nil)
+	}
+	var ctx = context.Background()
+	hospital.Name = hospitalname
+
+	res, err := db.InserDocument(ctx, "", "hospitals", "", converter.StructToBson(hospital))
+	if err != nil {
+		initError("Create Hospital", err)
+	}
+
+	str, ok := res.InsertedID.(primitive.ObjectID)
+	if ok {
+		fmt.Printf("ID is: %q\n", str.Hex())
+	} else {
+		fmt.Printf("value is not a string\n")
+	}
+	objID, _ := primitive.ObjectIDFromHex(str.Hex())
+	result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
+	var decodeerr = result.Decode(&hospital)
+
+	if decodeerr != nil {
+		initError("Decode Hospital", decodeerr)
+	}
+	fmt.Printf("Hosii %+v", hospital)
+	createerr := config.CreateHosp(cfg, hospital)
+	if createerr != nil {
+		initError("Error creating File", createerr)
+	}
+	fmt.Printf("Success creating hospital: %q\n", hospitalname)
+}
+func getcredentials() (err error) {
 	reader := bufio.NewReader(os.Stdin)
 
 	fmt.Print("Enter Username: ")
@@ -231,42 +271,7 @@ func createhospital(hospitalname string) {
 	} else {
 		fmt.Printf("U: %v, P: %v\n", username, password)
 	}
-	//Try Read the config first
-	_, configerr := config.ReadFile(cfg)
-
-	//Only create a new hospital if a config file does not exist
-	if configerr == nil {
-		fmt.Println("Config File already exists")
-		initError("Create Hospital", nil)
-	}
-	var ctx = context.Background()
-	hospital.Name = hospitalname
-	var newhosp bson.M
-	b, _ := bson.Marshal(hospital)
-	bson.Unmarshal([]byte(b), &newhosp)
-
-	res, err := db.InserDocument(ctx, "", "hospitals", "", newhosp)
-	if err != nil {
-		initError("Create Hospital", err)
-	}
-	str, ok := res.InsertedID.(primitive.ObjectID)
-	if ok {
-		fmt.Printf("ID is: %q\n", str.Hex())
-	} else {
-		fmt.Printf("value is not a string\n")
-	}
-	objID, _ := primitive.ObjectIDFromHex(str.Hex())
-	result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
-	var decodeerr = result.Decode(&hospital)
-	if decodeerr != nil {
-		initError("Decode Hospital", decodeerr)
-	}
-	fmt.Printf("Hosii %+v", hospital)
-	// createerr := config.CreateHosp(cfg, *hospital)
-	// if createerr != nil {
-	// 	initError("Error creating File", createerr)
-	// }
-	fmt.Printf("Success creating hospital: %q\n", hospitalname)
+	return
 }
 
 func initError(function string, e error) {

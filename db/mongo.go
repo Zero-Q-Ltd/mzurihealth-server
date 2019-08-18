@@ -72,6 +72,7 @@ func InserDocument(ctx context.Context, database string, collection string, id s
 	/**
 	Make Mongo Automatically create an ID
 	**/
+	fmt.Printf("%#v", document)
 	if id == "" {
 		delete(document, "_id")
 	}
