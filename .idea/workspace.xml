@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="330c4fcc-26ca-4942-9406-d9ce9d85e15a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/config.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gql/gen/resolver.go" beforeDir="false" afterPath="$PROJECT_DIR$/gql/gen/resolver.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gql/schema/admin/admin.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/gql/schema/admin/admin.graphql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resolvers/admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/resolvers/admin.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,8 +37,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="543">
-              <caret line="168" column="10" selection-start-line="168" selection-start-column="10" selection-end-line="168" selection-end-column="10" />
+            <state relative-caret-position="2625">
+              <caret line="176" column="10" selection-start-line="176" selection-start-column="10" selection-end-line="176" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -93,7 +87,7 @@
   <component name="ProjectFrameBounds" extendedState="5">
     <option name="y" value="30" />
     <option name="width" value="1920" />
-    <option name="height" value="2130" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectId" id="1OXuFuZB4q7JkjrVfTdXzIdyTBB" />
   <component name="ProjectView">
@@ -199,10 +193,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="30" width="1920" height="2130" extended-state="5" />
-    <editor active="true" />
+    <frame x="0" y="30" width="1920" height="1050" extended-state="5" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21611527" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21824974" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -277,8 +270,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/server.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="543">
-          <caret line="168" column="10" selection-start-line="168" selection-start-column="10" selection-end-line="168" selection-end-column="10" />
+        <state relative-caret-position="2625">
+          <caret line="176" column="10" selection-start-line="176" selection-start-column="10" selection-end-line="176" selection-end-column="10" />
         </state>
       </provider>
     </entry>

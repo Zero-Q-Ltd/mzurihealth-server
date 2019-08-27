@@ -15,17 +15,22 @@ import (
 var client *mongo.Client
 var defaultdb string
 
+const username = "kisinga"
+const password = "s1mpl3pa55"
+
 // ConnectDB is the entry point when the server is started that ensures a successful connection to a mongodb instance
 func ConnectDB(ctx context.Context, defaultdbstring string) (err error) {
 	fmt.Println("Connecting to Db........")
 
 	defaultdb = defaultdbstring
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	mongohost := "cluster0-agkzv.gcp.mongodb.net/test?retryWrites=true&w=majority"
+	mongoURI := fmt.Sprintf("mongodb+srv://%s:%s@%s", username, password, mongohost)
+	clientOptions := options.Client().ApplyURI(mongoURI)
 	clientvar, err := mongo.Connect(ctx, clientOptions)
 	client = clientvar
 
 	if err != nil {
-		// log.Error(err)
+		dbError(ctx, "Connection", nil, err)
 	}
 
 	err = client.Ping(ctx, nil)

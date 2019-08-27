@@ -9,18 +9,12 @@ import (
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"github.com/kisinga/mzurihealth/config"
-	"github.com/kisinga/mzurihealth/converter"
 	"github.com/kisinga/mzurihealth/db"
 	"github.com/kisinga/mzurihealth/gql/gen"
 	"github.com/kisinga/mzurihealth/models"
 	"github.com/kisinga/mzurihealth/tracer"
 	"golang.org/x/crypto/ssh/terminal"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/urfave/cli"
 )
@@ -77,8 +71,6 @@ var hospital models.Hospital
 const version = "1.0.0"
 const defaultPort = "4242"
 
-var cfg *config.Chasis
-
 func start(ctx context.Context, root string, port string, redirectHttps bool, logFormat string) {
 
 	gin.SetMode(gin.DebugMode)
@@ -96,20 +88,7 @@ func start(ctx context.Context, root string, port string, redirectHttps bool, lo
 
 	r.Use(c)
 
-	//Read the config first
-	hosp, configerr := config.ReadFile(cfg)
-	//Only create a new hospital if a config file does not exist
-	if configerr != nil {
-		fmt.Println("Error reading file")
-	}
-	fmt.Println(hosp)
-	decodeerr := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", hosp.ID}}).Decode(&hospital)
-	if decodeerr != nil {
-		initError("Decode Hospital After Reading from DB", decodeerr)
-	}
-
 	r.Use(gin.Recovery()) // add Recovery middleware
-	r.Use(static.Serve("/", static.LocalFile("./public", false)))
 	r.POST("/api", graphqlHandler())
 	r.GET("/api", graphqlHandler())
 	r.GET("/playground", playgroundHandler())
@@ -122,7 +101,6 @@ func main() {
 	//Create the first context
 	ctx := context.Background()
 
-	cfg = config.New(true)
 	//Create a connection to db
 	dberr := db.ConnectDB(ctx, "test")
 	if dberr != nil {
@@ -175,23 +153,6 @@ func main() {
 				},
 			},
 		},
-		{
-			Name:  "new",
-			Usage: "Create a new hospital",
-			Action: func(c *cli.Context) error {
-				fmt.Println("name")
-				fmt.Println(c.String("name"))
-				createhospital(c.String("name"))
-				return nil
-			},
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:  "name, n",
-					Value: "",
-					Usage: "Name of the new hospital",
-				},
-			},
-		},
 	}
 
 	// start()
@@ -214,45 +175,6 @@ func playgroundHandler() gin.HandlerFunc {
 	}
 }
 
-func createhospital(hospitalname string) {
-	//Try and read credentials provided via cli
-	getcredentials()
-	//Try Read the config first
-	_, configerr := config.ReadFile(cfg)
-
-	//Only create a new hospital if a config file does not exist
-	if configerr == nil {
-		fmt.Println("Config File already exists")
-		initError("Create Hospital", nil)
-	}
-	var ctx = context.Background()
-	hospital.Name = hospitalname
-
-	res, err := db.InserDocument(ctx, "", "hospitals", "", converter.StructToBson(hospital))
-	if err != nil {
-		initError("Create Hospital", err)
-	}
-
-	str, ok := res.InsertedID.(primitive.ObjectID)
-	if ok {
-		fmt.Printf("ID is: %q\n", str.Hex())
-	} else {
-		fmt.Printf("value is not a string\n")
-	}
-	objID, _ := primitive.ObjectIDFromHex(str.Hex())
-	result := db.QueryDocument(ctx, "", "hospitals", bson.D{{"_id", objID}})
-	var decodeerr = result.Decode(&hospital)
-
-	if decodeerr != nil {
-		initError("Decode Hospital", decodeerr)
-	}
-	fmt.Printf("Hosii %+v", hospital)
-	createerr := config.CreateHosp(cfg, hospital)
-	if createerr != nil {
-		initError("Error creating File", createerr)
-	}
-	fmt.Printf("Success creating hospital: %q\n", hospitalname)
-}
 func getcredentials() (err error) {
 	reader := bufio.NewReader(os.Stdin)
 

@@ -12,6 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// CreateAdmin creates a new admin in the database given all basic params
 func CreateAdmin(ctx context.Context, input *models.NewAdmin) (*models.HospAdmin, error) {
 
 	span, ctx := opentracing.StartSpanFromContext(ctx, "CreateAdmin")
